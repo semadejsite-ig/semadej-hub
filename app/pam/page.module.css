@@ -1,0 +1,186 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 4rem;
+}
+
+.hero {
+    position: relative;
+    padding: 6rem 1rem 4rem;
+    text-align: center;
+    background: radial-gradient(circle at center, #eff6ff 0%, white 70%);
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+/* Decorative background elements */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, #dbeafe 0%, transparent 70%);
+    border-radius: 50%;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.heroContent {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: rgba(59, 130, 246, 0.1);
+    color: #2563eb;
+    border-radius: 99px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.03em;
+    color: #1e293b;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+
+.quoteBox {
+    background: white;
+    border-left: 4px solid #f59e0b;
+    padding: 2rem;
+    margin: 3rem auto;
+    max-width: 700px;
+    text-align: left;
+    border-radius: 0 1rem 1rem 0;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.quoteText {
+    font-size: 1.1rem;
+    color: #334155;
+    font-style: italic;
+    line-height: 1.8;
+}
+
+.quoteAuthor {
+    margin-top: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 0.95rem;
+}
+
+.quoteRole {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 400;
+}
+
+.modulesSection {
+    padding: 4rem 1rem;
+    background: #f8fafc;
+}
+
+.sectionTitle {
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 3rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    border-color: #3b82f6;
+}
+
+.cardNumber {
+    font-size: 3rem;
+    font-weight: 900;
+    color: #e2e8f0;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+}
+
+.cardDesc {
+    color: #64748b;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.ctaSection {
+    text-align: center;
+    padding: 6rem 1rem;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    color: white;
+    margin-top: 4rem;
+    border-radius: 1rem;
+}
+
+.ctaTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.ctaText {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .quoteBox {
+        padding: 1.5rem;
+    }
+}

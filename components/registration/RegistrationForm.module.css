@@ -1,0 +1,85 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 480px;
+}
+
+.header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.subtitle {
+    color: var(--muted-foreground);
+    font-size: 1rem;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.submitButton {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.successWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    max-width: 400px;
+    animation: scaleIn 0.3s ease-out;
+}
+
+.successIcon {
+    color: var(--success);
+}
+
+.successTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.successText {
+    color: var(--muted-foreground);
+    line-height: 1.5;
+}
+
+.errorBanner {
+    background-color: rgba(239, 68, 68, 0.1);
+    /* Destructive color with opacity */
+    color: var(--destructive);
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

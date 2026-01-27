@@ -1,0 +1,257 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.subtitle {
+    color: var(--muted-foreground);
+}
+
+.filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.filterLeft {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.searchWrapper {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+    border: 1px solid var(--input);
+    border-radius: var(--radius);
+    font-size: 0.875rem;
+    min-width: 250px;
+}
+
+.toggleWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.toggleLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    user-select: none;
+}
+
+.legend {
+    display: flex;
+    gap: 1rem;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+}
+
+.dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+}
+
+.bgGreen {
+    background-color: var(--success);
+}
+
+.bgYellow {
+    background-color: var(--warning);
+}
+
+.bgRed {
+    background-color: var(--destructive);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.groupedWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.sectorSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sectorTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Borders via pseudo-elements */
+.statusGreen {
+    border-left: 4px solid var(--success);
+}
+
+.statusYellow {
+    border-left: 4px solid var(--warning);
+}
+
+.statusRed {
+    border-left: 4px solid var(--destructive);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.congName {
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--foreground);
+}
+
+.sectorBadge {
+    background: var(--muted);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    color: var(--muted-foreground);
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.agentInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+}
+
+.actionBtn {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.emptyState {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: var(--muted-foreground);
+    background: white;
+    border-radius: var(--radius);
+    border: 1px dashed var(--border);
+}
+
+.hint {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    opacity: 0.8;
+}
+
+.loading {
+    text-align: center;
+    padding: 4rem;
+    color: var(--muted-foreground);
+}
+
+@media (max-width: 640px) {
+    .filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterLeft {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .searchWrapper,
+    .searchInput {
+        max-width: none;
+    }
+
+    .legend {
+        justify-content: center;
+        width: 100%;
+        padding-top: 0.5rem;
+        border-top: 1px solid var(--muted);
+    }
+}
