@@ -71,6 +71,12 @@ export default function DashboardPage() {
             if (!profile) return;
             setUserProfile(profile);
 
+            // Redirect Coordinator to their specific area
+            if (profile.role === 'coordinator' || profile.role === 'coordenador') {
+                router.replace('/dashboard/registrations/pam');
+                return;
+            }
+
             // Fetch Logic based on Role
             let query = supabase.from('congregations').select('id, name, sector, members_count, carnets_count');
             let reportsQuery = supabase.from('monthly_reports').select('congregation_id, report_month, report_year, carnet_value, service_offering_value, special_offering_value');

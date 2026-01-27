@@ -45,7 +45,7 @@ export default function LoginPage() {
             // Successful auth, now check profile status
             const { data: profile, error: profileError } = await supabase
                 .from('profiles')
-                .select('status, role')
+                .select('approved, role')
                 .eq('id', data.user.id)
                 .single();
 
@@ -55,7 +55,9 @@ export default function LoginPage() {
             }
 
             if (profile) {
-                if (profile.role !== 'admin' && profile.status !== 'approved') {
+                // Check if user is approved (unless admin)
+                // Note: 'approved' column is boolean. 'status' column is legacy/text.
+                if (profile.role !== 'admin' && !profile.approved) {
                     await supabase.auth.signOut();
                     throw new Error('Sua conta ainda está em análise pelo administrador.');
                 }
@@ -82,7 +84,7 @@ export default function LoginPage() {
                     <div className={styles.header}>
                         <h1 className={styles.title}>Acesso Restrito</h1>
                         <p className={styles.subtitle}>
-                            Área exclusiva para Agentes Missionários e Coordenadores.
+                            Área exclusiva para Agentes Missionários, Pastores e Coordenadores.
                         </p>
                     </div>
 
@@ -125,19 +127,7 @@ export default function LoginPage() {
                             Ainda não tem acesso? <Link href="/register/agent" className={styles.link}>Cadastre-se aqui</Link>
                         </p>
 
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                                localStorage.setItem('mock_session', 'true');
-                                router.push('/dashboard');
-                                router.refresh();
-                            }}
-                            className="mt-6 w-full text-xs border-dashed border-gray-400 text-gray-500 hover:text-gray-900 hover:border-gray-900"
-                        >
-                            🧪 Acessar Modo de Teste (Admin)
-                        </Button>
+
 
                         <Link href="/" className={styles.link} style={{ fontSize: '0.8rem', marginTop: '1rem', display: 'block' }}>
                             Voltar para o início

@@ -42,7 +42,14 @@ export default function DashboardLayout({
             if (!session) {
                 router.push('/login');
             } else {
-                setUser(session.user);
+                // Fetch Profile Role
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', session.user.id)
+                    .single();
+
+                setUser({ ...session.user, role: profile?.role });
             }
         };
         checkSession();
@@ -76,26 +83,48 @@ export default function DashboardLayout({
                 </div>
 
                 <nav className={styles.nav}>
-                    <Link href="/dashboard" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                        <BarChart3 size={20} />
-                        Visão Geral
-                    </Link>
-                    <Link href="/dashboard/report" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                        <FileText size={20} />
-                        Relatório Financeiro
-                    </Link>
-                    <Link href="/dashboard/congregation" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                        <Users size={20} />
-                        Dados da Congregação
-                    </Link>
-                    <Link href="/dashboard/vacancies" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                        <Map size={20} />
-                        Vagas e Congregações
-                    </Link>
-                    <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                        <ShieldAlert size={20} />
-                        Gestão de Usuários
-                    </Link>
+                    {user.role !== 'coordinator' && (
+                        <>
+                            <Link href="/dashboard" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <BarChart3 size={20} />
+                                Visão Geral
+                            </Link>
+                            <Link href="/dashboard/report" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <FileText size={20} />
+                                Relatório Financeiro
+                            </Link>
+                            <Link href="/dashboard/congregation" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <Users size={20} />
+                                Dados da Congregação
+                            </Link>
+                            <Link href="/dashboard/vacancies" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <Map size={20} />
+                                Vagas e Congregações
+                            </Link>
+                        </>
+                    )}
+
+                    {user.role === 'admin' && (
+                        <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                            <ShieldAlert size={20} />
+                            Gestão de Usuários
+                        </Link>
+                    )}
+
+                    {['admin', 'coordinator'].includes(user.role) && (
+                        <>
+                            <div className={styles.navDivider}></div>
+                            <span className={styles.navSectionTitle}>Candidatos</span>
+                            <Link href="/dashboard/registrations/pam" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <User size={20} />
+                                Candidatos PAM
+                            </Link>
+                            <Link href="/dashboard/registrations/libras" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <User size={20} />
+                                Candidatos LIBRAS
+                            </Link>
+                        </>
+                    )}
                 </nav>
 
                 <div className={styles.userSection}>

@@ -162,3 +162,22 @@
         display: block;
     }
 }
+
+/* Sidebar Extensions */
+.navSectionTitle {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #94a3b8;
+    /* slate-400 */
+    font-weight: 700;
+    margin: 1.5rem 1rem 0.5rem 1rem;
+    letter-spacing: 0.05em;
+}
+
+.navDivider {
+    height: 1px;
+    background-color: #334155;
+    /* slate-700 */
+    margin: 0.5rem 1rem;
+}
