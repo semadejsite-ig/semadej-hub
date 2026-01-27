@@ -15,7 +15,8 @@ import {
     Users,
     Menu,
     X,
-    ShieldAlert
+    ShieldAlert,
+    Package
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -105,9 +106,22 @@ export default function DashboardLayout({
                     )}
 
                     {user.role === 'admin' && (
-                        <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                            <ShieldAlert size={20} />
-                            Gestão de Usuários
+                        <>
+                            <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <ShieldAlert size={20} />
+                                Gestão de Usuários
+                            </Link>
+                            <Link key="assets-link" href="/dashboard/assets" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <Package size={20} />
+                                Patrimônio
+                            </Link>
+                        </>
+                    )}
+
+                    {user.role !== 'coordinator' && (
+                        <Link href="/dashboard/materials" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                            <Package size={20} />
+                            Solicitações
                         </Link>
                     )}
 

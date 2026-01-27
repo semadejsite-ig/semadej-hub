@@ -82,6 +82,7 @@ export default function LoginPage() {
             <main className={styles.main}>
                 <div className={`glass-card ${styles.card}`}>
                     <div className={styles.header}>
+
                         <h1 className={styles.title}>Acesso Restrito</h1>
                         <p className={styles.subtitle}>
                             Área exclusiva para Agentes Missionários, Pastores e Coordenadores.
