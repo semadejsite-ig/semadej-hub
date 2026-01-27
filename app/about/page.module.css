@@ -1,0 +1,163 @@
+.container {
+    padding-top: 80px;
+    /* Space for fixed header */
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #f8fafc, #eff6ff);
+}
+
+.hero {
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: #64748b;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.contentSection {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 2rem 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+}
+
+.gridTwo {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .gridTwo {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.textBlock h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.textBlock h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--primary);
+    border-radius: 2px;
+}
+
+.textBlock p {
+    font-size: 1.125rem;
+    color: #475569;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.cardList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.featureCard {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s;
+}
+
+.featureCard:hover {
+    transform: translateY(-5px);
+}
+
+.presidentSection {
+    background: #0f172a;
+    color: white;
+    padding: 4rem;
+    border-radius: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.presidentContent {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.quote {
+    font-size: 1.25rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #e2e8f0;
+    margin-bottom: 2rem;
+}
+
+.author {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #60a5fa;
+}
+
+.timeline {
+    border-left: 4px solid #e2e8f0;
+    padding-left: 2rem;
+    margin-left: 1rem;
+}
+
+.timelineItem {
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.timelineItem::before {
+    content: '';
+    position: absolute;
+    left: -2.6rem;
+    top: 0.5rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: var(--primary);
+    border: 4px solid white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px #cbd5e1;
+}
+
+.timelineYear {
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.timelineText {
+    color: #475569;
+}

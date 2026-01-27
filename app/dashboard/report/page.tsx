@@ -23,7 +23,11 @@ export default function ReportPage() {
     const [success, setSuccess] = useState(false);
     const [userProfile, setUserProfile] = useState<any>(null);
 
-    // Initial State Logic (Previous Month)
+    // History State
+    const [history, setHistory] = useState<any[]>([]);
+    const [editingId, setEditingId] = useState<string | null>(null);
+
+    // Initial State Logic
     const getInitialDate = () => {
         const d = new Date();
         d.setMonth(d.getMonth() - 1);
@@ -46,12 +50,17 @@ export default function ReportPage() {
         observations: ''
     });
 
+    // 1. Fetch User & History
     useEffect(() => {
-        const getUser = async () => {
-            // Mock or Real check
+        const loadData = async () => {
+            // MOCK MODE
             const isMock = localStorage.getItem('mock_session');
             if (isMock) {
                 setUserProfile({ id: 'mock-id', congregation_id: 'mock-congregation' });
+                setHistory([
+                    { id: '1', report_month: 2, report_year: 2026, carnet_value: 350.00, service_offering_value: 120.00, special_offering_value: 50.00, observations: 'Mock data' },
+                    { id: '2', report_month: 1, report_year: 2026, carnet_value: 300.00, service_offering_value: 100.00, special_offering_value: 0.00, observations: 'Mock data' }
+                ]);
                 return;
             }
 
@@ -68,9 +77,24 @@ export default function ReportPage() {
                 .single();
 
             setUserProfile(profile);
+
+            if (profile?.congregation_id) {
+                fetchHistory(profile.congregation_id);
+            }
         };
-        getUser();
+        loadData();
     }, [router]);
+
+    const fetchHistory = async (congregationId: string) => {
+        const { data } = await supabase
+            .from('monthly_reports')
+            .select('*')
+            .eq('congregation_id', congregationId)
+            .order('report_year', { ascending: false })
+            .order('report_month', { ascending: false });
+
+        if (data) setHistory(data);
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
@@ -79,44 +103,94 @@ export default function ReportPage() {
     const nextStep = () => setStep(prev => prev + 1);
     const prevStep = () => setStep(prev => prev - 1);
 
+    const handleEdit = (report: any) => {
+        setEditingId(report.id);
+        setFormData({
+            month: report.report_month,
+            year: report.report_year,
+            carnet_value: report.carnet_value?.toString() || '',
+            service_offering_value: report.service_offering_value?.toString() || '',
+            special_offering_value: report.special_offering_value?.toString() || '',
+            observations: report.observations || ''
+        });
+        setStep(1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Tem certeza que deseja excluir este relatório?')) return;
+
+        try {
+            const { error } = await supabase.from('monthly_reports').delete().eq('id', id);
+            if (error) throw error;
+
+            // Refresh
+            if (userProfile?.congregation_id) fetchHistory(userProfile.congregation_id);
+            alert('Relatório excluído.');
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao excluir.');
+        }
+    };
+
+    const cancelEdit = () => {
+        setEditingId(null);
+        setFormData({
+            month: initialDate.month,
+            year: initialDate.year,
+            carnet_value: '',
+            service_offering_value: '',
+            special_offering_value: '',
+            observations: ''
+        });
+        setStep(1);
+    }
+
     const handleSubmit = async () => {
         setLoading(true);
         try {
-            // If Mock
-            const isMock = localStorage.getItem('mock_session');
-            if (isMock) {
-                await new Promise(r => setTimeout(r, 1000)); // Fake delay
+            // Mock Submit
+            if (localStorage.getItem('mock_session')) {
+                await new Promise(r => setTimeout(r, 1000));
                 setSuccess(true);
                 return;
             }
 
             if (!userProfile) throw new Error("Perfil não encontrado");
 
-            const { error } = await supabase.from('monthly_reports').insert([{
+            const payload = {
                 agent_id: userProfile.id,
                 congregation_id: userProfile.congregation_id,
                 report_month: Number(formData.month),
                 report_year: Number(formData.year),
-
-                // Fields
                 carnet_value: parseFloat(formData.carnet_value) || 0,
                 service_offering_value: parseFloat(formData.service_offering_value) || 0,
                 special_offering_value: parseFloat(formData.special_offering_value) || 0,
-
-                // Removed Stats from this report
                 member_count: 0,
                 carnet_count: 0,
                 people_baptized: 0,
-
                 observations: formData.observations
-            }]);
+            };
 
-            if (error) throw error;
+            if (editingId) {
+                // UPDATE
+                const { error } = await supabase
+                    .from('monthly_reports')
+                    .update(payload)
+                    .eq('id', editingId);
+                if (error) throw error;
+            } else {
+                // INSERT
+                const { error } = await supabase.from('monthly_reports').insert([payload]);
+                if (error) throw error;
+            }
+
             setSuccess(true);
+            if (userProfile.congregation_id) fetchHistory(userProfile.congregation_id);
 
         } catch (error) {
             console.error(error);
-            alert("Erro ao enviar relatório.");
+            alert("Erro ao salvar relatório.");
         } finally {
             setLoading(false);
         }
@@ -131,9 +205,12 @@ export default function ReportPage() {
         return (
             <div className={`glass-card ${styles.successCard}`}>
                 <CheckCircle size={64} className="text-green-500 mb-4" color="#10b981" />
-                <h2>Relatório Enviado!</h2>
-                <p>Os dados financeiros foram salvos com sucesso.</p>
-                <Button onClick={() => router.push('/dashboard')}>Voltar ao Início</Button>
+                <h2>{editingId ? 'Relatório Atualizado!' : 'Relatório Enviado!'}</h2>
+                <p>Os dados foram salvos com sucesso.</p>
+                <div className="flex gap-4 mt-6">
+                    <Button onClick={() => { setSuccess(false); cancelEdit(); }}>Lançar Novo</Button>
+                    <Button variant="outline" onClick={() => router.push('/dashboard')}>Voltar ao Dashboard</Button>
+                </div>
             </div>
         );
     }
@@ -141,7 +218,7 @@ export default function ReportPage() {
     return (
         <div className={styles.container}>
             <header className={styles.header}>
-                <h1>Relatório Financeiro Mensal</h1>
+                <h1>{editingId ? 'Editar Relatório' : 'Relatório Financeiro Mensal'}</h1>
                 <p>Preencha os dados financeiros da congregação.</p>
             </header>
 
@@ -162,9 +239,16 @@ export default function ReportPage() {
                 {/* STEP 1: FINANCIAL */}
                 {step === 1 && (
                     <div className={styles.stepContent}>
-                        <div className={styles.iconHeader}>
-                            <DollarSign size={32} />
-                            <h3>Dados Financeiros</h3>
+                        <div className="flex justify-between items-center mb-6">
+                            <div className={styles.iconHeader}>
+                                <DollarSign size={32} />
+                                <h3>Dados Financeiros</h3>
+                            </div>
+                            {editingId && (
+                                <button onClick={cancelEdit} className="text-sm text-red-500 hover:underline">
+                                    Cancelar Edição
+                                </button>
+                            )}
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-4">
@@ -257,11 +341,78 @@ export default function ReportPage() {
                         </Button>
                     ) : (
                         <Button onClick={handleSubmit} isLoading={loading} className="bg-green-600 hover:bg-green-700">
-                            <Save size={18} className="mr-2" /> Enviar Relatório
+                            <Save size={18} className="mr-2" /> {editingId ? 'Atualizar' : 'Enviar'}
                         </Button>
                     )}
                 </div>
 
+            </div>
+
+            {/* HISTORY SECTION */}
+            <div className={styles.historySection}>
+                <h3 className={styles.historyTitle}>Histórico de Envios</h3>
+                <div className={styles.historyCard}>
+                    <div className={styles.tableContainer}>
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Total (R$)</th>
+                                    <th>Observações</th>
+                                    <th style={{ textAlign: 'right' }}>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {history.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className={styles.emptyState}>
+                                            Nenhum relatório encontrado.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    history.map((report) => {
+                                        const total = (report.carnet_value || 0) + (report.service_offering_value || 0) + (report.special_offering_value || 0);
+                                        return (
+                                            <tr key={report.id}>
+                                                <td>
+                                                    <span className={styles.dateText}>
+                                                        {monthNames[report.report_month - 1]} / {report.report_year}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span className={styles.valueBadge}>
+                                                        R$ {total.toFixed(2)}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div className={styles.obsText}>
+                                                        {report.observations || '-'}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div className={styles.actionCell}>
+                                                        <button
+                                                            onClick={() => handleEdit(report)}
+                                                            className={styles.editBtn}
+                                                        >
+                                                            Editar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(report.id)}
+                                                            className={styles.deleteBtn}
+                                                        >
+                                                            Excluir
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     );

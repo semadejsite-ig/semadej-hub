@@ -19,6 +19,7 @@ export function Footer() {
                     <div>
                         <h4 className={styles.sectionTitle}>Navegação</h4>
                         <ul className={styles.navList}>
+                            <li><Link href="/about" className={styles.navLink}>Sobre a SEMADEJ</Link></li>
                             <li><Link href="/pam" className={styles.navLink}>Curso PAM</Link></li>
                             <li><Link href="/libras" className={styles.navLink}>Curso de LIBRAS</Link></li>
                             <li><Link href="/login" className={styles.navLink}>Área do Agente</Link></li>

@@ -14,7 +14,8 @@ import {
     User,
     Users,
     Menu,
-    X
+    X,
+    ShieldAlert
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -90,6 +91,10 @@ export default function DashboardLayout({
                     <Link href="/dashboard/vacancies" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                         <Map size={20} />
                         Vagas e Congregações
+                    </Link>
+                    <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                        <ShieldAlert size={20} />
+                        Gestão de Usuários
                     </Link>
                 </nav>
 

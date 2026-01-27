@@ -179,3 +179,125 @@
     color: var(--muted-foreground);
     margin-bottom: 2rem;
 }
+
+/* HISTORY SECTION */
+.historySection {
+    margin-top: 3rem;
+}
+
+.historyTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    border-left: 4px solid var(--primary);
+}
+
+.historyCard {
+    background: white;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.tableContainer {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table th {
+    background-color: #f8fafc;
+    color: var(--muted-foreground);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--foreground);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover {
+    background-color: #f8fafc;
+}
+
+.valueBadge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    background-color: #dcfce7;
+    color: #166534;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.dateText {
+    font-weight: 500;
+    color: var(--primary);
+}
+
+.obsText {
+    color: var(--muted-foreground);
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.actionCell {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.editBtn,
+.deleteBtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: color 0.2s;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.editBtn {
+    color: var(--accent);
+}
+
+.editBtn:hover {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+}
+
+.deleteBtn {
+    color: var(--destructive);
+}
+
+.deleteBtn:hover {
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+
+.emptyState {
+    padding: 2rem;
+    text-align: center;
+    color: var(--muted-foreground);
+    background-color: #f9fafb;
+}

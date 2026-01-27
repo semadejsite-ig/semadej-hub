@@ -121,17 +121,30 @@ export default function LoginPage() {
                             Entrar
                         </Button>
 
-                        <div className={styles.footerLink}>
-                            <p className={styles.footerText}>
-                                Ainda não tem acesso? <Link href="/register/agent" className={styles.link}>Cadastre-se aqui</Link>
-                            </p>
-                            <Link href="/" className={styles.link} style={{ fontSize: '0.8rem', marginTop: '1rem', display: 'block' }}>
-                                Voltar para o início
-                            </Link>
-                        </div>
+                        <p className={styles.footerText}>
+                            Ainda não tem acesso? <Link href="/register/agent" className={styles.link}>Cadastre-se aqui</Link>
+                        </p>
+
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                                localStorage.setItem('mock_session', 'true');
+                                router.push('/dashboard');
+                                router.refresh();
+                            }}
+                            className="mt-6 w-full text-xs border-dashed border-gray-400 text-gray-500 hover:text-gray-900 hover:border-gray-900"
+                        >
+                            🧪 Acessar Modo de Teste (Admin)
+                        </Button>
+
+                        <Link href="/" className={styles.link} style={{ fontSize: '0.8rem', marginTop: '1rem', display: 'block' }}>
+                            Voltar para o início
+                        </Link>
                     </form>
                 </div>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }

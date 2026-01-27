@@ -38,6 +38,8 @@ export default function DashboardPage() {
     const [userProfile, setUserProfile] = useState<any>(null);
     const [detailedStats, setDetailedStats] = useState<CongregationStats[]>([]);
     const [monthlyHistory, setMonthlyHistory] = useState<MonthlyHistory[]>([]);
+    const [sectorStats, setSectorStats] = useState<{ sector: string; total_raised: number }[]>([]);
+    const [rpcError, setRpcError] = useState<any>(null);
     const [stats, setStats] = useState({
         totalMembers: 0,
         totalCarnets: 0,
@@ -47,12 +49,19 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const loadDashboard = async () => {
+            // MOCK MODE CHECK
+            if (typeof window !== 'undefined' && localStorage.getItem('mock_session') === 'true') {
+                // ... mock ...
+                // ...
+                return;
+            }
+
             const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
                 router.push('/login');
                 return;
             }
-
+            // ... profile fetch ...
             const { data: profile } = await supabase
                 .from('profiles')
                 .select('*, congregations(name, sector)')
@@ -66,13 +75,27 @@ export default function DashboardPage() {
             let query = supabase.from('congregations').select('id, name, sector, members_count, carnets_count');
             let reportsQuery = supabase.from('monthly_reports').select('congregation_id, report_month, report_year, carnet_value, service_offering_value, special_offering_value');
 
+            // Fetch Sector Stats (Only for Admin/Leadership or Global view)
+            if (['admin', 'sector_pastor', 'sector_agent'].includes(profile.role)) {
+                try {
+                    const { data: sectors, error } = await supabase.rpc('get_sector_financials', { target_year: new Date().getFullYear() });
+                    if (error) {
+                        console.error('Error fetching sector stats:', error);
+                        setRpcError(error);
+                    }
+                    if (sectors) setSectorStats(sectors);
+                } catch (err) {
+                    console.error('RPC Call Failed:', err);
+                    setRpcError(err);
+                }
+            }
+
             if (['sector_agent', 'sector_pastor'].includes(profile.role)) {
                 // Filter by Sector
                 const sector = profile.congregations?.sector;
                 query = query.eq('sector', sector);
             } else if (profile.role === 'agent') {
                 query = query.eq('id', profile.congregation_id);
-                // Reports query is naturally filtered by RLS, but we can be explicit
                 reportsQuery = reportsQuery.eq('congregation_id', profile.congregation_id);
             }
 
@@ -80,6 +103,7 @@ export default function DashboardPage() {
             const { data: reports } = await reportsQuery;
 
             if (congData && reports) {
+                // ... (existing processing logic) ...
                 const finalStats: CongregationStats[] = [];
                 let tMembers = 0, tCarnets = 0, tMoney = 0;
 
@@ -150,12 +174,13 @@ export default function DashboardPage() {
 
     const maxRaised = detailedStats.length > 0 ? detailedStats[0].total_raised : 1;
     const maxHistory = Math.max(...monthlyHistory.map(h => h.total), 1);
+    const maxSector = Math.max(...sectorStats.map(s => s.total_raised), 1);
 
     return (
         <div className={styles.container}>
             <header className={styles.header}>
                 <div style={{ zIndex: 2 }}>
-                    <h1 className={styles.title}>Painel de Controle</h1>
+                    <h1 className={styles.title}>Painel de Controle v2.0</h1>
                     <p className={styles.subtitle}>
                         {userProfile?.full_name?.split(' ')[0]}, aqui está o resumo do desempenho missionário.
                     </p>
@@ -211,6 +236,8 @@ export default function DashboardPage() {
                 </div>
             </div>
 
+
+
             {/* MONTHLY EVOLUTION CHART */}
             <section className={`${styles.rankingSection} mb-8`}>
                 <div className={styles.sectionHeader}>
@@ -225,32 +252,91 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className="flex items-end justify-between h-64 mt-8 gap-4 px-4 bg-white rounded-lg p-4">
-                    {monthlyHistory.map((item, idx) => (
-                        <div key={idx} className="flex flex-col items-center w-full group relative h-full justify-end">
-                            {/* Tooltip */}
-                            <div className="absolute -top-8 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                                R$ {item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                            </div>
+                <div className={styles.chartContainer}>
+                    <div className={styles.chartGrid}>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                    </div>
 
-                            {/* Bar */}
-                            <div
-                                className="w-full bg-green-100 rounded-t-lg relative group-hover:bg-green-200 transition-all duration-500 overflow-hidden"
-                                style={{ height: `${(item.total / maxHistory) * 100}%`, minHeight: '4px' }}
-                            >
+                    {monthlyHistory.map((item, idx) => {
+                        const heightPercentage = Math.max((item.total / maxHistory) * 100, 4);
+                        return (
+                            <div key={idx} className={styles.chartColumn}>
+                                <div className={styles.chartTooltip}>
+                                    R$ {item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                </div>
                                 <div
-                                    className="absolute bottom-0 left-0 right-0 bg-green-500 rounded-t-lg opacity-80 group-hover:opacity-100 transition-opacity"
-                                    style={{ height: '100%' }}
-                                ></div>
+                                    className={styles.chartBarBg}
+                                    style={{ height: `${heightPercentage}%` }}
+                                >
+                                    <div className={styles.chartBarFill}
+                                        style={{ height: '100%' }}>
+                                    </div>
+                                </div>
+                                <div className={styles.chartLabel}>
+                                    {item.label}
+                                </div>
+                                <div className={styles.chartSubLabel}>
+                                    {item.year}
+                                </div>
                             </div>
-
-                            {/* Label */}
-                            <div className="mt-3 text-sm font-medium text-gray-600">{item.label}</div>
-                            <div className="text-xs text-gray-400">{item.year}</div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </section>
+
+            {/* SECTOR FINANCIAL CHART (NEW) */}
+            {sectorStats.length > 0 && (
+                <section className={`${styles.rankingSection} mb-8`}>
+                    <div className={styles.sectionHeader}>
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-orange-100 text-orange-700 rounded-lg">
+                                <TrendingUp size={24} />
+                            </div>
+                            <div>
+                                <h2 className={styles.sectionTitle}>Arrecadação por Setor</h2>
+                                <p className="text-sm text-gray-500">Consolidado do Ano Atual</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.chartContainer}>
+                        <div className={styles.chartGrid}>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                        </div>
+
+                        {sectorStats.map((item, idx) => {
+                            const heightPercentage = Math.max((item.total_raised / maxSector) * 100, 4);
+                            return (
+                                <div key={idx} className={styles.chartColumn}>
+                                    <div className={styles.chartTooltip}>
+                                        R$ {item.total_raised.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                    </div>
+                                    <div
+                                        className={styles.chartBarBg}
+                                        style={{ height: `${heightPercentage}%` }}
+                                    >
+                                        {/* Orange Fill for Sectors */}
+                                        <div className={styles.chartBarFill}
+                                            style={{ height: '100%', background: 'linear-gradient(to top, #f97316, #fb923c)' }}>
+                                        </div>
+                                    </div>
+                                    <div className={styles.chartLabel}>
+                                        Setor {item.sector}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+            )}
 
             {['admin', 'sector_agent', 'sector_pastor'].includes(userProfile?.role || 'none') && (
                 <section className={styles.rankingSection}>
