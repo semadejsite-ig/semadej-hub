@@ -85,7 +85,7 @@ export default function RegistrationListPage() {
         fetchData();
     }, [courseType, router]);
 
-    const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected') => {
+    const handleUpdateStatus = async (id: string, newStatus: 'approved' | 'rejected' | 'pending') => {
         const { error } = await supabase
             .from('registrations')
             .update({ status: newStatus })
@@ -170,8 +170,8 @@ export default function RegistrationListPage() {
                                 <div className="flex items-center gap-3 mb-1">
                                     <h3 className={styles.name}>{item.full_name}</h3>
                                     <span className={`${styles.badge} ${item.status === 'approved' ? styles.statusApproved :
-                                            item.status === 'rejected' ? styles.statusRejected :
-                                                styles.statusPending
+                                        item.status === 'rejected' ? styles.statusRejected :
+                                            styles.statusPending
                                         }`}>
                                         {getStatusLabel(item.status)}
                                     </span>
