@@ -221,6 +221,17 @@
     justify-content: space-between;
     position: relative;
     gap: 1rem;
+    overflow-x: auto; /* Enable horizontal scroll */
+}
+
+/* Ensure scrollbar looks good */
+.chartContainer::-webkit-scrollbar {
+    height: 6px;
+}
+
+.chartContainer::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 4px;
 }
 
 .chartGrid {
@@ -232,6 +243,7 @@
     pointer-events: none;
     opacity: 0.1;
     z-index: 0;
+    /* Grid stays fixed relative to container view, acting as sticky background */
 }
 
 .gridLine {
@@ -247,6 +259,7 @@
     justify-content: flex-end;
     height: 100%;
     flex: 1;
+    min-width: 60px; /* Prevent squashing on mobile */
     position: relative;
     z-index: 10;
     cursor: default;

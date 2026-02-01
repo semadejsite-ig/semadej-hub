@@ -127,9 +127,9 @@ export default function ReportPage() {
             // Refresh
             if (userProfile?.congregation_id) fetchHistory(userProfile.congregation_id);
             alert('Relatório excluído.');
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            alert('Erro ao excluir.');
+            alert(`Erro ao excluir: ${err.message || 'Erro desconhecido'}`);
         }
     };
 
@@ -188,9 +188,9 @@ export default function ReportPage() {
             setSuccess(true);
             if (userProfile.congregation_id) fetchHistory(userProfile.congregation_id);
 
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            alert("Erro ao salvar relatório.");
+            alert(`Erro ao salvar relatório: ${error.message || 'Erro desconhecido'}`);
         } finally {
             setLoading(false);
         }
