@@ -16,7 +16,8 @@ import {
     Menu,
     X,
     ShieldAlert,
-    Package
+    Package,
+    DollarSign
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -84,19 +85,31 @@ export default function DashboardLayout({
                 </div>
 
                 <nav className={styles.nav}>
+                    {/* 1. PRINCIPAL */}
+                    {user.role !== 'coordinator' && (
+                        <Link href="/dashboard" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                            <BarChart3 size={20} />
+                            Visão Geral
+                        </Link>
+                    )}
+
+                    {/* 2. MISSIONÁRIO (Operacional) */}
                     {user.role !== 'coordinator' && (
                         <>
-                            <Link href="/dashboard" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                                <BarChart3 size={20} />
-                                Visão Geral
-                            </Link>
+                            <div className={styles.navDivider}></div>
+                            <span className={styles.navSectionTitle}>Missionário</span>
+
                             <Link href="/dashboard/report" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                 <FileText size={20} />
                                 Relatório Financeiro
                             </Link>
                             <Link href="/dashboard/congregation" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                 <Users size={20} />
-                                Dados da Congregação
+                                Minha Congregação
+                            </Link>
+                            <Link href="/dashboard/materials" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <Package size={20} />
+                                Solicitações
                             </Link>
                             <Link href="/dashboard/vacancies" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                 <Map size={20} />
@@ -105,30 +118,37 @@ export default function DashboardLayout({
                         </>
                     )}
 
-                    {user.role === 'admin' && (
+                    {/* 3. ADMINISTRATIVO (Gestão) */}
+                    {['admin', 'treasurer'].includes(user.role) && (
                         <>
-                            <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                                <ShieldAlert size={20} />
-                                Gestão de Usuários
+                            <div className={styles.navDivider}></div>
+                            <span className={styles.navSectionTitle}>Administrativo</span>
+
+                            <Link href="/dashboard/treasury" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <DollarSign size={20} />
+                                Tesouraria
                             </Link>
-                            <Link key="assets-link" href="/dashboard/assets" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                                <Package size={20} />
-                                Patrimônio
-                            </Link>
+
+                            {user.role === 'admin' && (
+                                <>
+                                    <Link href="/dashboard/admin/users" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                        <ShieldAlert size={20} />
+                                        Gestão de Usuários
+                                    </Link>
+                                    <Link key="assets-link" href="/dashboard/assets" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                        <Package size={20} />
+                                        Patrimônio
+                                    </Link>
+                                </>
+                            )}
                         </>
                     )}
 
-                    {user.role !== 'coordinator' && (
-                        <Link href="/dashboard/materials" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                            <Package size={20} />
-                            Solicitações
-                        </Link>
-                    )}
-
+                    {/* 4. PROCESSOS SELETIVOS */}
                     {['admin', 'coordinator'].includes(user.role) && (
                         <>
                             <div className={styles.navDivider}></div>
-                            <span className={styles.navSectionTitle}>Candidatos</span>
+                            <span className={styles.navSectionTitle}>Processos Seletivos</span>
                             <Link href="/dashboard/registrations/pam" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                 <User size={20} />
                                 Candidatos PAM
