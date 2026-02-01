@@ -144,7 +144,7 @@ export default function MaterialsPage() {
                     Nova Solicitação
                 </div>
 
-                <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-sm text-blue-800 flex items-start gap-3">
+                <div className={styles.infoBox}>
                     <Clock size={18} className="shrink-0 mt-0.5" />
                     <p>
                         <strong>Regra de Antecedência:</strong> Solicitações de insumos devem ser feitas com no mínimo
@@ -190,7 +190,7 @@ export default function MaterialsPage() {
                     </div>
 
                     <div className="md:col-span-3">
-                        <Button onClick={handleCreate} className="w-full md:w-auto">
+                        <Button onClick={handleCreate} className={styles.submitBtn}>
                             Enviar Solicitação
                         </Button>
                     </div>
@@ -223,13 +223,13 @@ export default function MaterialsPage() {
                                     {isAdmin && (
                                         <td>
                                             <div className="font-medium text-slate-700">{req.profile?.full_name}</div>
-                                            <div className="text-xs text-slate-400 mb-1">{getRoleLabel(req.profile?.role)}</div>
+                                            <div className={styles.roleText}>{getRoleLabel(req.profile?.role)}</div>
                                             {req.profile?.phone && (
                                                 <a
                                                     href={`https://wa.me/55${req.profile.phone.replace(/\D/g, '')}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1 text-[10px] bg-green-50 text-green-700 px-1.5 py-0.5 rounded border border-green-200 hover:bg-green-100 transition-colors"
+                                                    className={styles.whatsappLink}
                                                 >
                                                     WhatsApp
                                                 </a>

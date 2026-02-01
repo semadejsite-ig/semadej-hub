@@ -222,6 +222,10 @@
     border-bottom: 1px solid var(--border);
 }
 
+.thRight {
+    text-align: right;
+}
+
 .table td {
     padding: 1rem;
     border-bottom: 1px solid var(--border);

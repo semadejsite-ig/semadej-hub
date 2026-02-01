@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Header } from '@/components/layout/Header';
 import { Users, Save, CheckCircle } from 'lucide-react';
+import styles from './page.module.css';
 
 export default function CongregationStatsPage() {
     const router = useRouter();
@@ -102,19 +102,19 @@ export default function CongregationStatsPage() {
     if (fetching) return <div className="p-8 text-center">Carregando dados...</div>;
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <header style={{ marginBottom: '2rem', textAlign: 'center' }}>
-                <h1 className="text-2xl font-bold text-gray-900">Dados da Congregação</h1>
-                <p className="text-gray-500 mt-1">{schoolName}</p>
+        <div className={styles.container}>
+            <header className={styles.header}>
+                <h1 className={styles.title}>Dados da Congregação</h1>
+                <p className={styles.subtitle}>{schoolName}</p>
             </header>
 
-            <div className="glass-card" style={{ padding: '2rem', borderRadius: '1rem' }}>
-                <div className="flex items-center justify-center gap-3 mb-6 text-blue-600">
+            <div className={styles.card}>
+                <div className={styles.cardHeader}>
                     <Users size={32} />
-                    <h3 className="text-lg font-semibold">Atualizar Estatísticas</h3>
+                    <h3 className={styles.cardTitle}>Atualizar Estatísticas</h3>
                 </div>
 
-                <form onSubmit={handleUpdate} className="flex flex-col gap-4">
+                <form onSubmit={handleUpdate} className={styles.form}>
                     <Input
                         id="members_count"
                         label="Quantos membros possui a sua congregação?"
@@ -133,9 +133,9 @@ export default function CongregationStatsPage() {
                         onChange={e => setFormData({ ...formData, carnets_count: e.target.value })}
                     />
 
-                    <div className="mt-4">
+                    <div className={styles.actions}>
                         {success ? (
-                            <Button className="bg-green-600 hover:bg-green-700 w-full" type="button">
+                            <Button className={styles.successBtn} type="button">
                                 <CheckCircle size={18} className="mr-2" /> Salvo com Sucesso!
                             </Button>
                         ) : (

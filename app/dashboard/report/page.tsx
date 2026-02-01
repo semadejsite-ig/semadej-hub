@@ -359,7 +359,7 @@ export default function ReportPage() {
                                     <th>Período</th>
                                     <th>Total (R$)</th>
                                     <th>Observações</th>
-                                    <th style={{ textAlign: 'right' }}>Ações</th>
+                                    <th className={styles.thRight}>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
