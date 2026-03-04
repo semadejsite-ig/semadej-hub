@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import styles from "./page.module.css";
-import { BookOpen, Users, ArrowRight, HandMetal } from "lucide-react";
+import { BookOpen, Users, ArrowRight, HandMetal, HeartHandshake } from "lucide-react";
 
 export default function Home() {
   return (
@@ -39,6 +39,20 @@ export default function Home() {
 
         {/* Features/Cards */}
         <section className={styles.grid}>
+          {/* PRAYER REQUESTS CARD */}
+          <div className="glass-card" style={{ padding: '2rem', borderRadius: '1rem', border: '1px solid rgba(236, 72, 153, 0.2)' }}>
+            <div className={styles.cardIcon}>
+              <HeartHandshake size={24} color="#ec4899" />
+            </div>
+            <h3 className={styles.cardTitle}>Pedidos de Oração</h3>
+            <p className={styles.cardText}>
+              Deixe seu pedido e nossa equipe de intercessores estará orando por você.
+            </p>
+            <Link href="/pedidos" className={styles.link} style={{ color: '#ec4899' }}>
+              Fazer um pedido →
+            </Link>
+          </div>
+
           {/* PAM CARD */}
           <div className="glass-card" style={{ padding: '2rem', borderRadius: '1rem' }}>
             <div className={styles.cardIcon}>

@@ -17,7 +17,8 @@ import {
     X,
     ShieldAlert,
     Package,
-    DollarSign
+    DollarSign,
+    HeartHandshake
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -159,6 +160,14 @@ export default function DashboardLayout({
                             </Link>
                         </>
                     )}
+
+                    {/* 5. GERAL (Sem restrição) */}
+                    <div className={styles.navDivider}></div>
+                    <span className={styles.navSectionTitle}>Geral</span>
+                    <Link href="/dashboard/pedidos" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                        <HeartHandshake size={20} />
+                        Pedidos de Oração
+                    </Link>
                 </nav>
 
                 <div className={styles.userSection}>
