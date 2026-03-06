@@ -55,8 +55,7 @@ export default function VacanciesPage() {
             // 3. Map Data
             const stats = congData.map(cong => {
                 const profilesInCong = profileData.filter(p => p.congregation_id === cong.id);
-                // Filter only AGENTS for the counter/status
-                const agentCount = profilesInCong.filter(p => p.role === 'agent').length;
+                const agentCount = profilesInCong.filter(p => p.role === 'agent' || p.role === 'sector_agent').length;
 
                 return {
                     ...cong,
@@ -102,8 +101,18 @@ export default function VacanciesPage() {
     });
 
     // History State
-    const [history, setHistory] = useState<any[]>([]);
+    type AssignmentHistory = {
+        id: string;
+        start_date: string;
+        end_date: string | null;
+        reason: string | null;
+        agent: {
+            full_name: string;
+        } | null;
+    };
+    const [history, setHistory] = useState<AssignmentHistory[]>([]);
     const [historyError, setHistoryError] = useState<string | null>(null);
+    console.debug('History Error state:', historyError);
     const [loadingHistory, setLoadingHistory] = useState(false);
 
     const openContactModal = async (cong: CongregationStatus) => {
@@ -127,10 +136,10 @@ export default function VacanciesPage() {
                 .order('start_date', { ascending: false });
 
             if (error) throw error;
-            setHistory(data || []);
-        } catch (error: any) {
+            setHistory(data as unknown as AssignmentHistory[] || []);
+        } catch (error: unknown) {
             console.error(error);
-            setHistoryError(error.message || 'Erro desconhecido');
+            setHistoryError((error as Error).message || 'Erro desconhecido');
         } finally {
             setLoadingHistory(false);
         }
@@ -230,7 +239,32 @@ export default function VacanciesPage() {
                             <div className={styles.groupedWrapper}>
                                 {sortedSectors.map(sector => (
                                     <section key={sector} className={styles.sectorSection}>
-                                        <h2 className={styles.sectorTitle}>Setor {sector}</h2>
+                                        <div className={styles.sectorHeader}>
+                                            <h2 className={styles.sectorTitle}>Setor {sector}</h2>
+                                            {(() => {
+                                                const sectorAgent = groupedData[sector]?.flatMap(c => c.profiles || []).find(p => p.role === 'sector_agent');
+                                                if (sectorAgent) {
+                                                    return (
+                                                        <div className={styles.sectorAgentBadge}>
+                                                            <Users size={14} className={styles.sectorAgentIcon} />
+                                                            <span className={styles.sectorAgentName}>{sectorAgent.full_name}</span>
+                                                            {sectorAgent.phone && (
+                                                                <a
+                                                                    href={getWhatsAppLink(sectorAgent.phone)}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className={styles.sectorAgentWhatsapp}
+                                                                    title="Contatar via WhatsApp"
+                                                                >
+                                                                    <MessageCircle size={12} />
+                                                                </a>
+                                                            )}
+                                                        </div>
+                                                    );
+                                                }
+                                                return null;
+                                            })()}
+                                        </div>
                                         <div className={styles.grid}>
                                             {groupedData[sector].map(cong => renderCard(cong))}
                                         </div>
@@ -293,14 +327,16 @@ export default function VacanciesPage() {
                         <div className={styles.contactSection}>
                             <h3 className={styles.contactTitle}>Agentes Missionários</h3>
                             <div className={styles.contactList}>
-                                {selectedCongregation.profiles.filter(p => p.role === 'agent').length > 0 ? (
+                                {selectedCongregation.profiles.filter(p => p.role === 'agent' || p.role === 'sector_agent').length > 0 ? (
                                     selectedCongregation.profiles
-                                        .filter(p => p.role === 'agent')
+                                        .filter(p => p.role === 'agent' || p.role === 'sector_agent')
                                         .map(agent => (
                                             <div key={agent.id} className={styles.contactCard}>
                                                 <div className={styles.contactInfo}>
                                                     <span className={styles.contactName}>{agent.full_name}</span>
-                                                    <span className={styles.contactRole}>Agente Missionário</span>
+                                                    <span className={styles.contactRole}>
+                                                        {agent.role === 'sector_agent' ? 'Agente Setorial' : 'Agente Missionário'}
+                                                    </span>
                                                 </div>
                                                 {agent.phone && (
                                                     <a
@@ -328,7 +364,7 @@ export default function VacanciesPage() {
                                 <p className="text-sm text-gray-500">Carregando histórico...</p>
                             ) : history.length > 0 ? (
                                 <div className={styles.historyList}>
-                                    {history.map((record, idx) => {
+                                    {history.map((record) => {
                                         const isActive = record.end_date === null;
                                         return (
                                             <div key={record.id} className={`${styles.historyItem} ${isActive ? styles.historyActive : ''}`}>

@@ -45,6 +45,18 @@ export default function PedidosOracao() {
 
             if (insertError) throw insertError;
 
+            // Send telegram alert (fire and forget or separate async)
+            fetch('/api/notifications/telegram', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    whatsapp: formData.whatsapp,
+                    address: formData.address,
+                    request: formData.request
+                })
+            }).catch(err => console.error('Telegram notification failed:', err));
+
             setSuccess(true);
             setFormData({
                 name: '',
@@ -53,7 +65,7 @@ export default function PedidosOracao() {
                 request: '',
                 consent_lgpd: false,
             });
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Error inserting prayer request:', err);
             setError('Houve um erro ao enviar seu pedido. Tente novamente mais tarde.');
         } finally {
@@ -84,7 +96,7 @@ export default function PedidosOracao() {
                         Pedidos de Oração
                     </h1>
                     <p className={styles.subtitle}>
-                        "E tudo o que pedirem em oração, se crerem, vocês receberão." - Mateus 21:22.
+                        &quot;E tudo o que pedirem em oração, se crerem, vocês receberão.&quot; - Mateus 21:22.
                         <br />
                         Deixe seu pedido e nossa equipe de intercessores estará orando por você.
                     </p>
