@@ -6,7 +6,8 @@
 
 @media (max-width: 768px) {
     .container {
-        padding: 0 1rem 2rem 1rem;
+        padding: 0 0.25rem 2rem 0.25rem;
+        /* Minimized side padding */
     }
 
     .header {
@@ -20,7 +21,22 @@
     }
 
     .grid {
+        grid-template-columns: 1fr;
+        /* Force 1 column to avoid min-width overflow */
         gap: 1rem;
+    }
+
+    .headerControls {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .select {
+        width: 100%;
+        min-width: unset;
+        /* Remove min-width restriction */
     }
 }
 
