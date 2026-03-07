@@ -9,7 +9,8 @@ import {
     CheckCircle2,
     TrendingUp,
     Search,
-    FileText
+    FileText,
+    Send
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import styles from './page.module.css';
@@ -131,6 +132,38 @@ export default function TreasuryPage() {
     if (loading) return <div className="p-8 text-center text-gray-500">Carregando painel financeiro...</div>;
 
     const hasPending = stats.pendingReports > 0;
+    const [sendingTelegram, setSendingTelegram] = useState(false);
+
+    const handleTelegramSummary = async () => {
+        if (!hasPending) return;
+        if (!confirm('Deseja enviar o resumo de pendências para o grupo do Telegram?')) return;
+
+        setSendingTelegram(true);
+        try {
+            const response = await fetch('/api/notifications/treasury-summary', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pendingList,
+                    monthName: stats.monthName,
+                    year: selectedDate.year
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert('Resumo enviado com sucesso para o Telegram!');
+            } else {
+                throw new Error(data.error || 'Erro desconhecido');
+            }
+        } catch (err: any) {
+            console.error('Telegram notification failed:', err);
+            alert(`Falha ao enviar: ${err.message}`);
+        } finally {
+            setSendingTelegram(false);
+        }
+    };
+
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
     return (
@@ -236,6 +269,16 @@ export default function TreasuryPage() {
                         >
                             Imprimir Relatório Geral
                         </Button>
+                        <Button
+                            variant="primary"
+                            className="mt-2"
+                            style={{ background: '#2563eb', width: '100%', gap: '8px' }}
+                            onClick={handleTelegramSummary}
+                            disabled={sendingTelegram || !hasPending}
+                        >
+                            <Send size={18} />
+                            {sendingTelegram ? 'Enviando...' : 'Auditoria Telegram'}
+                        </Button>
                     </div>
                 </div>
             </div>
@@ -340,51 +383,53 @@ export default function TreasuryPage() {
             </div>
 
             {/* DETAILS MODAL */}
-            {selectedReport && (
-                <div className={styles.modalOverlay} onClick={() => setSelectedReport(null)}>
-                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                        <button className={styles.modalClose} onClick={() => setSelectedReport(null)}>✕</button>
+            {
+                selectedReport && (
+                    <div className={styles.modalOverlay} onClick={() => setSelectedReport(null)}>
+                        <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                            <button className={styles.modalClose} onClick={() => setSelectedReport(null)}>✕</button>
 
-                        <h3 className={styles.title} style={{ fontSize: '1.5rem', marginBottom: '0.2rem' }}>
-                            {selectedReport.congregations?.name}
-                        </h3>
-                        <p className={styles.subtitle} style={{ marginBottom: '1.5rem' }}>
-                            Relatório de {monthNames[selectedReport.report_month - 1]} / {selectedReport.report_year}
-                        </p>
+                            <h3 className={styles.title} style={{ fontSize: '1.5rem', marginBottom: '0.2rem' }}>
+                                {selectedReport.congregations?.name}
+                            </h3>
+                            <p className={styles.subtitle} style={{ marginBottom: '1.5rem' }}>
+                                Relatório de {monthNames[selectedReport.report_month - 1]} / {selectedReport.report_year}
+                            </p>
 
-                        <div className="space-y-4">
-                            <div className={styles.modalRow}>
-                                <span className={styles.modalLabel}>Carnê Missionário</span>
-                                <span className={styles.modalValue}>R$ {selectedReport.carnet_value?.toFixed(2)}</span>
+                            <div className="space-y-4">
+                                <div className={styles.modalRow}>
+                                    <span className={styles.modalLabel}>Carnê Missionário</span>
+                                    <span className={styles.modalValue}>R$ {selectedReport.carnet_value?.toFixed(2)}</span>
+                                </div>
+                                <div className={styles.modalRow}>
+                                    <span className={styles.modalLabel}>Oferta de Missões</span>
+                                    <span className={styles.modalValue}>R$ {selectedReport.service_offering_value?.toFixed(2)}</span>
+                                </div>
+                                <div className={styles.modalRow}>
+                                    <span className={styles.modalLabel}>Ofertas Especiais</span>
+                                    <span className={styles.modalValue}>R$ {selectedReport.special_offering_value?.toFixed(2)}</span>
+                                </div>
+                                <div className={styles.modalRow} style={{ borderTop: '2px solid var(--border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
+                                    <span className={styles.modalLabel} style={{ fontWeight: 700, color: 'var(--foreground)' }}>TOTAL ARRECADADO</span>
+                                    <span className={styles.modalValue} style={{ fontSize: '1.2rem', color: '#16a34a' }}>
+                                        R$ {((selectedReport.carnet_value || 0) + (selectedReport.service_offering_value || 0) + (selectedReport.special_offering_value || 0)).toFixed(2)}
+                                    </span>
+                                </div>
                             </div>
-                            <div className={styles.modalRow}>
-                                <span className={styles.modalLabel}>Oferta de Missões</span>
-                                <span className={styles.modalValue}>R$ {selectedReport.service_offering_value?.toFixed(2)}</span>
-                            </div>
-                            <div className={styles.modalRow}>
-                                <span className={styles.modalLabel}>Ofertas Especiais</span>
-                                <span className={styles.modalValue}>R$ {selectedReport.special_offering_value?.toFixed(2)}</span>
-                            </div>
-                            <div className={styles.modalRow} style={{ borderTop: '2px solid var(--border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
-                                <span className={styles.modalLabel} style={{ fontWeight: 700, color: 'var(--foreground)' }}>TOTAL ARRECADADO</span>
-                                <span className={styles.modalValue} style={{ fontSize: '1.2rem', color: '#16a34a' }}>
-                                    R$ {((selectedReport.carnet_value || 0) + (selectedReport.service_offering_value || 0) + (selectedReport.special_offering_value || 0)).toFixed(2)}
-                                </span>
-                            </div>
-                        </div>
 
-                        {selectedReport.observations && (
-                            <div className="mt-6 p-4 bg-slate-50 rounded-lg text-sm text-slate-600 italic">
-                                "{selectedReport.observations}"
-                            </div>
-                        )}
+                            {selectedReport.observations && (
+                                <div className="mt-6 p-4 bg-slate-50 rounded-lg text-sm text-slate-600 italic">
+                                    "{selectedReport.observations}"
+                                </div>
+                            )}
 
-                        <div className="mt-8 flex justify-end">
-                            <Button onClick={() => setSelectedReport(null)}>Fechar</Button>
+                            <div className="mt-8 flex justify-end">
+                                <Button onClick={() => setSelectedReport(null)}>Fechar</Button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )
+            }
         </div>
     );
 }
