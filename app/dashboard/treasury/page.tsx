@@ -35,6 +35,7 @@ export default function TreasuryPage() {
     });
 
     const [selectedReport, setSelectedReport] = useState<any>(null);
+    const [sendingTelegram, setSendingTelegram] = useState(false);
 
     useEffect(() => {
         loadTreasuryData(selectedDate.month, selectedDate.year);
@@ -67,7 +68,23 @@ export default function TreasuryPage() {
 
             if (congError) throw congError;
 
-            // 2. Get Reports for SELECTED Month
+            // 2. Fetch ALL Profiles (Agents/Sector Agents)
+            const { data: allProfiles, error: profError } = await supabase
+                .from('profiles')
+                .select('id, full_name, role, congregation_id')
+                .or('role.eq.agent,role.eq.sector_agent');
+
+            if (profError) {
+                console.warn('Could not fetch profiles:', profError);
+            }
+
+            // JOIN in memory
+            const congsWithProfiles = allCongs.map(cong => ({
+                ...cong,
+                profiles: allProfiles?.filter(p => p.congregation_id === cong.id) || []
+            }));
+
+            // 3. Get Reports for SELECTED Month
             const { data: reports, error } = await supabase
                 .from('monthly_reports')
                 .select(`
@@ -92,7 +109,7 @@ export default function TreasuryPage() {
 
             // Determine who is pending
             const submittedIds = new Set(reports?.map(r => r.congregation_id));
-            const missing = allCongs?.filter(c => !submittedIds.has(c.id)) || [];
+            const missing = congsWithProfiles.filter(c => !submittedIds.has(c.id));
 
             setStats({
                 totalRaised: total,
@@ -129,14 +146,11 @@ export default function TreasuryPage() {
         setPrintMode('pending');
     };
 
-    if (loading) return <div className="p-8 text-center text-gray-500">Carregando painel financeiro...</div>;
-
     const hasPending = stats.pendingReports > 0;
-    const [sendingTelegram, setSendingTelegram] = useState(false);
 
     const handleTelegramSummary = async () => {
         if (!hasPending) return;
-        if (!confirm('Deseja enviar o resumo de pendências para o grupo do Telegram?')) return;
+        if (!confirm('Deseja enviar a notificação de pendências para os Agentes no Telegram?')) return;
 
         setSendingTelegram(true);
         try {
@@ -163,6 +177,8 @@ export default function TreasuryPage() {
             setSendingTelegram(false);
         }
     };
+
+    if (loading) return <div className="p-8 text-center text-gray-500">Carregando painel financeiro...</div>;
 
     const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
 
@@ -232,6 +248,16 @@ export default function TreasuryPage() {
                             >
                                 Imprimir Lista de Pendências
                             </Button>
+                            <Button
+                                variant="primary"
+                                className="mt-2"
+                                style={{ background: '#2563eb', width: '100%', gap: '8px' }}
+                                onClick={handleTelegramSummary}
+                                disabled={sendingTelegram || !hasPending}
+                            >
+                                <Send size={18} />
+                                {sendingTelegram ? 'Enviando...' : 'Notificar Agentes (Telegram)'}
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -268,16 +294,6 @@ export default function TreasuryPage() {
                             onClick={handlePrintGeneral}
                         >
                             Imprimir Relatório Geral
-                        </Button>
-                        <Button
-                            variant="primary"
-                            className="mt-2"
-                            style={{ background: '#2563eb', width: '100%', gap: '8px' }}
-                            onClick={handleTelegramSummary}
-                            disabled={sendingTelegram || !hasPending}
-                        >
-                            <Send size={18} />
-                            {sendingTelegram ? 'Enviando...' : 'Auditoria Telegram'}
                         </Button>
                     </div>
                 </div>

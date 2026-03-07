@@ -23,15 +23,36 @@ export async function POST(request: Request) {
                 .replace(/>/g, '&gt;');
         };
 
-        const pendingText = pendingList
-            .map((cong: any, index: number) => `${index + 1}. <b>${escapeHtml(cong.name)}</b> (Setor ${escapeHtml(cong.sector || '-')})`)
-            .join('\n');
+        // Group by sector
+        const sectors: Record<string, any[]> = {};
+        pendingList.forEach((cong: any) => {
+            const s = cong.sector || 'Não Informado';
+            if (!sectors[s]) sectors[s] = [];
+            sectors[s].push(cong);
+        });
+
+        const sortedSectors = Object.keys(sectors).sort((a, b) => {
+            if (a === 'Não Informado') return 1;
+            if (b === 'Não Informado') return -1;
+            return Number(a) - Number(b);
+        });
+
+        let pendingText = '';
+        sortedSectors.forEach(sector => {
+            pendingText += `\n<b>Setor ${sector}:</b>\n`;
+            sectors[sector].forEach((cong: any) => {
+                const agents = cong.profiles && cong.profiles.length > 0
+                    ? cong.profiles.map((p: any) => p.full_name).join(', ')
+                    : 'Sem agente vinculado';
+                pendingText += `- ${escapeHtml(cong.name)} (<i>${escapeHtml(agents)}</i>)\n`;
+            });
+        });
 
         const message = `
 <b>📊 Auditoria de Relatórios Financeiros</b>
 <b>📅 Referência:</b> ${monthName} / ${year}
 
-⚠️ <b>Congregações com Relatórios Pendentes:</b>
+⚠️ <b>Congregações Pendentes:</b>
 ${pendingText}
 
 ---
