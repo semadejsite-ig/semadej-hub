@@ -4,6 +4,25 @@
     gap: 2rem;
 }
 
+@media (max-width: 768px) {
+    .container {
+        gap: 1rem;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modalContent {
+        padding: 1.25rem;
+        margin: 1rem;
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -112,7 +131,7 @@
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1rem;
 }
 

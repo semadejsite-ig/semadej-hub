@@ -1,7 +1,7 @@
 .container {
     max-width: 600px;
     margin: 0 auto;
-    padding-bottom: 2rem;
+    padding: 0 0.75rem 2rem 0.75rem;
 }
 
 .header {
@@ -304,4 +304,37 @@
     text-align: center;
     color: var(--muted-foreground);
     background-color: #f9fafb;
+}
+
+@media (max-width: 768px) {
+    .line {
+        width: 30px;
+    }
+
+    .formCard {
+        padding: 1.25rem;
+    }
+
+    .iconHeader h3 {
+        font-size: 1.125rem;
+    }
+
+    .summary {
+        font-size: 0.875rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .actionCell {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-end;
+    }
+
+    .obsText {
+        max-width: 100px;
+    }
 }

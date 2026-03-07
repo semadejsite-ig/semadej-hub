@@ -121,6 +121,7 @@
     /* Width of sidebar */
     padding: 2rem;
     overflow-y: auto;
+    transition: padding 0.2s ease;
 }
 
 .overlay {
@@ -152,7 +153,8 @@
     .main {
         margin-left: 0;
         width: 100%;
-        padding: 1rem;
+        padding: 0.75rem;
+        /* Reduced from 1rem */
     }
 
     .closeBtn {
