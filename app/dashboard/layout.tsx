@@ -18,7 +18,9 @@ import {
     ShieldAlert,
     Package,
     DollarSign,
-    HeartHandshake
+    HeartHandshake,
+    MapPin,
+    Trophy
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -116,6 +118,10 @@ export default function DashboardLayout({
                                 <Map size={20} />
                                 Vagas e Congregações
                             </Link>
+                            <Link href="/dashboard/evangelism" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <MapPin size={20} />
+                                Evangelismo
+                            </Link>
                         </>
                     )}
 
@@ -129,6 +135,10 @@ export default function DashboardLayout({
                                 <DollarSign size={20} />
                                 Tesouraria
                             </Link>
+                            <Link href="/dashboard/evangelism/audit" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <FileText size={20} />
+                                Auditoria de Evangelismo
+                            </Link>
 
                             {user.role === 'admin' && (
                                 <>
@@ -139,6 +149,10 @@ export default function DashboardLayout({
                                     <Link key="assets-link" href="/dashboard/assets" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                         <Package size={20} />
                                         Patrimônio
+                                    </Link>
+                                    <Link href="/dashboard/admin/congregations" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                        <BarChart3 size={20} />
+                                        Estatísticas Gerais
                                     </Link>
                                 </>
                             )}

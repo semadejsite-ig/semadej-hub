@@ -12,7 +12,9 @@ import {
     AlertCircle,
     BarChart2,
     CalendarDays,
-    ArrowUpRight
+    ArrowUpRight,
+    Trophy,
+    Target
 } from 'lucide-react';
 
 interface CongregationStats {
@@ -32,18 +34,27 @@ interface MonthlyHistory {
     label: string;
 }
 
+interface EvangelismSectorStats {
+    sector: string;
+    total_reached: number;
+}
+
 export default function DashboardPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [userProfile, setUserProfile] = useState<any>(null);
     const [detailedStats, setDetailedStats] = useState<CongregationStats[]>([]);
     const [monthlyHistory, setMonthlyHistory] = useState<MonthlyHistory[]>([]);
+    const [evangelismHistory, setEvangelismHistory] = useState<MonthlyHistory[]>([]);
     const [sectorStats, setSectorStats] = useState<{ sector: string; total_raised: number }[]>([]);
+    const [evangelismSectorStats, setEvangelismSectorStats] = useState<EvangelismSectorStats[]>([]);
     const [rpcError, setRpcError] = useState<any>(null);
     const [stats, setStats] = useState({
         totalMembers: 0,
         totalCarnets: 0,
         totalFinancial: 0,
+        totalSouls: 0,
+        highlightCong: { name: '', scope: '', value: 0 },
         scopeName: ''
     });
 
@@ -133,10 +144,51 @@ export default function DashboardPage() {
                     tMoney += moneyRaised;
                 }
 
+                // 3. Process Evangelism Stats
+                const now = new Date();
+                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+                const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+
+                let evangelismQuery = supabase.from('evangelism_records')
+                    .select('*, congregations(name, sector)')
+                    .gte('event_date', startOfMonth)
+                    .lte('event_date', endOfMonth);
+
+                if (['sector_agent', 'sector_pastor'].includes(profile.role)) {
+                    evangelismQuery = evangelismQuery.eq('congregations.sector', profile.congregations?.sector);
+                } else if (profile.role === 'agent') {
+                    evangelismQuery = evangelismQuery.eq('congregation_id', profile.congregation_id);
+                }
+
+                const { data: evangelismData } = await evangelismQuery;
+
+                // Aggregate Souls and find Highlight
+                let totalSoulsVal = 0;
+                const congEvangelism: Record<string, { name: string, sector: string, total: number }> = {};
+
+                evangelismData?.forEach(rec => {
+                    totalSoulsVal += rec.people_reached || 0;
+                    if (rec.congregation_id) {
+                        if (!congEvangelism[rec.congregation_id]) {
+                            congEvangelism[rec.congregation_id] = {
+                                name: rec.congregations?.name || '?',
+                                sector: rec.congregations?.sector || '?',
+                                total: 0
+                            };
+                        }
+                        congEvangelism[rec.congregation_id].total += rec.people_reached || 0;
+                    }
+                });
+
+                const sortedCongs = Object.values(congEvangelism).sort((a, b) => b.total - a.total);
+                const highlight = sortedCongs.length > 0 ? sortedCongs[0] : null;
+
                 setStats({
                     totalMembers: tMembers,
                     totalCarnets: tCarnets,
                     totalFinancial: tMoney,
+                    totalSouls: totalSoulsVal,
+                    highlightCong: highlight ? { name: highlight.name, scope: `Setor ${highlight.sector}`, value: highlight.total } : { name: '---', scope: 'Nenhuma atividade no mês', value: 0 },
                     scopeName: profile.role === 'admin' ? 'Global' : `Setor ${profile.congregations?.sector || '?'}`
                 });
 
@@ -145,6 +197,7 @@ export default function DashboardPage() {
                 // 2. Process Monthly History (Last 6 Months)
                 const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
                 const historyMap = new Map<string, number>();
+                const evHistoryMap = new Map<string, number>();
 
                 reports.forEach(r => {
                     const key = `${r.report_year}-${r.report_month}`;
@@ -152,7 +205,31 @@ export default function DashboardPage() {
                     historyMap.set(key, (historyMap.get(key) || 0) + val);
                 });
 
+                // Fetch ALL evangelism records for the last 6 months to build history
+                const sixMonthsAgo = new Date();
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+                sixMonthsAgo.setDate(1);
+
+                let evHistoryQuery = supabase.from('evangelism_records')
+                    .select('event_date, people_reached, congregations(sector)')
+                    .gte('event_date', sixMonthsAgo.toISOString().split('T')[0]);
+
+                if (['sector_agent', 'sector_pastor'].includes(profile.role)) {
+                    evHistoryQuery = evHistoryQuery.eq('congregations.sector', profile.congregations?.sector);
+                } else if (profile.role === 'agent') {
+                    evHistoryQuery = evHistoryQuery.eq('congregation_id', profile.congregation_id);
+                }
+
+                const { data: evHistoryData } = await evHistoryQuery;
+
+                evHistoryData?.forEach(rec => {
+                    const d = new Date(rec.event_date);
+                    const key = `${d.getFullYear()}-${d.getMonth() + 1}`;
+                    evHistoryMap.set(key, (evHistoryMap.get(key) || 0) + (rec.people_reached || 0));
+                });
+
                 const history: MonthlyHistory[] = [];
+                const evHistory: MonthlyHistory[] = [];
                 const today = new Date();
                 for (let i = 5; i >= 0; i--) {
                     const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
@@ -166,8 +243,40 @@ export default function DashboardPage() {
                         label: monthNames[m - 1],
                         total: historyMap.get(key) || 0
                     });
+
+                    evHistory.push({
+                        month: m,
+                        year: y,
+                        label: monthNames[m - 1],
+                        total: evHistoryMap.get(key) || 0
+                    });
                 }
                 setMonthlyHistory(history);
+                setEvangelismHistory(evHistory);
+
+                // 4. Process Evangelism Sector Stats (Current Year)
+                if (['admin', 'sector_pastor', 'sector_agent'].includes(profile.role)) {
+                    const startOfYear = `${new Date().getFullYear()}-01-01`;
+                    const { data: yearEvData } = await supabase.from('evangelism_records')
+                        .select('people_reached, congregations(sector)')
+                        .gte('event_date', startOfYear);
+
+                    const sectorEvMap: Record<string, number> = {};
+                    yearEvData?.forEach(rec => {
+                        const congregations = rec.congregations as any;
+                        const sec = Array.isArray(congregations) ? congregations[0]?.sector : congregations?.sector;
+                        if (sec) {
+                            sectorEvMap[sec] = (sectorEvMap[sec] || 0) + (rec.people_reached || 0);
+                        }
+                    });
+
+                    const evSectors = Object.entries(sectorEvMap).map(([sector, total]) => ({
+                        sector,
+                        total_reached: total as number
+                    })).sort((a, b) => parseInt(a.sector) - parseInt(b.sector));
+
+                    setEvangelismSectorStats(evSectors);
+                }
             }
             setLoading(false);
         };
@@ -186,7 +295,7 @@ export default function DashboardPage() {
         <div className={styles.container}>
             <header className={styles.header}>
                 <div style={{ zIndex: 2 }}>
-                    <h1 className={styles.title}>Painel de Controle v2.0</h1>
+                    <h1 className={styles.title}>Painel do Agente</h1>
                     <p className={styles.subtitle}>
                         {userProfile?.full_name?.split(' ')[0]}, aqui está o resumo do desempenho missionário.
                     </p>
@@ -196,7 +305,53 @@ export default function DashboardPage() {
                 </div>
             </header>
 
+            <div className={styles.missionGrid}>
+                {/* HIGHLIGHT CONGREGATION CARD */}
+                <div className={styles.spotlightCard}>
+                    <div style={{ zIndex: 2 }}>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', opacity: 0.8, letterSpacing: '0.05em' }}>
+                            Congregação Destaque do Mês
+                        </span>
+                        <h2 style={{ fontSize: '1.75rem', fontWeight: 800, margin: '0.5rem 0' }}>{stats.highlightCong.name}</h2>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: 0.9 }}>
+                            <span style={{ background: 'rgba(255,255,255,0.2)', padding: '0.25rem 0.75rem', borderRadius: '99px', fontSize: '0.75rem' }}>
+                                {stats.highlightCong.scope}
+                            </span>
+                        </div>
+                    </div>
+                    <div style={{ textAlign: 'right', zIndex: 2 }}>
+                        <Trophy size={60} color="#fbbf24" strokeWidth={1.5} />
+                        <div style={{ fontSize: '1.25rem', fontWeight: 800, marginTop: '0.5rem' }}>{stats.highlightCong.value} 🤝</div>
+                    </div>
+                </div>
+
+                {/* SOULS CARD */}
+                <div className={styles.soulCard}>
+                    <div style={{ background: '#eff6ff', borderRadius: '12px', color: '#1e3a8a', marginBottom: '0.75rem', padding: '10px' }}>
+                        <Target size={24} />
+                    </div>
+                    <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>Vidas Alcançadas</span>
+                    <div className={styles.soulValue}>{stats.totalSouls}</div>
+                    <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Neste período</span>
+                </div>
+            </div>
+
             <div className={styles.grid}>
+                {/* FINANCIAL CARD */}
+                <div className={styles.card}>
+                    <div className={styles.cardHeader}>
+                        <div>
+                            <span className={styles.cardTitle}>Arrecadação Total</span>
+                            <div className={`${styles.cardValue} text-green-600`}>
+                                R$ {stats.totalFinancial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                            </div>
+                        </div>
+                        <div className={`${styles.iconBox} bg-green-50 text-green-600`}>
+                            <Banknote size={24} />
+                        </div>
+                    </div>
+                </div>
+
                 {/* MEMBER CARD */}
                 <div className={styles.card}>
                     <div className={styles.cardHeader}>
@@ -217,34 +372,120 @@ export default function DashboardPage() {
                             <span className={styles.cardTitle}>Carnês Ativos</span>
                             <div className={styles.cardValue}>{stats.totalCarnets}</div>
                         </div>
-                        <div className={`${styles.iconBox} bg-purple-50 text-purple-600`}>
+                        <div className={`${styles.iconBox} bg-indigo-50 text-indigo-600`}>
                             <Building2 size={24} />
                         </div>
                     </div>
                     <div className="text-sm text-gray-500">
-                        <strong>{stats.totalMembers > 0 ? ((stats.totalCarnets / stats.totalMembers) * 100).toFixed(1) : 0}%</strong> de taxa de adesão
-                    </div>
-                </div>
-
-                {/* FINANCIAL CARD */}
-                <div className={styles.card}>
-                    <div className={styles.cardHeader}>
-                        <div>
-                            <span className={styles.cardTitle}>Arrecadação Total</span>
-                            <div className={`${styles.cardValue} text-green-600`}>
-                                R$ {stats.totalFinancial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                            </div>
-                        </div>
-                        <div className={`${styles.iconBox} bg-green-50 text-green-600`}>
-                            <Banknote size={24} />
-                        </div>
+                        <strong>{stats.totalMembers > 0 ? ((stats.totalCarnets / stats.totalMembers) * 100).toFixed(1) : 0}%</strong> adesão
                     </div>
                 </div>
             </div>
 
 
 
-            {/* MONTHLY EVOLUTION CHART */}
+            {/* EVANGELISM EVOLUTION CHART */}
+            <section className={`${styles.rankingSection} mb-8`}>
+                <div className={styles.sectionHeader}>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-100 text-blue-700 rounded-lg">
+                            <Target size={24} />
+                        </div>
+                        <div>
+                            <h2 className={styles.sectionTitle}>Evolução Pessoas Abordadas</h2>
+                            <p className="text-sm text-gray-500">Últimos 6 meses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.chartContainer}>
+                    <div className={styles.chartGrid}>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                        <div className={styles.gridLine}></div>
+                    </div>
+
+                    {evangelismHistory.map((item, idx) => {
+                        const maxEvHistory = Math.max(...evangelismHistory.map(h => h.total), 1);
+                        const heightPercentage = Math.max((item.total / maxEvHistory) * 100, 4);
+                        return (
+                            <div key={idx} className={styles.chartColumn}>
+                                <div className={styles.chartTooltip}>
+                                    {item.total} pessoas
+                                </div>
+                                <div
+                                    className={styles.chartBarBg}
+                                    style={{ height: `${heightPercentage}%`, backgroundColor: '#dcfce7' }}
+                                >
+                                    <div className={styles.chartBarFill}
+                                        style={{ height: '100%', backgroundColor: '#16a34a' }}>
+                                    </div>
+                                </div>
+                                <div className={styles.chartLabel}>
+                                    {item.label}
+                                </div>
+                                <div className={styles.chartSubLabel}>
+                                    {item.year}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* EVANGELISM SECTOR CHART */}
+            {evangelismSectorStats.length > 0 && (
+                <section className={`${styles.rankingSection} mb-8`}>
+                    <div className={styles.sectionHeader}>
+                        <div className="flex items-center gap-3">
+                            <div className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
+                                <Users size={24} />
+                            </div>
+                            <div>
+                                <h2 className={styles.sectionTitle}>Pessoas Abordadas por Setor</h2>
+                                <p className="text-sm text-gray-500">Consolidado do Ano Atual</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className={styles.chartContainer}>
+                        <div className={styles.chartGrid}>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                            <div className={styles.gridLine}></div>
+                        </div>
+
+                        {evangelismSectorStats.map((item, idx) => {
+                            const maxEvSector = Math.max(...evangelismSectorStats.map(s => s.total_reached), 1);
+                            const heightPercentage = Math.max((item.total_reached / maxEvSector) * 100, 4);
+                            return (
+                                <div key={idx} className={styles.chartColumn}>
+                                    <div className={styles.chartTooltip}>
+                                        {item.total_reached} pessoas
+                                    </div>
+                                    <div
+                                        className={styles.chartBarBg}
+                                        style={{ height: `${heightPercentage}%`, backgroundColor: '#e0f2fe' }}
+                                    >
+                                        <div className={styles.chartBarFill}
+                                            style={{ height: '100%', background: 'linear-gradient(to top, #0284c7, #38bdf8)' }}>
+                                        </div>
+                                    </div>
+                                    <div className={styles.chartLabel}>
+                                        Setor {item.sector}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+            )}
+
+            {/* MONTHLY FINANCIAL EVOLUTION CHART */}
             <section className={`${styles.rankingSection} mb-8`}>
                 <div className={styles.sectionHeader}>
                     <div className="flex items-center gap-3">
@@ -294,7 +535,7 @@ export default function DashboardPage() {
                 </div>
             </section>
 
-            {/* SECTOR FINANCIAL CHART (NEW) */}
+            {/* SECTOR FINANCIAL CHART */}
             {sectorStats.length > 0 && (
                 <section className={`${styles.rankingSection} mb-8`}>
                     <div className={styles.sectionHeader}>
@@ -340,78 +581,6 @@ export default function DashboardPage() {
                                 </div>
                             );
                         })}
-                    </div>
-                </section>
-            )}
-
-            {['admin', 'sector_agent', 'sector_pastor'].includes(userProfile?.role || 'none') && (
-                <section className={styles.rankingSection}>
-                    <div className={styles.sectionHeader}>
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-blue-100 text-blue-700 rounded-lg">
-                                <BarChart2 size={24} />
-                            </div>
-                            <div>
-                                <h2 className={styles.sectionTitle}>Ranking de Desempenho</h2>
-                                <p className="text-sm text-gray-500">Ordenado por arrecadação total</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className={styles.tableContainer}>
-                        <table className={styles.table}>
-                            <thead>
-                                <tr>
-                                    <th className={styles.th}>Congregação</th>
-                                    <th className={styles.th}>Setor</th>
-                                    <th className={styles.th}>Adesão ao Carnê</th>
-                                    <th className={styles.th}>Membros</th>
-                                    <th className={styles.th} style={{ textAlign: 'right' }}>Arrecadação</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {detailedStats.map((cong) => (
-                                    <tr key={cong.id} className={styles.tr}>
-                                        <td className={styles.td}>
-                                            {cong.name}
-                                        </td>
-                                        <td className={styles.td}>
-                                            <span className="px-2 py-1 bg-gray-100 rounded text-xs font-semibold text-gray-600">
-                                                Setor {cong.sector}
-                                            </span>
-                                        </td>
-                                        <td className={styles.td}>
-                                            <div className="flex items-center gap-3">
-                                                <span className="text-xs font-bold w-8">{cong.participation_rate.toFixed(0)}%</span>
-                                                <div className={styles.progressBarBg}>
-                                                    <div
-                                                        className={styles.progressBarFill}
-                                                        style={{
-                                                            width: `${cong.participation_rate}%`,
-                                                            background: cong.participation_rate > 50 ? '#10b981' : '#f59e0b'
-                                                        }}
-                                                    ></div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className={styles.td}>{cong.members_count}</td>
-                                        <td className={styles.td} style={{ textAlign: 'right' }}>
-                                            R$ {cong.total_raised.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
-                                            {/* Visual Bar relative to Max */}
-                                            <div style={{
-                                                height: '4px',
-                                                background: '#3b82f6',
-                                                opacity: 0.3,
-                                                width: `${(cong.total_raised / maxRaised) * 100}%`,
-                                                marginLeft: 'auto',
-                                                marginTop: '4px',
-                                                borderRadius: '2px'
-                                            }}></div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
                     </div>
                 </section>
             )}

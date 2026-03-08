@@ -1,0 +1,138 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 0.5rem 4rem 0.5rem;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem 1rem;
+    background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+    border-radius: 1.5rem;
+    color: white;
+}
+
+.header h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.card {
+    background: white;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.fieldGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.fieldGroup label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.leadsSection {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.leadsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.leadsTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.leadItem {
+    background: #f8fafc;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    position: relative;
+    border: 1px solid #f1f5f9;
+}
+
+.removeBtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: #ef4444;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0.25rem;
+}
+
+.consentRow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.consentRow input {
+    cursor: pointer;
+}
+
+.consentRow label {
+    font-size: 0.8rem;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 0.25rem 2rem 0.25rem;
+    }
+
+    .header {
+        padding: 1.5rem 1rem;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .card {
+        padding: 1.25rem;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

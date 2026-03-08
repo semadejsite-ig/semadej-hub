@@ -10,7 +10,8 @@ import {
     TrendingUp,
     Search,
     FileText,
-    Send
+    Send,
+    BarChart2
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import styles from './page.module.css';
@@ -27,6 +28,7 @@ export default function TreasuryPage() {
     });
     const [recentReports, setRecentReports] = useState<any[]>([]);
     const [pendingList, setPendingList] = useState<any[]>([]);
+    const [detailedStats, setDetailedStats] = useState<any[]>([]);
     const [printMode, setPrintMode] = useState<'general' | 'pending' | null>(null);
     const [selectedDate, setSelectedDate] = useState(() => {
         const d = new Date();
@@ -63,7 +65,7 @@ export default function TreasuryPage() {
             // 1. Get ALL Congregations
             const { data: allCongs, error: congError } = await supabase
                 .from('congregations')
-                .select('id, name, sector')
+                .select('id, name, sector, members_count, carnets_count')
                 .order('name');
 
             if (congError) throw congError;
@@ -121,6 +123,27 @@ export default function TreasuryPage() {
 
             setPendingList(missing);
             setRecentReports(reports || []);
+
+            // 4. Calculate Ranking (Aggregating ALL reports for these congs)
+            const rankingData = congsWithProfiles.map(cong => {
+                const congReports = reports?.filter(r => r.congregation_id === cong.id) || [];
+                const total = congReports.reduce((sum, r) => sum + (r.carnet_value || 0) + (r.service_offering_value || 0) + (r.special_offering_value || 0), 0);
+
+                // Fetch members count from congregations (already in allCongs)
+                const members = allCongs.find(c => c.id === cong.id)?.members_count || 0;
+                const carnets = allCongs.find(c => c.id === cong.id)?.carnets_count || 0;
+
+                return {
+                    id: cong.id,
+                    name: cong.name,
+                    sector: cong.sector,
+                    total_raised: total,
+                    members_count: members,
+                    participation_rate: members > 0 ? (carnets / members) * 100 : 0
+                };
+            }).sort((a, b) => b.total_raised - a.total_raised);
+
+            setDetailedStats(rankingData);
 
         } catch (err) {
             console.error('Error loading treasury data:', err);
@@ -282,7 +305,7 @@ export default function TreasuryPage() {
 
                 {/* AUDIT STATUS - Hide on All Prints */}
                 <div className={`${styles.card} ${styles.auditCard} ${styles.noPrint}`}>
-                    <div className={styles.auditIcon}>
+                    <div className={styles.auditIcon} style={{ background: '#e0e7ff', color: '#4f46e5' }}>
                         <FileText size={32} />
                     </div>
                     <div>
@@ -446,6 +469,56 @@ export default function TreasuryPage() {
                     </div>
                 )
             }
+
+            {/* RANKING DE DESEMPENHO (Relatório Adicional) */}
+            <div className={styles.tableCard} style={{ marginTop: '2rem' }}>
+                <div className={styles.tableHeader}>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-blue-100 text-blue-700 rounded-lg">
+                            <BarChart2 size={24} />
+                        </div>
+                        <div>
+                            <h3 className={styles.tableTitle}>Ranking de Desempenho</h3>
+                            <p className="text-sm text-gray-500">Desempenho financeiro do mês selecionado</p>
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.tableContent}>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                <th>Congregação</th>
+                                <th>Setor</th>
+                                <th style={{ textAlign: 'right' }}>Arrecadação</th>
+                                <th style={{ textAlign: 'center' }}>Adesão ao Carnê</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {detailedStats.sort((a, b) => b.total_raised - a.total_raised).map((cong) => (
+                                <tr key={cong.id}>
+                                    <td style={{ fontWeight: 600 }}>{cong.name}</td>
+                                    <td>Setor {cong.sector}</td>
+                                    <td style={{ textAlign: 'right', fontWeight: 700 }}>
+                                        R$ {cong.total_raised.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                                    </td>
+                                    <td>
+                                        <div className="flex items-center justify-center gap-2">
+                                            <span className="text-xs font-bold">{cong.participation_rate.toFixed(0)}%</span>
+                                            <div style={{ width: '60px', height: '6px', background: '#e2e8f0', borderRadius: '99px', overflow: 'hidden' }}>
+                                                <div style={{
+                                                    width: `${cong.participation_rate}%`,
+                                                    height: '100%',
+                                                    background: cong.participation_rate > 50 ? '#10b981' : '#f59e0b'
+                                                }}></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     );
 }

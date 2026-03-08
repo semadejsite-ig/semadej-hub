@@ -7,6 +7,9 @@ create table congregations (
   name text not null,
   sector text,
   region text,
+  address text,
+  members_count integer default 0,
+  carnets_count integer default 0,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
@@ -60,12 +63,37 @@ create table vacancies (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Table: Evangelism Records (Ações de Campo)
+create table evangelism_records (
+  id uuid primary key default uuid_generate_v4(),
+  agent_id uuid references profiles(id) not null,
+  congregation_id uuid references congregations(id) not null,
+  title text not null,
+  description text,
+  event_date date not null default current_date,
+  people_reached integer default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Table: Evangelism Leads (Contatos colhidos)
+create table evangelism_leads (
+  id uuid primary key default uuid_generate_v4(),
+  record_id uuid references evangelism_records(id) on delete cascade not null,
+  full_name text not null,
+  contact_info text, -- telefone/email
+  consent_verbal boolean default false, -- LGPD
+  notes text,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
 -- Security Policies (RLS) - Basic Setup (To be refined)
 alter table registrations enable row level security;
 alter table congregations enable row level security;
 alter table profiles enable row level security;
 alter table monthly_reports enable row level security;
 alter table vacancies enable row level security;
+alter table evangelism_records enable row level security;
+alter table evangelism_leads enable row level security;
 
 -- Policies
 -- Registrations: Public insert, Admin view
@@ -78,3 +106,17 @@ create policy "Public can view congregations" on congregations for select using 
 -- Monthly Reports: Agents can insert, Admins view
 create policy "Agents can insert reports" on monthly_reports for insert with check (auth.uid() = agent_id);
 create policy "Agents can view own reports" on monthly_reports for select using (auth.uid() = agent_id);
+
+-- Evangelism Records Policies
+create policy "Agents can insert evangelism records" on evangelism_records for insert with check (auth.uid() = agent_id);
+create policy "Agents can view own evangelism records" on evangelism_records for select using (auth.uid() = agent_id);
+create policy "Admins can view all evangelism records" on evangelism_records for select using (auth.uid() in (select id from profiles where role = 'admin'));
+
+-- Evangelism Leads Policies
+create policy "Agents can manage own leads" on evangelism_leads for all using (
+  exists (
+    select 1 from evangelism_records 
+    where evangelism_records.id = evangelism_leads.record_id 
+    and evangelism_records.agent_id = auth.uid()
+  )
+);

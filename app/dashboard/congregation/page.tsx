@@ -18,8 +18,10 @@ export default function CongregationStatsPage() {
 
     const [formData, setFormData] = useState({
         members_count: '',
-        carnets_count: ''
+        carnets_count: '',
+        address: ''
     });
+    const [pastorName, setPastorName] = useState<string | null>(null);
 
     useEffect(() => {
         const getData = async () => {
@@ -28,7 +30,8 @@ export default function CongregationStatsPage() {
             if (isMock) {
                 setUserProfile({ id: 'mock', congregation_id: 'mock' });
                 setSchoolName("Congregação Exemplo");
-                setFormData({ members_count: '150', carnets_count: '80' });
+                setPastorName("Pr. João da Silva");
+                setFormData({ members_count: '150', carnets_count: '80', address: 'Rua das Missões, 123' });
                 setFetching(false);
                 return;
             }
@@ -50,7 +53,7 @@ export default function CongregationStatsPage() {
             // 2. Get Congregation Data
             const { data: cong } = await supabase
                 .from('congregations')
-                .select('name, members_count, carnets_count')
+                .select('name, members_count, carnets_count, address')
                 .eq('id', profile.congregation_id)
                 .single();
 
@@ -58,8 +61,19 @@ export default function CongregationStatsPage() {
                 setSchoolName(cong.name);
                 setFormData({
                     members_count: cong.members_count?.toString() || '',
-                    carnets_count: cong.carnets_count?.toString() || ''
+                    carnets_count: cong.carnets_count?.toString() || '',
+                    address: cong.address || ''
                 });
+
+                // 3. Get Pastor (User with role pastor or sector_pastor linked to this congregation)
+                const { data: pastor } = await supabase
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('congregation_id', profile.congregation_id)
+                    .in('role', ['pastor', 'sector_pastor'])
+                    .maybeSingle();
+
+                if (pastor) setPastorName(pastor.full_name);
             }
             setFetching(false);
         };
@@ -83,7 +97,8 @@ export default function CongregationStatsPage() {
                 .from('congregations')
                 .update({
                     members_count: parseInt(formData.members_count) || 0,
-                    carnets_count: parseInt(formData.carnets_count) || 0
+                    carnets_count: parseInt(formData.carnets_count) || 0,
+                    address: formData.address
                 })
                 .eq('id', userProfile.congregation_id);
 
@@ -106,6 +121,7 @@ export default function CongregationStatsPage() {
             <header className={styles.header}>
                 <h1 className={styles.title}>Dados da Congregação</h1>
                 <p className={styles.subtitle}>{schoolName}</p>
+                {pastorName && <p className="text-sm font-medium text-slate-500 mt-1">Dirigente: {pastorName}</p>}
             </header>
 
             <div className={styles.card}>
@@ -131,6 +147,14 @@ export default function CongregationStatsPage() {
                         placeholder="0"
                         value={formData.carnets_count}
                         onChange={e => setFormData({ ...formData, carnets_count: e.target.value })}
+                    />
+
+                    <Input
+                        id="address"
+                        label="Endereço Completo"
+                        placeholder="Ex: Rua das Missões, 123 - Centro"
+                        value={formData.address}
+                        onChange={e => setFormData({ ...formData, address: e.target.value })}
                     />
 
                     <div className={styles.actions}>
