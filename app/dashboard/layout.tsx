@@ -20,7 +20,8 @@ import {
     DollarSign,
     HeartHandshake,
     MapPin,
-    Trophy
+    Trophy,
+    Calendar
 } from 'lucide-react';
 
 export default function DashboardLayout({
@@ -116,7 +117,7 @@ export default function DashboardLayout({
                             </Link>
                             <Link href="/dashboard/vacancies" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                 <Map size={20} />
-                                Vagas e Congregações
+                                Alocação de Agentes
                             </Link>
                             <Link href="/dashboard/evangelism" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                 <MapPin size={20} />
@@ -153,6 +154,10 @@ export default function DashboardLayout({
                                     <Link href="/dashboard/admin/congregations" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                                         <BarChart3 size={20} />
                                         Estatísticas Gerais
+                                    </Link>
+                                    <Link href="/dashboard/admin/agenda" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                        <Calendar size={20} />
+                                        Agenda Automática
                                     </Link>
                                 </>
                             )}

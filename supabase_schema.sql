@@ -35,6 +35,8 @@ create table profiles (
   is_first_agent boolean default false, -- Agent 1
   is_second_agent boolean default false, -- Agent 2
   phone text,
+  last_access timestamp with time zone,
+  status text default 'active' check (status in ('active', 'inactive')),
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -86,6 +88,23 @@ create table evangelism_leads (
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
+-- Table: Calendar Events (Automated Secretary Agenda)
+create table calendar_events (
+  id uuid primary key default uuid_generate_v4(),
+  title text not null,
+  event_type text not null default 'text' check (event_type in ('text', 'vacancies_report', 'treasury_report')),
+  message text,
+  start_time timestamp with time zone not null,
+  recurrence text not null default 'none' check (recurrence in ('none', 'daily', 'weekly', 'monthly')),
+  end_time timestamp with time zone,
+  target_bot text not null default 'general' check (target_bot in ('general', 'treasury')),
+  status text not null default 'active' check (status in ('active', 'inactive')),
+  last_run timestamp with time zone,
+  created_by uuid references profiles(id),
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
 -- Security Policies (RLS) - Basic Setup (To be refined)
 alter table registrations enable row level security;
 alter table congregations enable row level security;
@@ -120,3 +139,8 @@ create policy "Agents can manage own leads" on evangelism_leads for all using (
     and evangelism_records.agent_id = auth.uid()
   )
 );
+
+-- Calendar Events Policies
+alter table calendar_events enable row level security;
+create policy "Admins can manage calendar events" on calendar_events for all using (auth.uid() in (select id from profiles where role = 'admin'));
+create policy "Admins can view calendar events" on calendar_events for select using (auth.uid() in (select id from profiles where role = 'admin'));

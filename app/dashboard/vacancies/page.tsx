@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/Button';
 import styles from './page.module.css';
-import { Search, Users, Phone, MessageCircle } from 'lucide-react';
+import { Search, Users, Phone, MessageCircle, Send } from 'lucide-react';
 
 type Profile = {
     id: string;
@@ -26,6 +26,7 @@ export default function VacanciesPage() {
     const [congregations, setCongregations] = useState<CongregationStatus[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [sendingTelegram, setSendingTelegram] = useState(false);
 
     // Contact Modal State
     const [selectedCongregation, setSelectedCongregation] = useState<CongregationStatus | null>(null);
@@ -48,7 +49,8 @@ export default function VacanciesPage() {
             // 2. Fetch ALL profiles for these congregations
             const { data: profileData, error: profileError } = await supabase
                 .from('profiles')
-                .select('id, full_name, phone, role, congregation_id');
+                .select('id, full_name, phone, role, congregation_id')
+                .neq('access_status', 'inactive');
 
             if (profileError) throw profileError;
 
@@ -145,6 +147,40 @@ export default function VacanciesPage() {
         }
     };
 
+    const handleTelegramSummary = async () => {
+        const withoutAgents = filteredCongregations.filter(c => c.agent_count === 0);
+
+        if (withoutAgents.length === 0) {
+            alert('Não há congregações sem agentes na lista atual.');
+            return;
+        }
+
+        if (!confirm(`Deseja notificar no Telegram sobre as ${withoutAgents.length} congregações sem agente?`)) return;
+
+        setSendingTelegram(true);
+        try {
+            const response = await fetch('/api/notifications/vacancies-summary', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pendingList: withoutAgents
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                alert('Alerta enviado com sucesso para o Telegram!');
+            } else {
+                throw new Error(data.error || 'Erro desconhecido');
+            }
+        } catch (err: any) {
+            console.error('Telegram notification failed:', err);
+            alert(`Falha ao enviar: ${err.message}`);
+        } finally {
+            setSendingTelegram(false);
+        }
+    };
+
     // Helper to format WhatsApp Link
     const getWhatsAppLink = (phone: string) => {
         if (!phone) return '#';
@@ -188,8 +224,19 @@ export default function VacanciesPage() {
         <div className={styles.container}>
             <header className={styles.header}>
                 <div>
-                    <h1 className={styles.title}>Mapa de Vagas</h1>
+                    <h1 className={styles.title}>Alocação de Agentes</h1>
                     <p className={styles.subtitle}>Gerencie a alocação de agentes nas 84 congregações.</p>
+                </div>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        onClick={handleTelegramSummary}
+                        isLoading={sendingTelegram}
+                        style={{ gap: '8px', border: '1px solid var(--border)' }}
+                    >
+                        <Send size={18} />
+                        Notificar Vagas (Telegram)
+                    </Button>
                 </div>
             </header>
 

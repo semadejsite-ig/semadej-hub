@@ -13,6 +13,8 @@ type UserProfile = {
     congregation_id: string;
     phone: string;
     approved: boolean;
+    access_status: 'active' | 'inactive';
+    last_access: string | null;
     congregations?: { name: string; sector: string };
 };
 
@@ -20,7 +22,7 @@ export default function AdminUsersPage() {
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [congregations, setCongregations] = useState<{ id: string, name: string }[]>([]);
     const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState<'pending' | 'approved'>('pending');
+    const [filter, setFilter] = useState<'pending' | 'approved' | 'inactive'>('pending');
 
     // Edit Modal State
     const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
@@ -88,6 +90,37 @@ export default function AdminUsersPage() {
         }
     };
 
+    const handleToggleStatus = async (user: UserProfile) => {
+        const currentStatus = user.access_status === 'inactive' ? 'inactive' : 'active';
+        const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+        const confirmMsg = newStatus === 'inactive'
+            ? `Deseja BLOQUEAR o acesso de ${user.full_name}?`
+            : `Deseja REATIVAR o acesso de ${user.full_name}?`;
+
+        if (!window.confirm(confirmMsg)) return;
+
+        try {
+            if (localStorage.getItem('mock_session')) {
+                setUsers(prev => prev.map(u => u.id === user.id ? { ...u, access_status: newStatus } : u));
+                alert(`Usuário ${newStatus === 'inactive' ? 'bloqueado' : 'reativado'}! (Mock)`);
+                return;
+            }
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ access_status: newStatus })
+                .eq('id', user.id);
+
+            if (error) throw error;
+
+            setUsers(prev => prev.map(u => u.id === user.id ? { ...u, access_status: newStatus } : u));
+            alert(`Usuário ${newStatus === 'inactive' ? 'bloqueado' : 'reativado'} com sucesso!`);
+        } catch (error) {
+            console.error(error);
+            alert("Erro ao alterar status de acesso do usuário. " + error);
+        }
+    };
+
     const openEditModal = (user: UserProfile) => {
         setEditingUser(user);
         setEditFormData({
@@ -144,11 +177,20 @@ export default function AdminUsersPage() {
     };
 
     const filteredUsers = users.filter(u => {
-        if (filter === 'pending') return !u.approved;
-        return u.approved;
+        if (filter === 'pending') return !u.approved && u.access_status !== 'inactive';
+        if (filter === 'inactive') return u.access_status === 'inactive';
+        if (filter === 'approved') return u.approved && u.access_status !== 'inactive';
+        return false;
     });
 
-    const pendingCount = users.filter(u => !u.approved).length;
+    const pendingCount = users.filter(u => !u.approved && u.access_status !== 'inactive').length;
+    const inactiveCount = users.filter(u => u.access_status === 'inactive').length;
+
+    const formatLastAccess = (dateString: string | null) => {
+        if (!dateString) return <span className="text-slate-400 italic">Nunca acessou</span>;
+        const target = new Date(dateString);
+        return target.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    };
 
     return (
         <div className={styles.container}>
@@ -176,6 +218,13 @@ export default function AdminUsersPage() {
                 >
                     Aprovados
                 </button>
+                <button
+                    className={`${styles.tab} ${filter === 'inactive' ? styles.activeTab : ''}`}
+                    onClick={() => setFilter('inactive')}
+                >
+                    Inativos
+                    {inactiveCount > 0 && <span className={`${styles.badge} ${filter === 'inactive' ? styles.badgeActive : ''}`}>{inactiveCount}</span>}
+                </button>
             </div>
 
             <div className={styles.card}>
@@ -191,6 +240,7 @@ export default function AdminUsersPage() {
                                     <th>Setor</th>
                                     <th>Perfil</th>
                                     <th>Contato</th>
+                                    <th>Último Acesso</th>
                                     <th style={{ textAlign: 'right' }}>Ações</th>
                                 </tr>
                             </thead>
@@ -233,15 +283,26 @@ export default function AdminUsersPage() {
                                                 </span>
                                             </td>
                                             <td>{user.phone}</td>
+                                            <td style={{ fontSize: '0.85rem' }}>{formatLastAccess(user.last_access)}</td>
                                             <td>
                                                 <div className={styles.actions}>
-                                                    {!user.approved && (
+                                                    {!user.approved && user.access_status !== 'inactive' && (
                                                         <button
                                                             className={styles.btnApprove}
                                                             onClick={() => handleApprove(user.id)}
                                                             title="Aprovar Usuário"
                                                         >
                                                             <Check size={14} /> Aprovar
+                                                        </button>
+                                                    )}
+                                                    {user.approved && (
+                                                        <button
+                                                            className={user.access_status !== 'inactive' ? styles.btnDelete : styles.btnApprove} // reusing delete class for red block btn visually
+                                                            onClick={() => handleToggleStatus(user)}
+                                                            title={user.access_status !== 'inactive' ? "Bloquear Acesso" : "Reativar Acesso"}
+                                                            style={{ padding: '0.4rem', borderRadius: '6px', background: user.access_status !== 'inactive' ? '#fee2e2' : '#dcfce7', color: user.access_status !== 'inactive' ? '#991b1b' : '#16a34a', border: 'none', cursor: 'pointer' }}
+                                                        >
+                                                            <ShieldAlert size={14} />
                                                         </button>
                                                     )}
                                                     <button

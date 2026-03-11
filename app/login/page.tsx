@@ -45,7 +45,7 @@ export default function LoginPage() {
             // Successful auth, now check profile status
             const { data: profile, error: profileError } = await supabase
                 .from('profiles')
-                .select('approved, role')
+                .select('approved, role, access_status')
                 .eq('id', data.user.id)
                 .single();
 
@@ -55,12 +55,23 @@ export default function LoginPage() {
             }
 
             if (profile) {
+                // Deny login if explicitly inactive
+                if (profile.access_status === 'inactive') {
+                    await supabase.auth.signOut();
+                    throw new Error('Sua conta foi desativada pelo administrador. Entre em contato para reativar.');
+                }
+
                 // Check if user is approved (unless admin)
-                // Note: 'approved' column is boolean. 'status' column is legacy/text.
                 if (profile.role !== 'admin' && !profile.approved) {
                     await supabase.auth.signOut();
                     throw new Error('Sua conta ainda está em análise pelo administrador.');
                 }
+
+                // Update last_access timestamp
+                await supabase
+                    .from('profiles')
+                    .update({ last_access: new Date().toISOString() })
+                    .eq('id', data.user.id);
             }
 
             // Successful login (Real)
