@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação - Sistema de Integração e Discipulado SEMADEJ</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --background: #f8fafc;
+            --card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow-premium: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Presentation Container */
+        .presentation {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Slide Styles */
+        .slide {
+            position: absolute;
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            max-height: 750px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-premium);
+            padding: 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Slide Active State */
+        .slide.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* Slide Outward Transitions */
+        .slide.exit-left {
+            opacity: 0;
+            transform: scale(0.95) translateX(-100px);
+            z-index: 1;
+        }
+
+        .slide.exit-right {
+            opacity: 0;
+            transform: scale(0.95) translateX(100px);
+            z-index: 1;
+        }
+
+        /* Background blur shapes for modern aesthetic */
+        .slide::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Grid layouts for content */
+        .slide-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 3rem;
+            flex: 1;
+            align-items: center;
+        }
+
+        @media (max-width: 900px) {
+            .slide-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .slide-visual {
+                display: none;
+            }
+        }
+
+        /* Typography & Headings */
+        .slide-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .slide-category {
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-title span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Features List */
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            animation: slideInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.1s; }
+        .feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .feature-item:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-icon-wrapper {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            flex-shrink: 0;
+        }
+
+        .feature-text h4 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-text p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Footer Info */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .slide-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+        }
+
+        /* Interactive Visual Mockups */
+        .slide-visual {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Visual mockup containers styling */
+        .visual-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);
+            width: 90%;
+            position: relative;
+            transform: rotate(-2deg);
+            transition: var(--transition);
+        }
+
+        .visual-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        /* Title Slide Customization */
+        .slide-title-page {
+            background: var(--primary-gradient);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-title-page::before {
+            display: none;
+        }
+
+        .title-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            display: inline-block;
+        }
+
+        .title-main {
+            font-family: 'Outfit', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .title-main span {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-sub {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+        }
+
+        /* Navigation Controls Overlay */
+        .controls {
+            position: fixed;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: white;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: var(--text-main);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: #2563eb;
+            width: 24px;
+            border-radius: 5px;
+        }
+
+        /* Visual Stepper Mockup inside presentation */
+        .stepper-mock {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 1.25rem 0.75rem;
+            border-radius: 12px;
+            margin-top: 1rem;
+        }
+
+        .step-mock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .step-mock-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #64748b;
+        }
+
+        .step-mock.active .step-mock-num {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .step-mock-text {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .step-mock.active .step-mock-text {
+            color: #10b981;
+        }
+
+        .step-mock-line {
+            flex: 1;
+            height: 2px;
+            background: #cbd5e1;
+            margin-top: -16px;
+        }
+
+        .step-mock-line.active {
+            background: #10b981;
+        }
+
+        /* QR Code & Alert mockups */
+        .qr-mock {
+            width: 140px;
+            height: 140px;
+            border: 4px solid var(--text-main);
+            border-radius: 12px;
+            padding: 0.5rem;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .qr-mock svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .tg-alert-mock {
+            background: #229ED9;
+            color: white;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            box-shadow: 0 10px 15px -3px rgba(34, 158, 217, 0.2);
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* SVG Circle Progress Mockup */
+        .circle-progress-mock {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .circle-progress-mock svg {
+            transform: rotate(-90deg);
+        }
+
+        .circle-text-mock {
+            position: absolute;
+            text-align: center;
+        }
+
+        .circle-text-mock h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .circle-text-mock span {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        /* Keypad Instructions overlay */
+        .keyboard-tips {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .k-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.05);
+        }
+
+        /* Alert badge mock */
+        .badge-mock {
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            background: rgba(239, 68, 68, 0.08);
+            color: #ef4444;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation">
+        
+        <!-- SLIDE 1: Capa -->
+        <section class="slide slide-title-page active" data-slide="1">
+            <div class="title-badge">SEMADEJ DIGITAL</div>
+            <h1 class="title-main">Sistema de Integração e <span>Discipulado</span></h1>
+            <p class="title-sub">
+                A tecnologia servindo ao Reino: aproximando liderança, voluntários e novos convertidos desde o primeiro instante da decisão.
+            </p>
+            <div style="font-size: 0.85rem; opacity: 0.7; font-weight: 600;">
+                Apresentação Oficial para a Igreja
+            </div>
+        </section>
+
+        <!-- SLIDE 2: O Desafio -->
+        <section class="slide" data-slide="2">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">O Cenário</span>
+                    <h2 class="slide-header slide-title">Do Papel para o <span>Cuidado Instantâneo</span></h2>
+                    <p class="slide-desc">
+                        O processo tradicional de fichas em papel gerava atrasos naturais no acolhimento de novas vidas. Nosso desafio era reduzir esse tempo a zero.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="clock"></i></div>
+                        <div class="feature-text">
+                            <h4>Atendimento sem Demora</h4>
+                            <p>O acompanhamento imediato nas primeiras 24 horas aumenta drasticamente a taxa de permanência do novo convertido.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="users"></i></div>
+                        <div class="feature-text">
+                            <h4>Equipe Integrada</h4>
+                            <p>Pastores, coordenadores e voluntários em sintonia através de uma única ferramenta inteligente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="transform: rotate(3deg); background: #fafafa; border: 1.5px dashed #cbd5e1; text-align: center;">
+                        <i data-lucide="file-text" size="48" style="color: #94a3b8; margin-bottom: 1rem;"></i>
+                        <h4 style="color: #64748b; margin-bottom: 0.5rem;">Ficha Física Tradicional</h4>
+                        <p style="font-size: 0.75rem; color: #94a3b8;">
+                            Risco de extravio • Atraso na digitação • Dificuldade de acompanhamento histórico das visitas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
+                <div>Slide 2 de 7</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Pilar 1 -->
+        <section class="slide" data-slide="3">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">Pilar 1</span>
+                    <h2 class="slide-header slide-title">Ficha de Decisão <span>100% Digital</span></h2>
+                    <p class="slide-desc">
+                        A captação da decisão agora ocorre direto pelo celular nos cultos, vias públicas ou eventos, enviando alertas em tempo real.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="qr-code"></i></div>
+                        <div class="feature-text">
+                            <h4>QR Code e Links da Congregação</h4>
+                            <p>Cada congregação possui seu link e QR Code exclusivo para acesso rápido ao formulário.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="send"></i></div>
+                        <div class="feature-text">
+                            <h4>Notificações no Telegram</h4>
+                            <p>Assim que a ficha é salva, um alerta é disparado automaticamente para o grupo de liderança da congregação.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="max-width: 320px;">
+                        <div class="qr-mock">
+                            <!-- Draw simple grid lines to simulate QR code -->
+                            <svg viewBox="0 0 100 100">
+                                <rect x="0" y="0" width="30" height="30" fill="#0f172a"/>
+                                <rect x="5" y="5" width="20" height="20" fill="white"/>
+                                <rect x="10" y="10" width="10" height="10" fill="#0f172a"/>
+                                <rect x="70" y="0" width="30" height="30" fill="#0f172a"/>
+                                <rect x="75" y="5" width="20" height="20" fill="white"/>
+                                <rect x="80" y="80" width="10" height="10" fill="#0f172a"/>
+                                <rect x="0" y="70" width="30" height="30" fill="#0f172a"/>
+                                <rect x="5" y="75" width="20" height="20" fill="white"/>
+                                <rect x="10" y="80" width="10" height="10" fill="#0f172a"/>
+                                <rect x="40" y="40" width="20" height="20" fill="#0f172a"/>
+                                <rect x="50" y="70" width="10" height="20" fill="#0f172a"/>
+                                <rect x="80" y="40" width="10" height="20" fill="#0f172a"/>
+                            </svg>
+                        </div>
+                        <div class="tg-alert-mock">
+                            <strong>🔔 Alerta SEMADEJ:</strong> Novas decisões no altar! <strong>Thiago Santos</strong> acaba de aceitar a Jesus na Congregação Central.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
+                <div>Slide 3 de 7</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Pilar 2 -->
+        <section class="slide" data-slide="4">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">Pilar 2</span>
+                    <h2 class="slide-header slide-title">Painel Geral do <span>Discipulado</span></h2>
+                    <p class="slide-desc">
+                        Uma central analítica exclusiva para pastores e coordenadores avaliarem a saúde espiritual e consolidação do setor ou congregação.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="pie-chart"></i></div>
+                        <div class="feature-text">
+                            <h4>Taxa de Integração Espiritual</h4>
+                            <p>Visualização gráfica da porcentagem de decididos que se tornaram membros ativos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="activity"></i></div>
+                        <div class="feature-text">
+                            <h4>Ouvidoria de Pendências</h4>
+                            <p>Alerta imediato de quantas vidas no setor estão sem voluntários alocados ou aguardando visitas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="max-width: 320px; text-align: center;">
+                        <h4 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Índice de Consolidação</h4>
+                        <div class="circle-progress-mock">
+                            <svg width="130" height="130">
+                                <circle cx="65" cy="65" r="50" fill="none" stroke="#e2e8f0" stroke-width="12"/>
+                                <circle cx="65" cy="65" r="50" fill="none" stroke="#10b981" stroke-width="12" stroke-dasharray="314" stroke-dashoffset="78"/>
+                            </svg>
+                            <div class="circle-text-mock">
+                                <h3>75%</h3>
+                                <span>Membros</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: space-around; margin-top: 1rem; font-size: 0.75rem;">
+                            <div><strong style="color: #10b981;">32</strong><br>Visitas Realizadas</div>
+                            <div><strong style="color: #ef4444;">8</strong><br>Pendentes</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
+                <div>Slide 4 de 7</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Pilar 3 -->
+        <section class="slide" data-slide="5">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">Pilar 3</span>
+                    <h2 class="slide-header slide-title">Acompanhamento e <span>Cartões de Vidas</span></h2>
+                    <p class="slide-desc">
+                        A tela de Acompanhamento reúne cards compactos que facilitam o dia a dia do discipulador, mostrando a evolução de cada pessoa.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="git-commit"></i></div>
+                        <div class="feature-text">
+                            <h4>Visual Stepper (Estágio da Vida)</h4>
+                            <p>Mostra a fase exata de integração: 1. Contato ➔ 2. Visita ➔ 3. Discipulado ➔ 4. Membro.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="alert-triangle"></i></div>
+                        <div class="feature-text">
+                            <h4>Alertas Inteligentes de Atraso</h4>
+                            <p>Avisos como "Contato Atrasado (3+ dias)" alertam a necessidade urgente de contato.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="max-width: 380px; transform: rotate(1deg); border-left: 4px solid #f59e0b;">
+                        <div class="badge-mock">⚠️ Contato Atrasado (3+ dias)</div>
+                        <h4 style="font-size: 1.1rem; font-weight: 800;">Wilkinson S. Martins</h4>
+                        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.75rem;">Congregação Central</p>
+                        
+                        <div class="stepper-mock">
+                            <div class="step-mock active">
+                                <span class="step-mock-num">1</span>
+                                <span class="step-mock-text">Contato</span>
+                            </div>
+                            <div class="step-mock-line"></div>
+                            <div class="step-mock">
+                                <span class="step-mock-num">2</span>
+                                <span class="step-mock-text">Visita</span>
+                            </div>
+                            <div class="step-mock-line"></div>
+                            <div class="step-mock">
+                                <span class="step-mock-num">3</span>
+                                <span class="step-mock-text">Curso</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <div style="flex:1; border: 1px solid var(--border); border-radius: 8px; padding: 0.4rem; font-size: 0.7rem; font-weight: 700; text-align: center; color: var(--text-muted);">
+                                Ver Ficha
+                            </div>
+                            <div style="flex:1; background: var(--accent-gradient); border-radius: 8px; padding: 0.4rem; font-size: 0.7rem; font-weight: 700; text-align: center; color: white;">
+                                Atualizar
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
+                <div>Slide 5 de 7</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Fluxo na Prática -->
+        <section class="slide" data-slide="6">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">Operação</span>
+                    <h2 class="slide-header slide-title">Como Funciona na <span>Prática</span></h2>
+                    <p class="slide-desc">
+                        Um fluxo perfeitamente desenhado para garantir que nenhuma vida caia no esquecimento.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">1</div>
+                        <div class="feature-text">
+                            <h4>Decisão Cadastrada</h4>
+                            <p>No culto, a pessoa aceita a Jesus e a ficha é preenchida pelo celular em menos de 1 minuto.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">2</div>
+                        <div class="feature-text">
+                            <h4>Alocação & Contato</h4>
+                            <p>O coordenador associa um voluntário pelo painel. O voluntário recebe a notificação e aciona via WhatsApp em 1 toque.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper">3</div>
+                        <div class="feature-text">
+                            <h4>Consolidação Registrada</h4>
+                            <p>O voluntário registra a 1ª visita, o início do discipulado e a situação da pessoa até que se torne membro integrado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="background: var(--primary-gradient); color: white; padding: 2rem; max-width: 320px;">
+                        <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem;"><i data-lucide="shield-check" style="display:inline; vertical-align:middle; margin-right: 0.5rem;"></i> Cuidado Ativo</h4>
+                        <p style="font-size: 0.8rem; line-height: 1.6; opacity: 0.85; margin-bottom: 1.5rem;">
+                            "De modo que o que planta não é nada, nem o que rega, mas Deus, que dá o crescimento."
+                        </p>
+                        <span style="font-size: 0.7rem; font-weight: 700; color: #60a5fa; text-transform: uppercase;">1 Coríntios 3:7</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
+                <div>Slide 6 de 7</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Benefícios -->
+        <section class="slide" data-slide="7">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">Benefícios</span>
+                    <h2 class="slide-header slide-title">Os Frutos do <span>Sistema</span></h2>
+                    <p class="slide-desc">
+                        Muito mais do que um sistema, uma ferramenta estratégica para o crescimento da igreja de forma estruturada.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="check-square"></i></div>
+                        <div class="feature-text">
+                            <h4>Zero Perda de Fichas</h4>
+                            <p>Total segurança de dados armazenados na nuvem. Sem perdas físicas ou esquecimentos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="trending-up"></i></div>
+                        <div class="feature-text">
+                            <h4>Decisões Estratégicas</h4>
+                            <p>Dados reais de integração facilitam a gestão de turmas de discipulado e batismo.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="users"></i></div>
+                        <div class="feature-text">
+                            <h4>Discipulado Afetuoso</h4>
+                            <p>O voluntário tem um canal direto, ágil e focado na necessidade do convertido.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual" style="flex-direction: column; gap: 1rem;">
+                    <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); font-family: 'Outfit';">
+                        Marcos do Acompanhamento:
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 320px; font-size: 0.8rem; font-weight: 600;">
+                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
+                            <span>1º Contato</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
+                            <span>1ª Visita</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
+                            <span>Discipulado</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
+                            <span>Consolidado</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
+                <div>Slide 7 de 7</div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Controls Toolbar -->
+    <div class="controls">
+        <button class="nav-btn" id="prevBtn" aria-label="Slide anterior"><i data-lucide="arrow-left"></i></button>
+        <div class="progress-dots" id="dotsContainer"></div>
+        <button class="nav-btn" id="nextBtn" aria-label="Próximo slide"><i data-lucide="arrow-right"></i></button>
+    </div>
+
+    <!-- Keyboard shortcuts tips -->
+    <div class="keyboard-tips">
+        Navegue com <span class="k-btn">←</span> e <span class="k-btn">→</span> no teclado
+    </div>
+
+    <script>
+        // Slides Navigation Logic
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlideIndex = 0;
+
+        // Initialize icons
+        lucide.createIcons();
+
+        // Create dots dynamically
+        slides.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (idx === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => navigateToSlide(idx));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateNavigationUI() {
+            slides.forEach((slide, idx) => {
+                slide.classList.remove('active', 'exit-left', 'exit-right');
+                if (idx === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else if (idx < currentSlideIndex) {
+                    slide.classList.add('exit-left');
+                } else {
+                    slide.classList.add('exit-right');
+                }
+            });
+
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlideIndex);
+            });
+        }
+
+        function navigateToSlide(index) {
+            if (index >= 0 && index < slides.length) {
+                currentSlideIndex = index;
+                updateNavigationUI();
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                navigateToSlide(currentSlideIndex - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlideIndex < slides.length - 1) {
+                navigateToSlide(currentSlideIndex + 1);
+            }
+        });
+
+        // Keyboard arrow navigation
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                if (currentSlideIndex > 0) navigateToSlide(currentSlideIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                if (currentSlideIndex < slides.length - 1) navigateToSlide(currentSlideIndex + 1);
+            }
+        });
+    </script>
+</body>
+</html>
