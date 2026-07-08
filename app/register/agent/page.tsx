@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -12,7 +11,6 @@ import { AlertTriangle, CheckCircle } from 'lucide-react';
 import { maskPhone } from '@/utils/masks';
 
 export default function AgentRegisterPage() {
-    const router = useRouter();
     const [congregations, setCongregations] = useState<{ id: string, name: string }[]>([]);
     const [formData, setFormData] = useState({
         email: '',
@@ -72,20 +70,21 @@ export default function AgentRegisterPage() {
             if (profileError) throw profileError;
 
             setStatus('success');
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error('Registration Error Details:', JSON.stringify(err, null, 2));
 
-            let msg = err.message || "Erro desconhecido ao realizar cadastro.";
+            const errorObj = err as { message?: string; status?: number; code?: string; details?: string };
+            let msg = errorObj.message || "Erro desconhecido ao realizar cadastro.";
 
             // Handle common Supabase/Postgres errors
-            if (err.status === 429 || err.code === 'over_email_send_rate_limit') {
+            if (errorObj.status === 429 || errorObj.code === 'over_email_send_rate_limit') {
                 msg = "Muitas tentativas recentes. Por favor, aguarde alguns minutos ou use outro e-mail.";
-            } else if (err.code === '23514') { // Check constraint violation
+            } else if (errorObj.code === '23514') { // Check constraint violation
                 msg = "Erro: O perfil selecionado não é permitido ou incompatível.";
-            } else if (err.code === '42703') { // Undefined column
+            } else if (errorObj.code === '42703') { // Undefined column
                 msg = "Erro: O banco de dados está desatualizado (coluna ausente).";
-            } else if (err.details) {
-                msg += ` (${err.details})`;
+            } else if (errorObj.details) {
+                msg += ` (${errorObj.details})`;
             }
 
             setErrorMsg(msg);
@@ -156,6 +155,7 @@ export default function AgentRegisterPage() {
                                 onChange={handleChange}
                             >
                                 <option value="agent">Agente Missionário</option>
+                                <option value="volunteer">Voluntário (Discipulado)</option>
                                 <option value="coordinator">Coordenador</option>
                                 <option value="sector_agent">Agente Setorial</option>
                                 <option value="sector_pastor">Pastor Setorial</option>

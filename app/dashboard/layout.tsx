@@ -19,8 +19,8 @@ import {
     Package,
     DollarSign,
     HeartHandshake,
+    Heart,
     MapPin,
-    Trophy,
     Calendar
 } from 'lucide-react';
 
@@ -31,7 +31,7 @@ export default function DashboardLayout({
 }) {
     const router = useRouter();
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<{ email?: string | null; role: string } | null>(null);
 
     useEffect(() => {
         // Check active session (Real or Mock)
@@ -55,7 +55,7 @@ export default function DashboardLayout({
                     .eq('id', session.user.id)
                     .single();
 
-                setUser({ ...session.user, role: profile?.role });
+                setUser({ ...session.user, role: profile?.role || 'agent' });
             }
         };
         checkSession();
@@ -90,7 +90,7 @@ export default function DashboardLayout({
 
                 <nav className={styles.nav}>
                     {/* 1. PRINCIPAL */}
-                    {user.role !== 'coordinator' && (
+                    {user.role !== 'coordinator' && user.role !== 'volunteer' && (
                         <Link href="/dashboard" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
                             <BarChart3 size={20} />
                             Visão Geral
@@ -98,7 +98,7 @@ export default function DashboardLayout({
                     )}
 
                     {/* 2. MISSIONÁRIO (Operacional) */}
-                    {user.role !== 'coordinator' && (
+                    {user.role !== 'coordinator' && user.role !== 'volunteer' && (
                         <>
                             <div className={styles.navDivider}></div>
                             <span className={styles.navSectionTitle}>Missionário</span>
@@ -181,12 +181,40 @@ export default function DashboardLayout({
                     )}
 
                     {/* 5. GERAL (Sem restrição) */}
-                    <div className={styles.navDivider}></div>
-                    <span className={styles.navSectionTitle}>Geral</span>
-                    <Link href="/dashboard/pedidos" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
-                        <HeartHandshake size={20} />
-                        Pedidos de Oração
-                    </Link>
+                    {user.role !== 'volunteer' && (
+                        <>
+                            <div className={styles.navDivider}></div>
+                            <span className={styles.navSectionTitle}>Geral</span>
+                            <Link href="/dashboard/pedidos" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <HeartHandshake size={20} />
+                                Pedidos de Oração
+                            </Link>
+                        </>
+                    )}
+
+                    {/* 6. DISCIPULADO */}
+                    {['volunteer', 'admin', 'coordinator', 'pastor', 'sector_agent', 'sector_pastor', 'agent'].includes(user.role) && (
+                        <>
+                            <div className={styles.navDivider}></div>
+                            <span className={styles.navSectionTitle}>Discipulado</span>
+                            {user.role !== 'volunteer' && (
+                                <>
+                                    <Link href="/dashboard/decisoes" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                        <FileText size={20} />
+                                        Fichas de Decisão
+                                    </Link>
+                                    <Link href="/dashboard/discipulado" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                        <BarChart3 size={20} />
+                                        Painel Geral
+                                    </Link>
+                                </>
+                            )}
+                            <Link href="/dashboard/acompanhamento" className={styles.navItem} onClick={() => setSidebarOpen(false)}>
+                                <Heart size={20} />
+                                Acompanhamento
+                            </Link>
+                        </>
+                    )}
                 </nav>
 
                 <div className={styles.userSection}>

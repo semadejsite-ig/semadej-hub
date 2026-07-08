@@ -88,6 +88,12 @@ export default function DashboardPage() {
                 return;
             }
 
+            // Redirect Volunteer to their specific area
+            if (profile.role === 'volunteer') {
+                router.replace('/dashboard/acompanhamento');
+                return;
+            }
+
             // Fetch Logic based on Role
             let query = supabase.from('congregations').select('id, name, sector, members_count, carnets_count');
             let reportsQuery = supabase.from('monthly_reports').select('congregation_id, report_month, report_year, carnet_value, service_offering_value, special_offering_value');

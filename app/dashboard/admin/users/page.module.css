@@ -169,6 +169,16 @@
     color: #9d174d;
 }
 
+.role_volunteer {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.role_treasurer {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
 /* Actions */
 .actions {
     display: flex;

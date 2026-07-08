@@ -1,0 +1,615 @@
+.container {
+    padding: 0 0.5rem 3rem 0.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
+}
+
+/* Filters Toolbar */
+.filtersToolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .filtersToolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        padding: 1rem;
+    }
+}
+
+.searchWrapper {
+    position: relative;
+    flex: 1;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted-foreground);
+    pointer-events: none;
+}
+
+.searchInput {
+    width: 100%;
+    padding: 0.625rem 1rem 0.625rem 2.25rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 0.9rem;
+    outline: none;
+    color: var(--foreground);
+    transition: all 0.2s;
+}
+
+.searchInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+}
+
+.filtersGroup {
+    display: flex;
+    gap: 1rem;
+}
+
+@media (max-width: 640px) {
+    .filtersGroup {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+
+.filterField {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 160px;
+}
+
+.filterField label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.filterSelect {
+    padding: 0.625rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 0.85rem;
+    color: var(--foreground);
+    outline: none;
+    cursor: pointer;
+}
+
+.filterSelect:focus {
+    border-color: var(--primary);
+}
+
+
+/* Converts Cards Grid */
+.cardsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+@media (max-width: 640px) {
+    .cardsGrid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+}
+
+.convertCard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    padding: 1.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.01);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.convertCard:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+}
+
+/* Card highlight borders based on status/severity */
+.convertCard.info { border-left: 4px solid var(--accent); }
+.convertCard.warning { border-left: 4px solid var(--warning); }
+.convertCard.error { border-left: 4px solid var(--destructive); }
+.convertCard.success { border-left: 4px solid var(--success); }
+
+/* Alert Badge */
+.alertBadge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+}
+
+.alertBadge.info { background-color: rgba(59, 130, 246, 0.08); color: var(--accent); }
+.alertBadge.warning { background-color: rgba(245, 158, 11, 0.08); color: var(--warning); }
+.alertBadge.error { background-color: rgba(239, 68, 68, 0.08); color: var(--destructive); }
+.alertBadge.success { background-color: rgba(16, 185, 129, 0.08); color: var(--success); }
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+    gap: 0.5rem;
+}
+
+.name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--foreground);
+    letter-spacing: -0.01em;
+}
+
+.congregationName {
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.25rem;
+}
+
+.volunteerBadge {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    margin-top: 0.35rem;
+}
+
+.volunteerBadge strong {
+    color: var(--foreground);
+    font-weight: 700;
+}
+
+.dateBadge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.7rem;
+    color: var(--muted-foreground);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+/* Visual Stepper Progress Bar */
+.stepperContainer {
+    margin: 0.5rem 0;
+    background: #fafafa;
+    border: 1px solid var(--border);
+    padding: 0.85rem 0.5rem;
+    border-radius: var(--radius);
+}
+
+.stepper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    gap: 0.25rem;
+}
+
+.stepNum {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid var(--border);
+    color: var(--muted-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    transition: all 0.3s;
+}
+
+.stepText {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted-foreground);
+}
+
+.stepActive .stepNum {
+    background-color: var(--success);
+    border-color: var(--success);
+    color: white;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.2);
+}
+
+.stepActive .stepText {
+    color: var(--success);
+}
+
+.stepLine {
+    flex: 1;
+    height: 2px;
+    background-color: var(--border);
+    margin: 0 -2px;
+    margin-top: -12px;
+    z-index: 1;
+    transition: background-color 0.3s;
+}
+
+.lineActive {
+    background-color: var(--success);
+}
+
+
+/* Contact Section */
+.contactSection {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.phoneText {
+    font-size: 0.85rem;
+    color: var(--foreground);
+}
+
+.whatsappBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem;
+    background-color: var(--success);
+    color: white;
+    border-radius: var(--radius);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+    transition: all 0.2s;
+}
+
+.whatsappBtn:hover {
+    opacity: 0.9;
+    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+}
+
+.cardControlButtons {
+    display: flex;
+    justify-content: center;
+}
+
+.expandedSection {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem;
+    animation: slideDown 0.25s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.detailGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--foreground);
+}
+
+@media (max-width: 480px) {
+    .detailGrid {
+        grid-template-columns: 1fr;
+    }
+    .detailGrid div {
+        grid-column: span 1 !important;
+    }
+}
+
+.divider {
+    height: 1px;
+    background-color: var(--border);
+}
+
+/* Discipleship / Acompanhamento milestones */
+.discipuladoSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.discipuladoHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sectionLabel {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.editBtn {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 0.75rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius);
+}
+
+.editBtn:hover {
+    background: var(--muted);
+}
+
+/* Edit form style */
+.editFlowContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background: #fafafa;
+    border: 1px solid var(--border);
+    padding: 1rem;
+    border-radius: 12px;
+    animation: fadeIn 0.2s ease;
+}
+
+.flowGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.flowGroup h5 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.grid2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 0.8rem;
+    color: var(--foreground);
+    outline: none;
+}
+
+.select:focus {
+    border-color: var(--primary);
+}
+
+.textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: white;
+    font-size: 0.8rem;
+    color: var(--foreground);
+    outline: none;
+    resize: vertical;
+}
+
+.textarea:focus {
+    border-color: var(--primary);
+}
+
+.editActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+}
+
+/* View flow details */
+.viewFlowGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.flowStatusLine {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 0.25rem;
+}
+
+.flowLabel {
+    font-weight: 600;
+    color: var(--muted-foreground);
+}
+
+.flowVal {
+    color: var(--foreground);
+    text-align: right;
+    display: inline-flex;
+    align-items: center;
+}
+
+.notesBoxView {
+    background: rgba(15, 23, 42, 0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.notesBoxView strong {
+    display: block;
+    color: var(--primary);
+    margin-bottom: 0.25rem;
+}
+
+.notesBoxView p {
+    color: var(--muted-foreground);
+    line-height: 1.4;
+}
+
+/* Loading Wrapper */
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: var(--muted-foreground);
+    gap: 1rem;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--muted);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s infinite linear;
+}
+
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    background: rgba(239, 68, 68, 0.05);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: 12px;
+    color: var(--destructive);
+    text-align: center;
+    max-width: 500px;
+    margin: 3rem auto;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 1rem;
+}
+
+.heartIconEmpty {
+    color: var(--muted-foreground);
+    opacity: 0.4;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

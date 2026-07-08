@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/Button';
 import styles from './page.module.css';
-import { Check, Edit2, ShieldAlert, UserCheck, Users } from 'lucide-react';
+import { Check, Edit2, ShieldAlert, UserCheck } from 'lucide-react';
 
 type UserProfile = {
     id: string;
@@ -279,7 +279,13 @@ export default function AdminUsersPage() {
                                                 <span className={`${styles.roleBadge} ${styles[`role_${user.role}`]}`}>
                                                     {user.role === 'sector_pastor' ? 'Pastor Setorial' :
                                                         user.role === 'sector_agent' ? 'Agente Setorial' :
-                                                            user.role}
+                                                            user.role === 'agent' ? 'Agente Missionário' :
+                                                                user.role === 'coordinator' ? 'Coordenador' :
+                                                                    user.role === 'pastor' ? 'Pastor' :
+                                                                        user.role === 'admin' ? 'Administrador' :
+                                                                            user.role === 'treasurer' ? 'Tesoureiro' :
+                                                                                user.role === 'volunteer' ? 'Voluntário' :
+                                                                                    user.role}
                                                 </span>
                                             </td>
                                             <td>{user.phone}</td>
@@ -348,6 +354,7 @@ export default function AdminUsersPage() {
                                     <option value="sector_pastor">Pastor Setorial</option>
                                     <option value="pastor">Pastor</option>
                                     <option value="admin">Administrador</option>
+                                    <option value="volunteer">Voluntário</option>
                                 </select>
                             </div>
 
