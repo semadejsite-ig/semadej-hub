@@ -65,6 +65,8 @@ export default function AcompanhamentoPage() {
     const [myConverts, setMyConverts] = useState<NewConvert[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [userRole, setUserRole] = useState<string | null>(null);
+    const [volunteers, setVolunteers] = useState<{ id: string; full_name: string }[]>([]);
 
     // Toggle expanded card to view full details
     const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
@@ -124,6 +126,17 @@ export default function AcompanhamentoPage() {
                 return;
             }
 
+            setUserRole(profile.role);
+
+            if (profile.role !== 'volunteer') {
+                const { data: volunteerData } = await supabase
+                    .from('profiles')
+                    .select('id, full_name')
+                    .eq('role', 'volunteer')
+                    .order('full_name', { ascending: true });
+                setVolunteers(volunteerData || []);
+            }
+
             // 2. Fetch converts (Volunteers see only assigned, leaders see all permitted by RLS)
             let query = supabase
                 .from('new_converts')
@@ -149,6 +162,12 @@ export default function AcompanhamentoPage() {
     };
 
     const mockData = () => {
+        setUserRole('admin');
+        setVolunteers([
+            { id: 'v1', full_name: 'Gabriel Fernandes (Mock)' },
+            { id: 'v2', full_name: 'Sarah Carvalho (Mock)' },
+            { id: 'v3', full_name: 'Mateus Oliveira (Mock)' }
+        ]);
         setMyConverts([
             {
                 id: 'c1',
@@ -260,6 +279,39 @@ export default function AcompanhamentoPage() {
             }
         ]);
         setLoading(false);
+    };
+
+    const handleAssignVolunteer = async (convertId: string, volunteerId: string) => {
+        try {
+            const vId = volunteerId || null;
+            const isMock = localStorage.getItem('mock_session') === 'true';
+            
+            if (!isMock) {
+                const { error: updateErr } = await supabase
+                    .from('new_converts')
+                    .update({ volunteer_id: vId })
+                    .eq('id', convertId);
+                
+                if (updateErr) throw updateErr;
+            }
+
+            const matchedVolunteer = volunteers.find(v => v.id === volunteerId);
+            
+            setMyConverts(prev => prev.map(nc => {
+                if (nc.id === convertId) {
+                    return {
+                        ...nc,
+                        volunteer_id: vId,
+                        volunteer: matchedVolunteer ? { full_name: matchedVolunteer.full_name } : null
+                    };
+                }
+                return nc;
+            }));
+
+        } catch (err) {
+            console.error('Error assigning volunteer:', err);
+            alert('Erro ao associar voluntário.');
+        }
     };
 
     const handleStatusChange = async (convertId: string, newStatus: NewConvert['status']) => {
@@ -545,7 +597,23 @@ export default function AcompanhamentoPage() {
                                             {convert.congregations?.name || 'Congregação'}
                                         </span>
                                         <div className={styles.volunteerBadge}>
-                                            <strong>Voluntário:</strong> {convert.volunteer?.full_name || <span className="text-red-500 font-semibold">Não alocado</span>}
+                                            <strong>Voluntário:</strong>{' '}
+                                            {userRole !== 'volunteer' ? (
+                                                <select
+                                                    value={convert.volunteer_id || ''}
+                                                    onChange={(e) => handleAssignVolunteer(convert.id, e.target.value)}
+                                                    className={styles.volunteerSelect}
+                                                >
+                                                    <option value="">Nenhum (Não alocado)</option>
+                                                    {volunteers.map(v => (
+                                                        <option key={v.id} value={v.id}>
+                                                            {v.full_name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            ) : (
+                                                convert.volunteer?.full_name || <span className="text-red-500 font-semibold">Não alocado</span>
+                                            )}
                                         </div>
                                     </div>
                                     <div className={styles.dateBadge}>
@@ -597,24 +665,32 @@ export default function AcompanhamentoPage() {
 
                                 {/* CONTROLS BAR */}
                                 <div className={styles.cardControlButtons}>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
+                                    <button
                                         onClick={() => setExpandedCardId(isExpanded ? null : convert.id)}
-                                        className="flex items-center gap-1"
+                                        className={`${styles.btnAction} ${styles.btnExpand} ${isExpanded ? styles.btnExpandActive : ''}`}
                                     >
                                         {isExpanded ? (
                                             <>Ocultar Ficha <ChevronUp size={14} /></>
                                         ) : (
                                             <>Ver Ficha Completa <ChevronDown size={14} /></>
                                         )}
-                                    </Button>
+                                    </button>
+
+                                    {!isEditing && (
+                                        <button
+                                            onClick={() => startEditing(convert)}
+                                            className={`${styles.btnAction} ${styles.btnUpdate}`}
+                                        >
+                                            <Edit2 size={14} /> Atualizar Ficha
+                                        </button>
+                                    )}
                                 </div>
 
                                 {/* EXPANDED DETAILS */}
                                 {isExpanded && (
                                     <div className={styles.expandedSection}>
-                                        <div className={styles.detailGrid}>
+                                        <h4 className={styles.subSectionTitle}>Dados Pessoais</h4>
+                                        <div className={styles.detailGrid} style={{ marginBottom: '1.5rem' }}>
                                             <div><strong>Sexo:</strong> {convert.gender || 'Não informado'}</div>
                                             <div><strong>Estado Civil:</strong> {convert.marital_status || 'Não informado'}</div>
                                             <div><strong>Nascimento:</strong> {convert.birth_date ? formatDate(convert.birth_date) : 'Não informada'}</div>
@@ -632,158 +708,8 @@ export default function AcompanhamentoPage() {
                                             <div><strong>Deseja visitas?</strong> {convert.wants_visitation ? 'Sim' : 'Não'}</div>
                                             <div><strong>Anotado por:</strong> {convert.registered_by || '-'}</div>
                                         </div>
-                                    </div>
-                                )}
 
-                                <div className={styles.divider}></div>
-
-                                {/* STATUS AND INTEGRATION FORM (STEPS UPDATER) */}
-                                <div className={styles.discipuladoSection}>
-                                    <div className={styles.discipuladoHeader}>
-                                        <span className={styles.sectionLabel}>Lançamento de Acompanhamento:</span>
-                                        {!isEditing && (
-                                            <button
-                                                onClick={() => startEditing(convert)}
-                                                className={styles.editBtn}
-                                            >
-                                                <Edit2 size={12} /> Atualizar Ficha
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {isEditing ? (
-                                        <div className={styles.editFlowContainer}>
-                                            {/* Status de Integração */}
-                                            <div className={styles.flowGroup}>
-                                                <h5>Situação do Acompanhamento</h5>
-                                                <div className={styles.grid2}>
-                                                    <select
-                                                        value={convert.status}
-                                                        onChange={(e) => handleStatusChange(convert.id, e.target.value as NewConvert['status'])}
-                                                        className={styles.select}
-                                                    >
-                                                        <option value="in_progress">Em Acompanhamento</option>
-                                                        <option value="integrated">Consolidado (Membro)</option>
-                                                        <option value="inactive">Afastado / Inativo</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            {/* 1º Contato */}
-                                            <div className={styles.flowGroup}>
-                                                <h5>1º Contato</h5>
-                                                <div className={styles.grid2}>
-                                                    <Input
-                                                        type="date"
-                                                        value={firstContactDate}
-                                                        onChange={(e) => setFirstContactDate(e.target.value)}
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        placeholder="Responsável"
-                                                        value={firstContactBy}
-                                                        onChange={(e) => setFirstContactBy(e.target.value)}
-                                                        autoCapitalize="words"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            {/* 1ª Visita */}
-                                            <div className={styles.flowGroup}>
-                                                <h5>1ª Visita</h5>
-                                                <div className={styles.grid2}>
-                                                    <Input
-                                                        type="date"
-                                                        value={firstVisitDate}
-                                                        onChange={(e) => setFirstVisitDate(e.target.value)}
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        placeholder="Visitante"
-                                                        value={firstVisitBy}
-                                                        onChange={(e) => setFirstVisitBy(e.target.value)}
-                                                        autoCapitalize="words"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            {/* Discipulado */}
-                                            <div className={styles.flowGroup}>
-                                                <h5>Início do Discipulado</h5>
-                                                <div className={styles.grid2}>
-                                                    <Input
-                                                        type="date"
-                                                        value={discipleshipStartDate}
-                                                        onChange={(e) => setDiscipleshipStartDate(e.target.value)}
-                                                    />
-                                                    <Input
-                                                        type="text"
-                                                        placeholder="Discipulador"
-                                                        value={discipleshipBy}
-                                                        onChange={(e) => setDiscipleshipBy(e.target.value)}
-                                                        autoCapitalize="words"
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            {/* Situação Atual */}
-                                            <div className={styles.flowGroup}>
-                                                <h5>Status Ficha Física</h5>
-                                                <div className={styles.grid2}>
-                                                    <select
-                                                        value={situationType}
-                                                        onChange={(e) => setSituationType(e.target.value)}
-                                                        className={styles.select}
-                                                    >
-                                                        <option value="permanência">Permanência</option>
-                                                        <option value="desistência">Desistência</option>
-                                                        <option value="transferência">Transferência para...</option>
-                                                    </select>
-                                                    {situationType === 'transferência' && (
-                                                        <Input
-                                                            type="text"
-                                                            placeholder="Congregação destino"
-                                                            value={situationText}
-                                                            onChange={(e) => setSituationText(e.target.value)}
-                                                            autoCapitalize="words"
-                                                            required
-                                                        />
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            {/* Observações */}
-                                            <div className={styles.flowGroup}>
-                                                <h5>Diário de Acompanhamento</h5>
-                                                <textarea
-                                                    className={styles.textarea}
-                                                    rows={3}
-                                                    placeholder="Comentários sobre contatos, visitas ou discipulado..."
-                                                    value={notes}
-                                                    onChange={(e) => setNotes(e.target.value)}
-                                                    autoCapitalize="sentences"
-                                                />
-                                            </div>
-
-                                            <div className={styles.editActions}>
-                                                <Button
-                                                    variant="outline"
-                                                    size="sm"
-                                                    onClick={() => setEditingId(null)}
-                                                    disabled={saving}
-                                                >
-                                                    Cancelar
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    onClick={() => handleSaveAcompanhamento(convert.id)}
-                                                    isLoading={saving}
-                                                >
-                                                    Salvar Marcos
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ) : (
+                                        <h4 className={styles.subSectionTitle}>Acompanhamento Físico</h4>
                                         <div className={styles.viewFlowGrid}>
                                             <div className={styles.flowStatusLine}>
                                                 <span className={styles.flowLabel}>1º Contato:</span>
@@ -838,8 +764,152 @@ export default function AcompanhamentoPage() {
                                                 </div>
                                             )}
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                )}
+
+                                {/* STATUS AND INTEGRATION FORM (STEPS UPDATER) */}
+                                {isEditing && (
+                                    <>
+                                        <div className={styles.divider}></div>
+                                        <div className={styles.discipuladoSection}>
+                                            <div className={styles.discipuladoHeader}>
+                                                <span className={styles.sectionLabel}>Lançamento de Acompanhamento:</span>
+                                            </div>
+
+                                            <div className={styles.editFlowContainer}>
+                                                {/* Status de Integração */}
+                                                <div className={styles.flowGroup}>
+                                                    <h5>Situação do Acompanhamento</h5>
+                                                    <div className={styles.grid2}>
+                                                        <select
+                                                            value={convert.status}
+                                                            onChange={(e) => handleStatusChange(convert.id, e.target.value as NewConvert['status'])}
+                                                            className={styles.select}
+                                                        >
+                                                            <option value="in_progress">Em Acompanhamento</option>
+                                                            <option value="integrated">Consolidado (Membro)</option>
+                                                            <option value="inactive">Afastado / Inativo</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                {/* 1º Contato */}
+                                                <div className={styles.flowGroup}>
+                                                    <h5>1º Contato</h5>
+                                                    <div className={styles.grid2}>
+                                                        <Input
+                                                            type="date"
+                                                            value={firstContactDate}
+                                                            onChange={(e) => setFirstContactDate(e.target.value)}
+                                                        />
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Responsável"
+                                                            value={firstContactBy}
+                                                            onChange={(e) => setFirstContactBy(e.target.value)}
+                                                            autoCapitalize="words"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                {/* 1ª Visita */}
+                                                <div className={styles.flowGroup}>
+                                                    <h5>1ª Visita</h5>
+                                                    <div className={styles.grid2}>
+                                                        <Input
+                                                            type="date"
+                                                            value={firstVisitDate}
+                                                            onChange={(e) => setFirstVisitDate(e.target.value)}
+                                                        />
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Visitante"
+                                                            value={firstVisitBy}
+                                                            onChange={(e) => setFirstVisitBy(e.target.value)}
+                                                            autoCapitalize="words"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                {/* Discipulado */}
+                                                <div className={styles.flowGroup}>
+                                                    <h5>Início do Discipulado</h5>
+                                                    <div className={styles.grid2}>
+                                                        <Input
+                                                            type="date"
+                                                            value={discipleshipStartDate}
+                                                            onChange={(e) => setDiscipleshipStartDate(e.target.value)}
+                                                        />
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Discipulador"
+                                                            value={discipleshipBy}
+                                                            onChange={(e) => setDiscipleshipBy(e.target.value)}
+                                                            autoCapitalize="words"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                {/* Situação Atual */}
+                                                <div className={styles.flowGroup}>
+                                                    <h5>Status Ficha Física</h5>
+                                                    <div className={styles.grid2}>
+                                                        <select
+                                                            value={situationType}
+                                                            onChange={(e) => setSituationType(e.target.value)}
+                                                            className={styles.select}
+                                                        >
+                                                            <option value="permanência">Permanência</option>
+                                                            <option value="desistência">Desistência</option>
+                                                            <option value="transferência">Transferência para...</option>
+                                                        </select>
+                                                        {situationType === 'transferência' && (
+                                                            <Input
+                                                                type="text"
+                                                                placeholder="Congregação destino"
+                                                                value={situationText}
+                                                                onChange={(e) => setSituationText(e.target.value)}
+                                                                autoCapitalize="words"
+                                                                required
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Observações */}
+                                                <div className={styles.flowGroup}>
+                                                    <h5>Diário de Acompanhamento</h5>
+                                                    <textarea
+                                                        className={styles.textarea}
+                                                        rows={3}
+                                                        placeholder="Comentários sobre contatos, visitas ou discipulado..."
+                                                        value={notes}
+                                                        onChange={(e) => setNotes(e.target.value)}
+                                                        autoCapitalize="sentences"
+                                                    />
+                                                </div>
+
+                                                <div className={styles.editActions}>
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => setEditingId(null)}
+                                                        disabled={saving}
+                                                    >
+                                                        Cancelar
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        onClick={() => handleSaveAcompanhamento(convert.id)}
+                                                        isLoading={saving}
+                                                    >
+                                                        Salvar Marcos
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         );
                     })}
