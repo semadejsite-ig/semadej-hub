@@ -9,10 +9,7 @@ import {
     Banknote,
     TrendingUp,
     Building2,
-    AlertCircle,
-    BarChart2,
     CalendarDays,
-    ArrowUpRight,
     Trophy,
     Target
 } from 'lucide-react';
@@ -39,16 +36,24 @@ interface EvangelismSectorStats {
     total_reached: number;
 }
 
+interface UserProfile {
+    full_name: string;
+    role: string;
+    congregation_id: string | null;
+    congregations: {
+        name: string;
+        sector: string;
+    } | null;
+}
+
 export default function DashboardPage() {
     const router = useRouter();
     const [loading, setLoading] = useState(true);
-    const [userProfile, setUserProfile] = useState<any>(null);
-    const [detailedStats, setDetailedStats] = useState<CongregationStats[]>([]);
+    const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
     const [monthlyHistory, setMonthlyHistory] = useState<MonthlyHistory[]>([]);
     const [evangelismHistory, setEvangelismHistory] = useState<MonthlyHistory[]>([]);
     const [sectorStats, setSectorStats] = useState<{ sector: string; total_raised: number }[]>([]);
     const [evangelismSectorStats, setEvangelismSectorStats] = useState<EvangelismSectorStats[]>([]);
-    const [rpcError, setRpcError] = useState<any>(null);
     const [stats, setStats] = useState({
         totalMembers: 0,
         totalCarnets: 0,
@@ -104,12 +109,10 @@ export default function DashboardPage() {
                     const { data: sectors, error } = await supabase.rpc('get_sector_financials', { target_year: new Date().getFullYear() });
                     if (error) {
                         console.error('Error fetching sector stats:', error);
-                        setRpcError(error);
                     }
                     if (sectors) setSectorStats(sectors);
                 } catch (err) {
                     console.error('RPC Call Failed:', err);
-                    setRpcError(err);
                 }
             }
 
@@ -198,7 +201,7 @@ export default function DashboardPage() {
                     scopeName: profile.role === 'admin' ? 'Global' : `Setor ${profile.congregations?.sector || '?'}`
                 });
 
-                setDetailedStats(finalStats.sort((a, b) => b.total_raised - a.total_raised));
+
 
                 // 2. Process Monthly History (Last 6 Months)
                 const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
@@ -269,7 +272,7 @@ export default function DashboardPage() {
 
                     const sectorEvMap: Record<string, number> = {};
                     yearEvData?.forEach(rec => {
-                        const congregations = rec.congregations as any;
+                        const congregations = rec.congregations as { sector: string } | { sector: string }[] | null;
                         const sec = Array.isArray(congregations) ? congregations[0]?.sector : congregations?.sector;
                         if (sec) {
                             sectorEvMap[sec] = (sectorEvMap[sec] || 0) + (rec.people_reached || 0);
@@ -293,7 +296,6 @@ export default function DashboardPage() {
         return <div className="flex items-center justify-center min-h-screen text-blue-600 font-medium">Carregando painel...</div>;
     }
 
-    const maxRaised = detailedStats.length > 0 ? detailedStats[0].total_raised : 1;
     const maxHistory = Math.max(...monthlyHistory.map(h => h.total), 1);
     const maxSector = Math.max(...sectorStats.map(s => s.total_raised), 1);
 
@@ -404,7 +406,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className={styles.chartContainer}>
+                <div className={`${styles.chartContainer} ${styles.historyChart}`}>
                     <div className={styles.chartGrid}>
                         <div className={styles.gridLine}></div>
                         <div className={styles.gridLine}></div>
@@ -505,7 +507,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className={styles.chartContainer}>
+                <div className={`${styles.chartContainer} ${styles.historyChart}`}>
                     <div className={styles.chartGrid}>
                         <div className={styles.gridLine}></div>
                         <div className={styles.gridLine}></div>
