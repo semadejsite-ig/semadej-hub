@@ -469,24 +469,38 @@
 .whatsappBtn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    background-color: #25D366;
-    color: white;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
+    padding: 0.625rem 1rem;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    color: white !important;
+    border: none;
+    border-radius: var(--radius, 8px);
     text-decoration: none;
-    transition: opacity 0.2s;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.15), 0 2px 4px -1px rgba(37, 211, 102, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
 }
 
 .whatsappBtn:hover {
-    opacity: 0.9;
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.25), 0 4px 6px -2px rgba(37, 211, 102, 0.15);
+}
+
+.whatsappBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.15);
 }
 
 .whatsappBtn.disabled {
-    background-color: #cbd5e1;
+    background: #cbd5e1 !important;
+    color: #94a3b8 !important;
+    box-shadow: none;
     cursor: not-allowed;
+    pointer-events: none;
 }
 
 /* Timeline / History Styles */

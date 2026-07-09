@@ -218,13 +218,23 @@
 }
 
 .btnWhatsapp {
-    background: #25d366;
-    color: white;
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%) !important;
+    color: white !important;
     text-decoration: none;
+    font-weight: 700;
+    box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.15), 0 2px 4px -1px rgba(37, 211, 102, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btnWhatsapp:hover {
-    background: #128c7e;
+    opacity: 0.95;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.25), 0 4px 6px -2px rgba(37, 211, 102, 0.15);
+}
+
+.btnWhatsapp:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.15);
 }
 
 .btnReset {

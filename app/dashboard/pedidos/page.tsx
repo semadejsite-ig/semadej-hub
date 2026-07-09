@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { Button } from '@/components/ui/Button';
-import { Phone, MapPin, HeartHandshake, CheckCircle2 } from 'lucide-react';
+import { Phone, MapPin, HeartHandshake, CheckCircle2, MessageCircle } from 'lucide-react';
 import styles from './page.module.css';
 
 type PrayerRequest = {
@@ -138,9 +138,9 @@ export default function GestaoPedidos() {
                                         href={`https://wa.me/55${req.whatsapp.replace(/\D/g, '')}`}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-muted h-9 px-4 py-2"
+                                        className={styles.whatsappBtn}
                                     >
-                                        WhatsApp
+                                        <MessageCircle size={16} /> WhatsApp
                                     </a>
                                 )}
                                 {req.status === 'pending' && (
