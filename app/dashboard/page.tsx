@@ -401,7 +401,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                             <h2 className={styles.sectionTitle}>Evolução Pessoas Abordadas</h2>
-                            <p className="text-sm text-gray-500">Últimos 6 meses</p>
+                            <p className="text-sm text-gray-500">Últimos meses</p>
                         </div>
                     </div>
                 </div>
@@ -423,12 +423,14 @@ export default function DashboardPage() {
                                 <div className={styles.chartTooltip}>
                                     {item.total} pessoas
                                 </div>
-                                <div
-                                    className={styles.chartBarBg}
-                                    style={{ height: `${heightPercentage}%`, backgroundColor: '#dcfce7' }}
-                                >
-                                    <div className={styles.chartBarFill}
-                                        style={{ height: '100%', backgroundColor: '#16a34a' }}>
+                                <div className={styles.barWrapper}>
+                                    <div
+                                        className={styles.chartBarBg}
+                                        style={{ height: `${heightPercentage}%`, backgroundColor: '#dcfce7' }}
+                                    >
+                                        <div className={styles.chartBarFill}
+                                            style={{ height: '100%', backgroundColor: '#16a34a' }}>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={styles.chartLabel}>
@@ -475,12 +477,14 @@ export default function DashboardPage() {
                                     <div className={styles.chartTooltip}>
                                         {item.total_reached} pessoas
                                     </div>
-                                    <div
-                                        className={styles.chartBarBg}
-                                        style={{ height: `${heightPercentage}%`, backgroundColor: '#e0f2fe' }}
-                                    >
-                                        <div className={styles.chartBarFill}
-                                            style={{ height: '100%', background: 'linear-gradient(to top, #0284c7, #38bdf8)' }}>
+                                    <div className={styles.barWrapper}>
+                                        <div
+                                            className={styles.chartBarBg}
+                                            style={{ height: `${heightPercentage}%`, backgroundColor: '#e0f2fe' }}
+                                        >
+                                            <div className={styles.chartBarFill}
+                                                style={{ height: '100%', background: 'linear-gradient(to top, #0284c7, #38bdf8)' }}>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className={styles.chartLabel}>
@@ -502,7 +506,7 @@ export default function DashboardPage() {
                         </div>
                         <div>
                             <h2 className={styles.sectionTitle}>Evolução de Ofertas</h2>
-                            <p className="text-sm text-gray-500">Últimos 6 meses</p>
+                            <p className="text-sm text-gray-500">Últimos meses</p>
                         </div>
                     </div>
                 </div>
@@ -523,12 +527,14 @@ export default function DashboardPage() {
                                 <div className={styles.chartTooltip}>
                                     R$ {item.total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                 </div>
-                                <div
-                                    className={styles.chartBarBg}
-                                    style={{ height: `${heightPercentage}%` }}
-                                >
-                                    <div className={styles.chartBarFill}
-                                        style={{ height: '100%' }}>
+                                <div className={styles.barWrapper}>
+                                    <div
+                                        className={styles.chartBarBg}
+                                        style={{ height: `${heightPercentage}%` }}
+                                    >
+                                        <div className={styles.chartBarFill}
+                                            style={{ height: '100%' }}>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className={styles.chartLabel}>
@@ -574,13 +580,15 @@ export default function DashboardPage() {
                                     <div className={styles.chartTooltip}>
                                         R$ {item.total_raised.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                                     </div>
-                                    <div
-                                        className={styles.chartBarBg}
-                                        style={{ height: `${heightPercentage}%` }}
-                                    >
-                                        {/* Orange Fill for Sectors */}
-                                        <div className={styles.chartBarFill}
-                                            style={{ height: '100%', background: 'linear-gradient(to top, #f97316, #fb923c)' }}>
+                                    <div className={styles.barWrapper}>
+                                        <div
+                                            className={styles.chartBarBg}
+                                            style={{ height: `${heightPercentage}%` }}
+                                        >
+                                            {/* Orange Fill for Sectors */}
+                                            <div className={styles.chartBarFill}
+                                                style={{ height: '100%', background: 'linear-gradient(to top, #f97316, #fb923c)' }}>
+                                            </div>
                                         </div>
                                     </div>
                                     <div className={styles.chartLabel}>

@@ -377,6 +377,15 @@
     cursor: default;
 }
 
+.barWrapper {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 0;
+}
+
 .chartBarBg {
     width: 100%;
     max-width: 40px;
@@ -448,6 +457,7 @@
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    white-space: nowrap;
 }
 
 .chartSubLabel {
