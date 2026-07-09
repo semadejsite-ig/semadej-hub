@@ -590,12 +590,20 @@ export default function AcompanhamentoPage() {
                                 </div>
 
                                 <div className={styles.cardHeader}>
-                                    <div>
+                                    <div style={{ width: '100%' }}>
                                         <h2 className={styles.name}>{convert.full_name}</h2>
-                                        <span className={styles.congregationName}>
-                                            <Users size={12} style={{ display: 'inline', marginRight: '4px' }} />
-                                            {convert.congregations?.name || 'Congregação'}
-                                        </span>
+                                        
+                                        <div className={styles.metaRow}>
+                                            <span className={styles.congregationName}>
+                                                <Users size={12} style={{ display: 'inline', marginRight: '4px' }} />
+                                                {convert.congregations?.name || 'Congregação'}
+                                            </span>
+                                            <div className={styles.dateBadge}>
+                                                <Calendar size={12} />
+                                                <span>Decisão em {formatDate(convert.decision_date)}</span>
+                                            </div>
+                                        </div>
+
                                         <div className={styles.volunteerBadge}>
                                             <strong>Voluntário:</strong>{' '}
                                             {userRole !== 'volunteer' ? (
@@ -615,10 +623,6 @@ export default function AcompanhamentoPage() {
                                                 convert.volunteer?.full_name || <span className="text-red-500 font-semibold">Não alocado</span>
                                             )}
                                         </div>
-                                    </div>
-                                    <div className={styles.dateBadge}>
-                                        <Calendar size={14} />
-                                        <span>Decisão em {formatDate(convert.decision_date)}</span>
                                     </div>
                                 </div>
 
