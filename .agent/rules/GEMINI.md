@@ -238,21 +238,23 @@ When user's prompt is NOT in English:
 
 ## TIER 2: DESIGN RULES (Reference)
 
-> **Design rules are in the specialist agents, NOT here.**
+> **Design rules are in the specialist agents and the workspace Design System.**
 
 | Task         | Read                            |
 | ------------ | ------------------------------- |
 | Web UI/UX    | `.agent/frontend-specialist.md` |
 | Mobile UI/UX | `.agent/mobile-developer.md`    |
+| Workspace UI | `DESIGN_SYSTEM.md` (Root)       |
 
-**These agents contain:**
+**These agents and assets contain:**
 
+- **Standardization:** Always check and follow the specifications in `DESIGN_SYSTEM.md` for botões (WhatsApp), inputs e layouts.
 - Purple Ban (no violet/purple colors)
 - Template Ban (no standard layouts)
 - Anti-cliché rules
 - Deep Design Thinking protocol
 
-> 🔴 **For design work:** Open and READ the agent file. Rules are there.
+> 🔴 **For design/UI work:** Read the specialist agent file AND `DESIGN_SYSTEM.md` first. Rules are binding.
 
 ---
 
