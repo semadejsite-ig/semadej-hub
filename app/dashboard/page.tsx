@@ -335,12 +335,12 @@ export default function DashboardPage() {
 
                 {/* SOULS CARD */}
                 <div className={styles.soulCard}>
-                    <div style={{ background: '#eff6ff', borderRadius: '12px', color: '#1e3a8a', marginBottom: '0.75rem', padding: '10px' }}>
-                        <Target size={24} />
+                    <div className={styles.iconBox} style={{ color: 'var(--primary, #6366F1)', background: 'rgba(99, 102, 241, 0.08)' }}>
+                        <Target size={22} />
                     </div>
-                    <span style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>Vidas Alcançadas</span>
+                    <span className={styles.cardTitle}>Vidas Alcançadas</span>
                     <div className={styles.soulValue}>{stats.totalSouls}</div>
-                    <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Neste período</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary, #6B6B6B)' }}>Neste período</span>
                 </div>
             </div>
 
@@ -350,12 +350,12 @@ export default function DashboardPage() {
                     <div className={styles.cardHeader}>
                         <div>
                             <span className={styles.cardTitle}>Arrecadação Total</span>
-                            <div className={`${styles.cardValue} text-green-600`}>
+                            <div className={styles.cardValue} style={{ color: 'var(--secondary, #20970B)' }}>
                                 R$ {stats.totalFinancial.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                             </div>
                         </div>
-                        <div className={`${styles.iconBox} bg-green-50 text-green-600`}>
-                            <Banknote size={24} />
+                        <div className={styles.iconBox} style={{ color: 'var(--secondary, #20970B)', background: 'rgba(32, 151, 11, 0.08)' }}>
+                            <Banknote size={22} />
                         </div>
                     </div>
                 </div>
@@ -367,8 +367,8 @@ export default function DashboardPage() {
                             <span className={styles.cardTitle}>Total de Membros</span>
                             <div className={styles.cardValue}>{stats.totalMembers}</div>
                         </div>
-                        <div className={`${styles.iconBox} bg-blue-50 text-blue-600`}>
-                            <Users size={24} />
+                        <div className={styles.iconBox} style={{ color: 'var(--primary, #6366F1)', background: 'rgba(99, 102, 241, 0.08)' }}>
+                            <Users size={22} />
                         </div>
                     </div>
                 </div>
@@ -380,28 +380,26 @@ export default function DashboardPage() {
                             <span className={styles.cardTitle}>Carnês Ativos</span>
                             <div className={styles.cardValue}>{stats.totalCarnets}</div>
                         </div>
-                        <div className={`${styles.iconBox} bg-indigo-50 text-indigo-600`}>
-                            <Building2 size={24} />
+                        <div className={styles.iconBox} style={{ color: 'var(--text-primary, #0A0A0A)', background: 'var(--muted, #F4F4F6)' }}>
+                            <Building2 size={22} />
                         </div>
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary, #6B6B6B)', marginTop: '0.5rem' }}>
                         <strong>{stats.totalMembers > 0 ? ((stats.totalCarnets / stats.totalMembers) * 100).toFixed(1) : 0}%</strong> adesão
                     </div>
                 </div>
             </div>
 
-
-
             {/* EVANGELISM EVOLUTION CHART */}
-            <section className={`${styles.rankingSection} mb-8`}>
+            <section className={styles.rankingSection}>
                 <div className={styles.sectionHeader}>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-blue-100 text-blue-700 rounded-lg">
-                            <Target size={24} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div className={styles.iconBox} style={{ color: 'var(--secondary, #20970B)', background: 'rgba(32, 151, 11, 0.08)' }}>
+                            <Target size={20} />
                         </div>
                         <div>
                             <h2 className={styles.sectionTitle}>Evolução Pessoas Abordadas</h2>
-                            <p className="text-sm text-gray-500">Últimos meses</p>
+                            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary, #6B6B6B)' }}>Últimos meses</p>
                         </div>
                     </div>
                 </div>
@@ -426,11 +424,12 @@ export default function DashboardPage() {
                                 <div className={styles.barWrapper}>
                                     <div
                                         className={styles.chartBarBg}
-                                        style={{ height: `${heightPercentage}%`, backgroundColor: '#dcfce7' }}
+                                        style={{ height: `${heightPercentage}%` }}
                                     >
-                                        <div className={styles.chartBarFill}
-                                            style={{ height: '100%', backgroundColor: '#16a34a' }}>
-                                        </div>
+                                        <div 
+                                            className={styles.chartBarFill}
+                                            style={{ height: '100%', backgroundColor: 'var(--secondary, #20970B)' }}
+                                        />
                                     </div>
                                 </div>
                                 <div className={styles.chartLabel}>
@@ -447,15 +446,15 @@ export default function DashboardPage() {
 
             {/* EVANGELISM SECTOR CHART */}
             {evangelismSectorStats.length > 0 && (
-                <section className={`${styles.rankingSection} mb-8`}>
+                <section className={styles.rankingSection}>
                     <div className={styles.sectionHeader}>
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-indigo-100 text-indigo-700 rounded-lg">
-                                <Users size={24} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div className={styles.iconBox} style={{ color: 'var(--primary, #6366F1)', background: 'rgba(99, 102, 241, 0.08)' }}>
+                                <Users size={20} />
                             </div>
                             <div>
                                 <h2 className={styles.sectionTitle}>Pessoas Abordadas por Setor</h2>
-                                <p className="text-sm text-gray-500">Consolidado do Ano Atual</p>
+                                <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary, #6B6B6B)' }}>Consolidado do Ano Atual</p>
                             </div>
                         </div>
                     </div>
@@ -480,11 +479,12 @@ export default function DashboardPage() {
                                     <div className={styles.barWrapper}>
                                         <div
                                             className={styles.chartBarBg}
-                                            style={{ height: `${heightPercentage}%`, backgroundColor: '#e0f2fe' }}
+                                            style={{ height: `${heightPercentage}%` }}
                                         >
-                                            <div className={styles.chartBarFill}
-                                                style={{ height: '100%', background: 'linear-gradient(to top, #0284c7, #38bdf8)' }}>
-                                            </div>
+                                            <div 
+                                                className={styles.chartBarFill}
+                                                style={{ height: '100%', backgroundColor: 'var(--primary, #6366F1)' }}
+                                            />
                                         </div>
                                     </div>
                                     <div className={styles.chartLabel}>
@@ -498,15 +498,15 @@ export default function DashboardPage() {
             )}
 
             {/* MONTHLY FINANCIAL EVOLUTION CHART */}
-            <section className={`${styles.rankingSection} mb-8`}>
+            <section className={styles.rankingSection}>
                 <div className={styles.sectionHeader}>
-                    <div className="flex items-center gap-3">
-                        <div className="p-2 bg-green-100 text-green-700 rounded-lg">
-                            <CalendarDays size={24} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div className={styles.iconBox} style={{ color: 'var(--secondary, #20970B)', background: 'rgba(32, 151, 11, 0.08)' }}>
+                            <CalendarDays size={20} />
                         </div>
                         <div>
                             <h2 className={styles.sectionTitle}>Evolução de Ofertas</h2>
-                            <p className="text-sm text-gray-500">Últimos meses</p>
+                            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary, #6B6B6B)' }}>Últimos meses</p>
                         </div>
                     </div>
                 </div>
@@ -532,9 +532,10 @@ export default function DashboardPage() {
                                         className={styles.chartBarBg}
                                         style={{ height: `${heightPercentage}%` }}
                                     >
-                                        <div className={styles.chartBarFill}
-                                            style={{ height: '100%' }}>
-                                        </div>
+                                        <div 
+                                            className={styles.chartBarFill}
+                                            style={{ height: '100%', backgroundColor: 'var(--secondary, #20970B)' }}
+                                        />
                                     </div>
                                 </div>
                                 <div className={styles.chartLabel}>
@@ -551,15 +552,15 @@ export default function DashboardPage() {
 
             {/* SECTOR FINANCIAL CHART */}
             {sectorStats.length > 0 && (
-                <section className={`${styles.rankingSection} mb-8`}>
+                <section className={styles.rankingSection}>
                     <div className={styles.sectionHeader}>
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-orange-100 text-orange-700 rounded-lg">
-                                <TrendingUp size={24} />
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div className={styles.iconBox} style={{ color: 'var(--primary, #6366F1)', background: 'rgba(99, 102, 241, 0.08)' }}>
+                                <TrendingUp size={20} />
                             </div>
                             <div>
                                 <h2 className={styles.sectionTitle}>Arrecadação por Setor</h2>
-                                <p className="text-sm text-gray-500">Consolidado do Ano Atual</p>
+                                <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary, #6B6B6B)' }}>Consolidado do Ano Atual</p>
                             </div>
                         </div>
                     </div>
@@ -585,10 +586,10 @@ export default function DashboardPage() {
                                             className={styles.chartBarBg}
                                             style={{ height: `${heightPercentage}%` }}
                                         >
-                                            {/* Orange Fill for Sectors */}
-                                            <div className={styles.chartBarFill}
-                                                style={{ height: '100%', background: 'linear-gradient(to top, #f97316, #fb923c)' }}>
-                                            </div>
+                                            <div 
+                                                className={styles.chartBarFill}
+                                                style={{ height: '100%', backgroundColor: 'var(--primary, #6366F1)' }}
+                                            />
                                         </div>
                                     </div>
                                     <div className={styles.chartLabel}>

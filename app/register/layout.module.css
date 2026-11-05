@@ -1,31 +1,47 @@
+/* SEMADEJ Online - Registration Layout */
+
 .wrapper {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--background);
-    background-image: radial-gradient(at 50% 0%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #070B16;
+  background-image:
+    radial-gradient(ellipse 65% 45% at 50% 12%, rgba(29, 78, 216, 0.16) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 35% at 80% 30%, rgba(245, 158, 11, 0.08) 0%, transparent 65%),
+    linear-gradient(180deg, #070B16 0%, #0B1222 50%, #070B16 100%);
+  color: #F8FAFC;
+  font-family: var(--font-body, 'DM Sans', 'Inter', system-ui, sans-serif);
 }
 
 .main {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1.5rem 5rem;
 }
 
 .card {
-    width: 100%;
-    max-width: 550px;
-    padding: 2.5rem;
-    border-radius: 1.5rem;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  max-width: 540px;
+  padding: 2.75rem 2.25rem;
+  border-radius: 20px;
+  background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 20px 48px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 640px) {
-    .card {
-        padding: 1.5rem;
-        border-radius: 1rem;
-    }
+  .main {
+    padding: 2rem 1rem 3.5rem;
+  }
+
+  .card {
+    padding: 2rem 1.25rem;
+    border-radius: 16px;
+  }
 }

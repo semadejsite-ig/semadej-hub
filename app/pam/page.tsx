@@ -1,108 +1,278 @@
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { Button } from '@/components/ui/Button';
+import { Footer } from '@/components/layout/Footer';
 import styles from './page.module.css';
-import { ArrowRight, BookOpen, Heart, Globe, GraduationCap, Users } from 'lucide-react';
+import {
+    ArrowRight,
+    Compass,
+    Globe2,
+    BookOpen,
+    Church,
+    History,
+    Languages,
+    Users,
+    Sparkles,
+    Flame,
+    GraduationCap,
+    Award,
+    CalendarCheck,
+    Video
+} from 'lucide-react';
 
-export default function PAMPage() {
+export default function EMADPage() {
+    const modules = [
+        {
+            id: 1,
+            title: 'Introdução a Missões',
+            icon: Compass,
+            color: '#38BDF8',
+            lessons: [
+                'O que é Missões',
+                'Para que Missões',
+                'Onde fazer Missões',
+                'Como fazer Missões',
+                'Quem deve fazer Missões',
+                'Avaliação de Fixação 1 (Quiz)',
+            ],
+        },
+        {
+            id: 2,
+            title: 'Desafios da Evangelização Mundial',
+            icon: Globe2,
+            color: '#60A5FA',
+            lessons: [
+                'Panorama Mundial Contemporâneo',
+                'A Situação Religiosa Global',
+                'Principais Desafios do Século XXI',
+                'Sua Atitude Diante dos Desafios',
+                'Avaliação de Fixação 2 (Quiz)',
+            ],
+        },
+        {
+            id: 3,
+            title: 'Bases Bíblicas de Missões',
+            icon: BookOpen,
+            color: '#818CF8',
+            lessons: [
+                'O Início: A Resposta de Deus',
+                'A Chamada de um Homem & A Tipificação de Um Povo',
+                'A Aprovação: O Nascimento de Jesus',
+                'O Amor Missionário em Ação',
+                'A Prática nos Atos dos Apóstolos',
+                'Quadro Final da Ação Missionária & Avaliação 3',
+            ],
+        },
+        {
+            id: 4,
+            title: 'A Igreja Local e Missões',
+            icon: Church,
+            color: '#34D399',
+            lessons: [
+                'O que Significa Igreja Local',
+                'Destruindo os Mitos da Igreja Local',
+                'O Envolvimento da Igreja com a Obra Missionária',
+                'A Responsabilidade da Secretaria de Missões',
+                'Avaliação de Fixação 4 (Quiz)',
+            ],
+        },
+        {
+            id: 5,
+            title: 'História de Missões',
+            icon: History,
+            color: '#FBBF24',
+            lessons: [
+                'Cristianismo Primitivo e Missões',
+                'O Avanço Missionário e os Primeiros Programas',
+                'A Igreja e o Acordo de Constantino',
+                'O Segundo e o Terceiro Despertamento Missionário',
+                'Avaliação de Fixação 5 (Quiz)',
+            ],
+        },
+        {
+            id: 6,
+            title: 'Missões Transculturais',
+            icon: Languages,
+            color: '#F472B6',
+            lessons: [
+                'Definindo Missões Transculturais',
+                'A Visão Teológica Transcultural da Bíblia',
+                'O Preparo do Missionário Transcultural',
+                'Avaliação de Fixação 6 (Quiz)',
+            ],
+        },
+        {
+            id: 7,
+            title: 'Missões por Faixa Etária',
+            icon: Users,
+            color: '#FB923C',
+            lessons: [
+                'Definindo Estratégias por Faixas Etárias',
+                'Primeira e Segunda Faixas (0 a 4 anos e 5 a 8 anos)',
+                'Terceira e Quarta Faixas (9 a 11 anos e 12 a 14 anos)',
+                'Quinta Faixa (15 a 17 anos) e 18 anos em diante',
+                'Avaliação de Fixação 7 (Quiz)',
+            ],
+        },
+        {
+            id: 8,
+            title: 'Antropologia Missionária',
+            icon: Sparkles,
+            color: '#A78BFA',
+            lessons: [
+                'Definição do Termo, Cultura e Sociedade',
+                'Cosmovisões e Diferenças Culturais',
+                'O Missionário e o Choque Cultural',
+                'A Importância da Etnografia e Contextualização',
+                'Avaliação de Fixação 8 (Quiz)',
+            ],
+        },
+        {
+            id: 9,
+            title: 'Povos Não Alcançados & Janela 10/40',
+            icon: Flame,
+            color: '#F87171',
+            lessons: [
+                'Janela 10/40: O Último e Grande Desafio Missionário',
+                'A Importância de se Conhecer um "Povo"',
+                'Povos Inalcançados, mas Não Inalcançáveis',
+                'Estratégias de Envio e Identificação Cultural',
+                'A Importância da Oração no Alcance Global & Avaliação 9',
+            ],
+        },
+        {
+            id: 10,
+            title: 'Discipulado Bíblico',
+            icon: GraduationCap,
+            color: '#2DD4BF',
+            lessons: [
+                'O Perfil do Discípulo',
+                'O Papel do Discipulador',
+                'O Método Bíblico de Formação de Líderes',
+                'Avaliação de Fixação 10 (Quiz Final)',
+            ],
+        },
+    ];
+
     return (
-        <div className="min-h-screen bg-white">
+        <div className={styles.wrapper}>
             <Header />
 
             <main className={styles.container}>
                 {/* HERO */}
                 <section className={styles.hero}>
                     <div className={styles.heroContent}>
-                        <div className={styles.badge}>Inscrições Abertas 2026</div>
+                        <div className={styles.badge}>EMAD • Escola de Missões Online</div>
                         <h1 className={styles.title}>
-                            Curados para <br />
-                            <span className="text-blue-600">Curar</span>
+                            Curso Básico de <br />
+                            <span className={styles.titleHighlight}>Missões</span>
                         </h1>
                         <p className={styles.subtitle}>
-                            O Programa de Aprofundamento Missionário (PAM) não é apenas um curso.
-                            É um convite radical para redescobrir o fundamento da fé e levar o Evangelho ao mundo.
+                            Você que procura ampliar o conhecimento e se preparar para o desenvolvimento de seu ministério, seja ele local ou transcultural, encontrará na <strong>EMAD</strong> as matérias e ferramentas fundamentais para cumprir a Grande Comissão.
                         </p>
-                        <div className="flex gap-4 justify-center">
-                            <Link href="/register/pam">
-                                <Button size="lg" className="shadow-xl shadow-blue-500/20">
-                                    Quero me Matricular <ArrowRight className="ml-2" size={18} />
-                                </Button>
+
+                        <div className={styles.highlightPills}>
+                            <span className={styles.pillFeature}>
+                                <Video size={16} color="#38BDF8" /> 100% Online
+                            </span>
+                            <span className={styles.pillFeature}>
+                                <Award size={16} color="#34D399" /> Certificado Incluso
+                            </span>
+                            <span className={styles.pillFeature}>
+                                <CalendarCheck size={16} color="#FBBF24" /> Bônus: Planner Anual
+                            </span>
+                        </div>
+
+                        <div className="flex justify-center">
+                            <Link href="/register/pam" className={styles.primaryCta}>
+                                <span>Quero me Matricular na EMAD</span>
+                                <ArrowRight size={18} />
                             </Link>
                         </div>
                     </div>
                 </section>
 
-                {/* PREFACE QUOTE */}
-                <section className={styles.quoteBox}>
-                    <p className={styles.quoteText}>
-                        "A jornada que você inicia aqui está centralizada em uma verdade imutável: para realizar a Missão de Deus, primeiro precisamos ser transformados por Ele. Por isso, a nossa formação começa nos fundamentos... lembrando que somos 'Salvos pela Graça' para então sermos 'Curados para Curar'. Não há como edificar o Reino sem primeiro entendermos nossa posição e nossa cura em Cristo."
-                    </p>
-                    <div className={styles.quoteAuthor}>
-                        Pb. Wilkinson dos Santos Martins
-                        <div className={styles.quoteRole}>Diretor de Missões - SEMADEJ</div>
-                    </div>
-                </section>
-
-                {/* FOUNDER TESTIMONY */}
-                <section className={styles.quoteBox} style={{ borderLeftColor: '#f97316' }}> {/* Orange border for distinction */}
-                    <h3 className="text-xl font-bold text-slate-800 mb-4">Um Chamado para as Nações</h3>
-                    <div className="space-y-4">
-                        <p className={styles.quoteText}>
-                            "Minha jornada com missões abrange mais de 30 anos, período em que realizei trabalhos em campo em mais de 15 países... Descobri bem jovem que o propósito de Deus para mim era adorá-l'O com a minha própria vida, mas foi em Cuba que compreendi que meu maior desejo era doar a minha vida e desgastá-la completamente para proclamar o Reino de Deus."
-                        </p>
-                        <p className={styles.quoteText}>
-                            "A vocação missionária exige a disposição de doar a vida pelo anúncio de Jesus Cristo. Não se trata apenas de dizer que temos vocação, mas de transformá-la em entrega e serviço aos nossos irmãos... É por essa razão — unindo a experiência de campo com a urgência do chamado — que desenvolvi o Programa de Aprofundamento Missionário (PAM)."
-                        </p>
-                    </div>
-
-                    <div className={styles.quoteAuthor}>
-                        Pastor e Missionário Edson Reynaldo Crespi Vianna
-                        <div className={styles.quoteRole}>Fundador do PAM</div>
-                    </div>
-                </section>
-
-                {/* MODULES */}
+                {/* CURRICULUM GRID */}
                 <section className={styles.modulesSection}>
-                    <h2 className={styles.sectionTitle}>Sua Jornada em 10 Módulos</h2>
+                    <div className={styles.sectionHeader}>
+                        <h2 className={styles.sectionTitle}>Grade Curricular Completa</h2>
+                        <p className={styles.sectionSubtitle}>
+                            Uma formação estruturada em 10 módulos essenciais com vídeo-aulas, avaliações práticas de fixação e materiais bônus de planejamento.
+                        </p>
+                    </div>
+
                     <div className={styles.grid}>
-                        {[
-                            { id: 1, title: 'Salvos pela Graça', desc: 'O fundamento de tudo. Entenda a profundidade da graça que nos alcançou para que possamos alcançar outros.', icon: Heart, color: 'text-rose-500' },
-                            { id: 2, title: 'Curados para Curar', desc: 'Não há como edificar o Reino sem antes sermos transformados. A cura interior como pré-requisito para a missão.', icon: Heart, color: 'text-rose-500' },
-                            { id: 3, title: 'Identidade & Paternidade', desc: 'Aprofundando a teologia pessoal. Reconhecendo quem somos em Deus para servir com segurança.', icon: BookOpen, color: 'text-blue-500' },
-                            { id: 4, title: 'Vida no Espírito', desc: 'O poder capacitador para a obra. Sem o Espírito, a missão é impossível. Uma vida de dependência total.', icon: BookOpen, color: 'text-blue-500' },
-                            { id: 5, title: 'Cosmovisão Missiológica', desc: 'Expandindo o olhar. Deixando de olhar apenas para si para enxergar o plano global de Deus.', icon: Globe, color: 'text-teal-500' },
-                            { id: 6, title: 'O Que Creio', desc: 'Doutrina sólida para tempos líquidos. A importância de saber exatamente em quem e no que cremos.', icon: BookOpen, color: 'text-teal-500' },
-                            { id: 7, title: 'Cristão por Convicção', desc: 'Fé inabalável. Transformando conhecimento teológico em certeza de vida prática e testemunho.', icon: BookOpen, color: 'text-teal-500' },
-                            { id: 8, title: 'O Missionário', desc: 'O perfil, o caráter e a preparação daquele que é enviado. A vida do obreiro no campo.', icon: Users, color: 'text-orange-500' },
-                            { id: 9, title: 'Ministério Infantil', desc: 'Evangelização em todas as idades. Alcançando o futuro da igreja e transformando gerações.', icon: Users, color: 'text-orange-500' },
-                            { id: 10, title: 'Projeto de Conclusão', desc: 'O ápice: Desenvolvimento Missionário. Saindo da teoria para plantar sementes reais do Reino.', icon: GraduationCap, color: 'text-amber-500' },
-                        ].map((m) => (
-                            <div key={m.id} className={styles.card}>
-                                <div className={styles.cardNumber}>{String(m.id).padStart(2, '0')}</div>
-                                <h3 className={styles.cardTitle}>{m.title}</h3>
-                                <p className={styles.cardDesc}>{m.desc}</p>
-                                <m.icon className={`mt-4 ${m.color}`} size={24} />
+                        {modules.map((m) => {
+                            const IconComponent = m.icon;
+                            return (
+                                <div key={m.id} className={styles.card}>
+                                    <div>
+                                        <div className={styles.cardTop}>
+                                            <span className={styles.cardNumber}>
+                                                {String(m.id).padStart(2, '0')}
+                                            </span>
+                                            <div className={styles.cardIconBox} style={{ color: m.color }}>
+                                                <IconComponent size={22} />
+                                            </div>
+                                        </div>
+                                        <h3 className={styles.cardTitle}>{m.title}</h3>
+                                        <ul className={styles.cardLessons}>
+                                            {m.lessons.map((lesson, idx) => (
+                                                <li key={idx} className={styles.lessonItem}>
+                                                    <span className={styles.lessonBullet}>▸</span>
+                                                    <span>{lesson}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+                            );
+                        })}
+
+                        {/* BONUS & MÓDULO EXTRA CARD */}
+                        <div className={`${styles.card} ${styles.cardBonus}`}>
+                            <div>
+                                <div className={styles.cardTop}>
+                                    <span className={styles.cardNumber}>★</span>
+                                    <div className={styles.cardIconBox} style={{ color: '#F59E0B' }}>
+                                        <Award size={22} />
+                                    </div>
+                                </div>
+                                <h3 className={styles.cardTitle}>Módulo Extra & Bônus</h3>
+                                <ul className={styles.cardLessons}>
+                                    <li className={styles.lessonItem}>
+                                        <span className={styles.lessonBullet}>★</span>
+                                        <strong>Módulo Extra: Janela 4/14</strong> (Alcance de Crianças e Adolescentes)
+                                    </li>
+                                    <li className={styles.lessonItem}>
+                                        <span className={styles.lessonBullet}>★</span>
+                                        <strong>Bônus Especial: Planner Anual Missionário</strong>
+                                    </li>
+                                    <li className={styles.lessonItem}>
+                                        <span className={styles.lessonBullet}>★</span>
+                                        <strong>Certificado Oficial de Conclusão da EMAD</strong>
+                                    </li>
+                                </ul>
                             </div>
-                        ))}
+                        </div>
                     </div>
                 </section>
 
-                {/* CTA */}
+                {/* FINAL CTA */}
                 <section className={styles.ctaSection}>
                     <div className="max-w-2xl mx-auto px-4">
-                        <h2 className={styles.ctaTitle}>Pronto para o Chamado?</h2>
+                        <h2 className={styles.ctaTitle}>Pronto para Desenvolver seu Ministério?</h2>
                         <p className={styles.ctaText}>
-                            Que este curso seja o catalisador de um novo fogo missionário em seu coração.
-                            As vagas são limitadas para a turma de 2026.
+                            Garanta sua vaga na EMAD e faça parte da nova geração de homens e mulheres capacitados para alcançar vidas na igreja local e nos confins da terra.
                         </p>
-                        <Link href="/register/pam">
-                            <Button size="lg" variant="secondary" className="font-bold text-lg px-8 py-6 h-auto">
-                                FAZER MINHA INSCRIÇÃO AGORA
-                            </Button>
+                        <Link href="/register/pam" className={styles.primaryCta}>
+                            <span>FAZER MINHA INSCRIÇÃO NA EMAD</span>
+                            <ArrowRight size={18} />
                         </Link>
                     </div>
                 </section>
             </main>
+
+            <Footer />
         </div>
     );
 }

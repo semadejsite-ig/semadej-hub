@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apresentação - Sistema de Integração e Discipulado SEMADEJ</title>
+    <title>Apresentação - Opções do Menu de Discipulado SEMADEJ</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,6 +16,9 @@
             --accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
             --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --ethos-color: #8b5cf6;
+            --pathos-color: #ec4899;
+            --logos-color: #0284c7;
             --background: #f8fafc;
             --card: #ffffff;
             --text-main: #0f172a;
@@ -58,15 +61,15 @@
         /* Slide Styles */
         .slide {
             position: absolute;
-            width: 90%;
-            max-width: 1200px;
-            height: 80vh;
-            max-height: 750px;
+            width: 92%;
+            max-width: 1240px;
+            height: 82vh;
+            max-height: 760px;
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-premium);
-            padding: 3.5rem;
+            padding: 3rem 3.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -103,9 +106,9 @@
         .slide::before {
             content: '';
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
             top: -100px;
             right: -100px;
             border-radius: 50%;
@@ -115,13 +118,13 @@
         /* Grid layouts for content */
         .slide-grid {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 3rem;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2.5rem;
             flex: 1;
             align-items: center;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 960px) {
             .slide-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
@@ -133,22 +136,40 @@
 
         /* Typography & Headings */
         .slide-header {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .slide-category {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.15em;
             color: #2563eb;
-            margin-bottom: 0.5rem;
-            display: inline-block;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
+        .rhetoric-tag {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .tag-ethos { background: rgba(139, 92, 246, 0.1); color: var(--ethos-color); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .tag-pathos { background: rgba(236, 72, 153, 0.1); color: var(--pathos-color); border: 1px solid rgba(236, 72, 153, 0.2); }
+        .tag-logos { background: rgba(2, 132, 199, 0.1); color: var(--logos-color); border: 1px solid rgba(2, 132, 199, 0.2); }
 
         .slide-title {
             font-family: 'Outfit', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.35rem;
             font-weight: 800;
             line-height: 1.15;
             color: #0f172a;
@@ -162,10 +183,10 @@
         }
 
         .slide-desc {
-            font-size: 1.05rem;
+            font-size: 1rem;
             color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         /* Features List */
@@ -173,7 +194,7 @@
             display: flex;
             align-items: flex-start;
             gap: 1rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
             animation: slideInUp 0.6s ease forwards;
             opacity: 0;
         }
@@ -197,23 +218,24 @@
             width: 42px;
             height: 42px;
             border-radius: 12px;
-            background: rgba(37, 99, 235, 0.06);
+            background: rgba(37, 99, 235, 0.08);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #2563eb;
             flex-shrink: 0;
+            font-weight: 800;
         }
 
         .feature-text h4 {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-main);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
 
         .feature-text p {
-            font-size: 0.875rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             line-height: 1.45;
         }
@@ -224,8 +246,8 @@
             justify-content: space-between;
             align-items: center;
             border-top: 1px solid var(--border);
-            padding-top: 1.5rem;
-            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            margin-top: 1rem;
             font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 600;
@@ -236,6 +258,7 @@
             align-items: center;
             gap: 0.5rem;
             color: var(--text-main);
+            font-weight: 800;
         }
 
         /* Interactive Visual Mockups */
@@ -248,16 +271,15 @@
             position: relative;
         }
 
-        /* Visual mockup containers styling */
         .visual-card {
             background: white;
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             padding: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.05);
-            width: 90%;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.06);
+            width: 92%;
             position: relative;
-            transform: rotate(-2deg);
+            transform: rotate(-1.5deg);
             transition: var(--transition);
         }
 
@@ -287,17 +309,17 @@
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
             display: inline-block;
         }
 
         .title-main {
             font-family: 'Outfit', sans-serif;
-            font-size: 4rem;
+            font-size: 3.8rem;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -0.03em;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
         }
 
         .title-main span {
@@ -307,44 +329,138 @@
         }
 
         .title-sub {
-            font-size: 1.25rem;
-            color: #94a3b8;
-            max-width: 700px;
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 720px;
+            margin: 0 auto 2rem auto;
             line-height: 1.6;
-            margin-bottom: 3rem;
         }
 
-        /* Navigation Controls Overlay */
+        /* Rhetoric Guide Overlay/Modal */
+        .rhetoric-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(6px);
+            z-index: 100;
+            display: opacity;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rhetoric-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .rhetoric-modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 680px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .rhetoric-modal-overlay.active .rhetoric-modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0.25rem;
+            border-radius: 6px;
+        }
+
+        .rhetoric-box {
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .rhetoric-box h5 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .box-ethos { background: rgba(139, 92, 246, 0.08); border-left: 4px solid var(--ethos-color); color: #4c1d95; }
+        .box-pathos { background: rgba(236, 72, 153, 0.08); border-left: 4px solid var(--pathos-color); color: #831843; }
+        .box-logos { background: rgba(2, 132, 199, 0.08); border-left: 4px solid var(--logos-color); color: #0c4a6e; }
+
+        /* Controls Toolbar */
         .controls {
             position: fixed;
-            bottom: 2.5rem;
+            bottom: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            z-index: 100;
+            gap: 1rem;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            z-index: 50;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-btn {
-            width: 54px;
-            height: 54px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            background: white;
-            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-main);
-            cursor: pointer;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
         }
 
         .nav-btn:hover {
-            background: var(--text-main);
-            color: white;
-            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .progress-dots {
@@ -356,41 +472,65 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: var(--border);
+            background: rgba(255, 255, 255, 0.25);
             cursor: pointer;
             transition: var(--transition);
         }
 
         .dot.active {
-            background: #2563eb;
+            background: #3b82f6;
             width: 24px;
-            border-radius: 5px;
+            border-radius: 9999px;
         }
 
-        /* Visual Stepper Mockup inside presentation */
+        /* Floating Speaker Guide Button */
+        .speaker-guide-btn {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 50;
+            transition: var(--transition);
+        }
+
+        .speaker-guide-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stepper & Timeline Mocks */
         .stepper-mock {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            padding: 1.25rem 0.75rem;
-            border-radius: 12px;
-            margin-top: 1rem;
+            margin: 1rem 0;
+            position: relative;
         }
 
         .step-mock {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.3rem;
+            z-index: 2;
         }
 
         .step-mock-num {
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: #e2e8f0;
+            background: #f1f5f9;
             border: 2px solid #cbd5e1;
             display: flex;
             align-items: center;
@@ -427,70 +567,6 @@
             background: #10b981;
         }
 
-        /* QR Code & Alert mockups */
-        .qr-mock {
-            width: 140px;
-            height: 140px;
-            border: 4px solid var(--text-main);
-            border-radius: 12px;
-            padding: 0.5rem;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem auto;
-            box-shadow: var(--shadow-premium);
-        }
-
-        .qr-mock svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .tg-alert-mock {
-            background: #229ED9;
-            color: white;
-            border-radius: 12px;
-            padding: 1rem;
-            font-size: 0.75rem;
-            line-height: 1.4;
-            box-shadow: 0 10px 15px -3px rgba(34, 158, 217, 0.2);
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        /* SVG Circle Progress Mockup */
-        .circle-progress-mock {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-        }
-
-        .circle-progress-mock svg {
-            transform: rotate(-90deg);
-        }
-
-        .circle-text-mock {
-            position: absolute;
-            text-align: center;
-        }
-
-        .circle-text-mock h3 {
-            font-size: 1.5rem;
-            font-weight: 800;
-        }
-
-        .circle-text-mock span {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
         /* Keypad Instructions overlay */
         .keyboard-tips {
             position: fixed;
@@ -511,18 +587,6 @@
             border-radius: 4px;
             font-family: monospace;
             box-shadow: 0 2px 2px rgba(0,0,0,0.05);
-        }
-
-        /* Alert badge mock */
-        .badge-mock {
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 0.25rem 0.6rem;
-            border-radius: 9999px;
-            background: rgba(239, 68, 68, 0.08);
-            color: #ef4444;
-            display: inline-block;
-            margin-bottom: 0.5rem;
         }
 
         .screen-tab-btn {
@@ -547,213 +611,373 @@
         .screen-tab-btn.active p {
             color: rgba(255, 255, 255, 0.7) !important;
         }
+
+        /* WhatsApp Button styling matching DESIGN_SYSTEM.md */
+        .whatsappBtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.8rem;
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white !important;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.15);
+            transition: all 0.2s ease;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Floating Speaker Guide Button (Aristotelian Rhetoric) -->
+    <button class="speaker-guide-btn" onclick="toggleRhetoricModal()">
+        <i data-lucide="mic"></i> Dicas do Orador
+    </button>
 
     <div class="presentation">
         
         <!-- SLIDE 1: Capa -->
         <section class="slide slide-title-page active" data-slide="1">
             <div class="title-badge">SEMADEJ DIGITAL</div>
-            <h1 class="title-main">Sistema de Integração e <span>Discipulado</span></h1>
+            <h1 class="title-main">Opções do Menu de <span>Discipulado</span></h1>
             <p class="title-sub">
-                A tecnologia servindo ao Reino: aproximando liderança, voluntários e novos convertidos desde o primeiro instante da decisão.
+                Capacitando voluntários e discipuladores para acolher, acompanhar e consolidar cada nova vida de forma simples, humana e ágil.
             </p>
-            <div style="font-size: 0.85rem; opacity: 0.7; font-weight: 600;">
-                Apresentação Oficial para a Igreja
+            <div style="font-size: 0.85rem; opacity: 0.8; font-weight: 600; display: flex; gap: 1rem; justify-content: center;">
+                <span class="rhetoric-tag tag-ethos"><i data-lucide="shield-check" size="12"></i> Postura</span>
+                <span class="rhetoric-tag tag-pathos"><i data-lucide="heart" size="12"></i> Conexão</span>
+                <span class="rhetoric-tag tag-logos"><i data-lucide="brain" size="12"></i> Clareza</span>
             </div>
         </section>
 
-        <!-- SLIDE 2: O Desafio -->
-        <section class="slide" data-slide="2">
+        
+        <!-- SLIDE 3: Como as pessoas chegam no sistema -->
+        <section class="slide" data-slide="3">
             <div class="slide-grid">
                 <div class="slide-content">
-                    <span class="slide-category">O Cenário</span>
-                    <h2 class="slide-header slide-title">Do Papel para o <span>Cuidado Instantâneo</span></h2>
+                    <span class="slide-category">
+                        O Caminho até o Sistema
+                        <span class="rhetoric-tag tag-logos"><i data-lucide="brain" size="12"></i> Clareza</span>
+                    </span>
+                    <h2 class="slide-header slide-title">Como as pessoas <span>chegam aqui?</span></h2>
                     <p class="slide-desc">
-                        O processo tradicional de fichas em papel gerava atrasos naturais no acolhimento de novas vidas. Nosso desafio era reduzir esse tempo a zero.
+                        Antes de falarmos do menu, veja como é simples o processo desde o momento do apelo até a ficha cair no sistema.
                     </p>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="clock"></i></div>
+                        <div class="feature-icon-wrapper" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">1</div>
                         <div class="feature-text">
-                            <h4>Atendimento sem Demora</h4>
-                            <p>O acompanhamento imediato nas primeiras 24 horas aumenta drasticamente a taxa de permanência do novo convertido.</p>
+                            <h4>Momento do Apelo no Culto</h4>
+                            <p>A pessoa aceita Jesus ou se reconcilia. A equipe de recepção acolhe.</p>
                         </div>
                     </div>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="users"></i></div>
+                        <div class="feature-icon-wrapper" style="color: #2563eb; background: rgba(37, 99, 235, 0.1);">2</div>
                         <div class="feature-text">
-                            <h4>Equipe Integrada</h4>
-                            <p>Pastores, coordenadores e voluntários em sintonia através de uma única ferramenta inteligente.</p>
+                            <h4>Preenchimento via Link / QR Code</h4>
+                            <p>O voluntário abre o formulário de cadastro da congregação no próprio celular e registra o contato inicial.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">3</div>
+                        <div class="feature-text">
+                            <h4>Acesso pelo Perfil de Discipulado</h4>
+                            <p>O líder e os voluntários entram no sistema (SEMADEJ Hub) usando seus perfis e encontram as fichas prontas no menu.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="slide-visual">
-                    <div class="visual-card" style="transform: rotate(3deg); background: #fafafa; border: 1.5px dashed #cbd5e1; text-align: center;">
-                        <i data-lucide="file-text" size="48" style="color: #94a3b8; margin-bottom: 1rem;"></i>
-                        <h4 style="color: #64748b; margin-bottom: 0.5rem;">Ficha Física Tradicional</h4>
-                        <p style="font-size: 0.75rem; color: #94a3b8;">
-                            Risco de extravio • Atraso na digitação • Dificuldade de acompanhamento histórico das visitas.
+                    <div class="visual-card" style="background: var(--primary-gradient); color: white; border: none; text-align: left; padding: 2rem;">
+                        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                            <i data-lucide="qr-code" size="64" style="color: white; opacity: 0.9;"></i>
+                        </div>
+                        <h4 style="font-size: 1.1rem; font-weight: 800; color: #60a5fa; margin-bottom: 0.75rem; text-align: center;">
+                            Sem papéis perdidos!
+                        </h4>
+                        <p style="font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.85); margin-bottom: 0; text-align: center;">
+                            Cada congregação tem seu QR Code e Link específico. Quando preenchido, o sistema já organiza tudo no lugar certo.
                         </p>
                     </div>
                 </div>
             </div>
             
             <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 2 de 8</div>
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 2 de 9</div>
             </div>
         </section>
-
-        <!-- SLIDE 3: Pilar 1 -->
+\n        <!-- SLIDE 4: Visão Geral das 3 Opções -->
         <section class="slide" data-slide="3">
             <div class="slide-grid">
                 <div class="slide-content">
-                    <span class="slide-category">Pilar 1</span>
-                    <h2 class="slide-header slide-title">Ficha de Decisão <span>100% Digital</span></h2>
+                    <span class="slide-category">
+                        O Menu de Discipulado
+                        <span class="rhetoric-tag tag-logos">Clareza: Estrutural</span>
+                    </span>
+                    <h2 class="slide-header slide-title">Três Ferramentas, <span>Um Só Propósito</span></h2>
                     <p class="slide-desc">
-                        A captação da decisão agora ocorre direto pelo celular nos cultos, vias públicas ou eventos, enviando alertas em tempo real.
+                        O menu de Discipulado foi construído pensando no voluntário. Dividimos o trabalho em 3 opções claras e fáceis de usar.
                     </p>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="qr-code"></i></div>
+                        <div class="feature-icon-wrapper" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);">1</div>
                         <div class="feature-text">
-                            <h4>QR Code e Links da Congregação</h4>
-                            <p>Cada congregação possui seu link e QR Code exclusivo para acesso rápido ao formulário.</p>
+                            <h4>📄 Fichas de Decisão</h4>
+                            <p>Onde a nova vida é cadastrada nos cultos e eventos. É o ponto de entrada e triagem inicial.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper" style="color: #2563eb; background: rgba(37, 99, 235, 0.1);">2</div>
+                        <div class="feature-text">
+                            <h4>📊 Painel Geral de Discipulado</h4>
+                            <p>A visão panorâmica com indicadores, porcentagem de integração e saúde da congregação.</p>
                         </div>
                     </div>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="send"></i></div>
+                        <div class="feature-icon-wrapper" style="color: #10b981; background: rgba(16, 185, 129, 0.1);">3</div>
                         <div class="feature-text">
-                            <h4>Notificações no Telegram</h4>
-                            <p>Assim que a ficha é salva, um alerta é disparado automaticamente para o grupo de liderança da congregação.</p>
+                            <h4>❤️ Acompanhamento de Vidas</h4>
+                            <p>A rotina prática do discipulador: cartões de vida, atualizações de fases e contato via WhatsApp em 1 toque.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="slide-visual">
-                    <div class="visual-card" style="max-width: 320px;">
-                        <div class="qr-mock">
-                            <!-- Draw simple grid lines to simulate QR code -->
-                            <svg viewBox="0 0 100 100">
-                                <rect x="0" y="0" width="30" height="30" fill="#0f172a"/>
-                                <rect x="5" y="5" width="20" height="20" fill="white"/>
-                                <rect x="10" y="10" width="10" height="10" fill="#0f172a"/>
-                                <rect x="70" y="0" width="30" height="30" fill="#0f172a"/>
-                                <rect x="75" y="5" width="20" height="20" fill="white"/>
-                                <rect x="80" y="80" width="10" height="10" fill="#0f172a"/>
-                                <rect x="0" y="70" width="30" height="30" fill="#0f172a"/>
-                                <rect x="5" y="75" width="20" height="20" fill="white"/>
-                                <rect x="10" y="80" width="10" height="10" fill="#0f172a"/>
-                                <rect x="40" y="40" width="20" height="20" fill="#0f172a"/>
-                                <rect x="50" y="70" width="10" height="20" fill="#0f172a"/>
-                                <rect x="80" y="40" width="10" height="20" fill="#0f172a"/>
-                            </svg>
-                        </div>
-                        <div class="tg-alert-mock">
-                            <strong>🔔 Alerta SEMADEJ:</strong> Novas decisões no altar! <strong>Thiago Santos</strong> acaba de aceitar a Jesus na Congregação Central.
+                    <div class="visual-card" style="background: var(--primary-gradient); color: white; border: none; text-align: left; padding: 2rem;">
+                        <h4 style="font-size: 1.1rem; font-weight: 800; color: #60a5fa; margin-bottom: 0.75rem;">
+                            💡 Por que essa estrutura simples?
+                        </h4>
+                        <p style="font-size: 0.85rem; line-height: 1.6; color: rgba(255,255,255,0.85); margin-bottom: 1.25rem;">
+                            Independentemente de ter muita ou pouca experiência com tecnologia, qualquer voluntário consegue identificar exatamente onde clicar para cuidar da sua ovelha.
+                        </p>
+                        <div style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 0.6rem 1rem; border-radius: 8px; border-left: 3px solid #10b981;">
+                            <strong>Promessa ao Voluntário:</strong> Sem formulários longos ou complicados. Tudo é direto e prático.
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 3 de 8</div>
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 3 de 9</div>
             </div>
         </section>
 
-        <!-- SLIDE 4: Pilar 2 -->
+        <!-- SLIDE 4: Opção 1 - Fichas de Decisão -->
         <section class="slide" data-slide="4">
             <div class="slide-grid">
                 <div class="slide-content">
-                    <span class="slide-category">Pilar 2</span>
-                    <h2 class="slide-header slide-title">Painel Geral do <span>Discipulado</span></h2>
+                    <span class="slide-category">
+                        Opção 1 no Menu
+                        <span class="rhetoric-tag tag-ethos">Postura: Responsabilidade</span>
+                    </span>
+                    <h2 class="slide-header slide-title">📄 Fichas de <span>Decisão</span></h2>
                     <p class="slide-desc">
-                        Uma central analítica exclusiva para pastores e coordenadores avaliarem a saúde espiritual e consolidação do setor ou congregação.
+                        A porta de entrada. É onde registramos cada pessoa que aceitou a Jesus ou se reconciliou no altar ou no evangelismo.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="file-input"></i></div>
+                        <div class="feature-text">
+                            <h4>Cadastro Ágil no Celular</h4>
+                            <p>Preenchimento rápido durante o apelo, salvando nome, telefone, congregação e pedido de oração.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="user-plus"></i></div>
+                        <div class="feature-text">
+                            <h4>Atribuição Imediata de Voluntários</h4>
+                            <p>O líder escolhe o discipulador responsável com 1 clique na lista, evitando que a pessoa fique sem assistência.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="filter"></i></div>
+                        <div class="feature-text">
+                            <h4>Filtros por Congregação e Setor</h4>
+                            <p>Organize rapidamente por congregação ou filtre apenas as fichas que ainda não possuem discipulador alocado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="max-width: 380px;">
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; margin-bottom: 0.5rem;">Links Públicos</div>
+                        <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.25rem;">Links e QRs de Fichas</h4>
+                        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 1rem;">Compartilhe para recepção e apelo</p>
+                        
+                        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="font-weight: 800; color: #0f172a; font-size: 0.85rem;">Sede - SEMADEJ</span>
+                                <span style="font-size: 0.6rem; background: #e2e8f0; color: #475569; padding: 0.2rem 0.4rem; border-radius: 4px; font-weight: 700;">Setor 1</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem;">
+                                <button style="flex: 1; padding: 0.4rem; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.65rem; font-weight: 700;"><i data-lucide="link" size="12"></i> Copiar Link</button>
+                                <button style="flex: 1; padding: 0.4rem; background: #0f172a; color: white; border: none; border-radius: 6px; font-size: 0.65rem; font-weight: 700;"><i data-lucide="qr-code" size="12"></i> QR Code</button>
+                            </div>
+                        </div>
+                    </div> </div></div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 4 de 9</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: Opção 2 - Painel Geral -->
+        <section class="slide" data-slide="5">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">
+                        Opção 2 no Menu
+                        <span class="rhetoric-tag tag-logos">Clareza: Dados Transparentes</span>
+                    </span>
+                    <h2 class="slide-header slide-title">📊 Painel Geral do <span>Discipulado</span></h2>
+                    <p class="slide-desc">
+                        A central de indicadores. Permite enxergar a saúde do discipulado e a evolução dos novos convertidos de forma gráfica e transparente.
                     </p>
                     
                     <div class="feature-item">
                         <div class="feature-icon-wrapper"><i data-lucide="pie-chart"></i></div>
                         <div class="feature-text">
                             <h4>Taxa de Integração Espiritual</h4>
-                            <p>Visualização gráfica da porcentagem de decididos que se tornaram membros activos.</p>
+                            <p>Mostra a porcentagem exata de pessoas que chegaram e já foram integradas à igreja local.</p>
                         </div>
                     </div>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="activity"></i></div>
+                        <div class="feature-icon-wrapper"><i data-lucide="bar-chart-3"></i></div>
                         <div class="feature-text">
-                            <h4>Ouvidoria de Pendências</h4>
-                            <p>Alerta imediato de quantas vidas no setor estão sem voluntários alocados ou aguardando visitas.</p>
+                            <h4>Estatísticas por Congregação</h4>
+                            <p>Comparativo claro entre congregações: quantas vidas estão pendentes, em progresso ou sem voluntário.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="award"></i></div>
+                        <div class="feature-text">
+                            <h4>Desempenho dos Voluntários</h4>
+                            <p>Reconheça os voluntários mais dedicados e identifique quem precisa de ajuda ou reforço na equipe.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="slide-visual">
-                    <div class="visual-card" style="max-width: 320px; text-align: center;">
-                        <h4 style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-muted);">Índice de Consolidação</h4>
-                        <div class="circle-progress-mock">
-                            <svg width="130" height="130">
-                                <circle cx="65" cy="65" r="50" fill="none" stroke="#e2e8f0" stroke-width="12"/>
-                                <circle cx="65" cy="65" r="50" fill="none" stroke="#10b981" stroke-width="12" stroke-dasharray="314" stroke-dashoffset="78"/>
-                            </svg>
-                            <div class="circle-text-mock">
-                                <h3>75%</h3>
-                                <span>Membros</span>
+                    <div class="visual-card" style="max-width: 380px; text-align: center;">
+                        <h4 style="font-size: 0.9rem; margin-bottom: 0.75rem; color: var(--text-muted); font-weight: 700;">Visão Geral da Congregação</h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin-bottom: 1rem;">
+                            <div style="background: white; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <span style="font-size: 0.55rem; color: #64748b; font-weight: 700;">Novas Decisões</span>
+                                <div style="font-size: 1.1rem; font-weight: 800; color: #0f172a;">12</div>
+                            </div>
+                            <div style="background: white; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <span style="font-size: 0.55rem; color: #64748b; font-weight: 700;">Sem Voluntário</span>
+                                <div style="font-size: 1.1rem; font-weight: 800; color: #ef4444;">3</div>
+                            </div>
+                            <div style="background: white; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <span style="font-size: 0.55rem; color: #64748b; font-weight: 700;">Em Acompanh.</span>
+                                <div style="font-size: 1.1rem; font-weight: 800; color: #f59e0b;">24</div>
+                            </div>
+                            <div style="background: white; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                <span style="font-size: 0.55rem; color: #64748b; font-weight: 700;">Consolidados</span>
+                                <div style="font-size: 1.1rem; font-weight: 800; color: #10b981;">28</div>
                             </div>
                         </div>
-                        <div style="display: flex; justify-content: space-around; margin-top: 1rem; font-size: 0.75rem;">
-                            <div><strong style="color: #10b981;">32</strong><br>Visitas Realizadas</div>
-                            <div><strong style="color: #ef4444;">8</strong><br>Pendentes</div>
+
+                        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.4rem;">
+                                <span>Taxa de Integração Espiritual</span>
+                                <span style="color: #10b981;">48%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+                                <div style="width: 48%; height: 100%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                            </div>
+                        </div>
+                    </div></div></div>
+
+                        <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.4rem;">
+                                <span>Taxa de Consolidação</span>
+                                <span style="color: #10b981;">48%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+                                <div style="width: 48%; height: 100%; background: linear-gradient(90deg, #10b981, #059669);"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 4 de 8</div>
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 5 de 9</div>
             </div>
         </section>
 
-        <!-- SLIDE 5: Pilar 3 -->
-        <section class="slide" data-slide="5">
+        <!-- SLIDE 6: Opção 3 - Acompanhamento -->
+        <section class="slide" data-slide="6">
             <div class="slide-grid">
                 <div class="slide-content">
-                    <span class="slide-category">Pilar 3</span>
-                    <h2 class="slide-header slide-title">Acompanhamento e <span>Cartões de Vidas</span></h2>
+                    <span class="slide-category">
+                        Opção 3 no Menu
+                        <span class="rhetoric-tag tag-pathos">Conexão: Cuidado Pastoral</span>
+                    </span>
+                    <h2 class="slide-header slide-title">❤️ Acompanhamento de <span>Vidas</span></h2>
                     <p class="slide-desc">
-                        A tela de Acompanhamento reúne cards compactos que facilitam o dia a dia do discipulador, mostrando a evolução de cada pessoa.
+                        A ferramenta do dia a dia. É onde o voluntário cuida ativamente do novo convertido, registrando contatos e visitas.
                     </p>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="git-commit"></i></div>
+                        <div class="feature-icon-wrapper"><i data-lucide="message-circle"></i></div>
                         <div class="feature-text">
-                            <h4>Visual Stepper (Estágio da Vida)</h4>
-                            <p>Mostra a fase exata de integração: 1. Contato ➔ 2. Visita ➔ 3. Discipulado ➔ 4. Membro.</p>
+                            <h4>Botão Direto para o WhatsApp</h4>
+                            <p>Com apenas 1 toque no botão verde, o voluntário abre a conversa já no aplicativo sem precisar salvar o número.</p>
                         </div>
                     </div>
                     
                     <div class="feature-item">
+                        <div class="feature-icon-wrapper"><i data-lucide="check-circle-2"></i></div>
+                        <div class="feature-text">
+                            <h4>Passos Visuais de Evolução</h4>
+                            <p>Acompanhe o caminho: 1. Contato inicial ➔ 2. Visita realizada ➔ 3. Estudo do Discipulado ➔ 4. Batismo/Integração.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-item">
                         <div class="feature-icon-wrapper"><i data-lucide="alert-triangle"></i></div>
                         <div class="feature-text">
-                            <h4>Alertas Inteligentes de Atraso</h4>
-                            <p>Avisos como "Contato Atrasado (3+ dias)" alertam a necessidade urgente de contato.</p>
+                            <h4>Alertas Inteligentes de Atenção</h4>
+                            <p>Avisos visuais como "⚠️ 3+ dias sem contato" ajudam a lembrar que a pessoa precisa de carinho e atenção.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="slide-visual">
-                    <div class="visual-card" style="max-width: 380px; transform: rotate(1deg); border-left: 4px solid #f59e0b;">
-                        <div class="badge-mock">⚠️ Contato Atrasado (3+ dias)</div>
-                        <h4 style="font-size: 1.1rem; font-weight: 800;">Wilkinson S. Martins</h4>
-                        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.75rem;">Congregação Central</p>
+                    <div class="visual-card" style="max-width: 380px; border-left: 4px solid #ef4444;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.65rem; font-weight: 800; background: #fee2e2; color: #b91c1c; padding: 0.2rem 0.5rem; border-radius: 4px;">Sem Voluntário Alocado</span>
+                            <span style="font-size: 0.65rem; color: #64748b;">Sede • 12/08/2026</span>
+                        </div>
+
+                        <h4 style="font-size: 1.1rem; font-weight: 800;">Ana Clara Vasconcelos</h4>
+                        <div style="margin: 0.5rem 0;">
+                            <select style="width: 100%; font-size: 0.7rem; padding: 0.4rem; border-radius: 4px; border: 1px solid #cbd5e1; background: #f8fafc; font-weight: 600;">
+                                <option>Voluntário: Teste</option>
+                                <option>Gabriel Fernandes</option>
+                            </select>
+                        </div>
                         
                         <div class="stepper-mock">
                             <div class="step-mock active">
@@ -768,65 +992,126 @@
                             <div class="step-mock-line"></div>
                             <div class="step-mock">
                                 <span class="step-mock-num">3</span>
-                                <span class="step-mock-text">Curso</span>
+                                <span class="step-mock-text">Estudo</span>
+                            </div>
+                            <div class="step-mock-line"></div>
+                            <div class="step-mock">
+                                <span class="step-mock-num">4</span>
+                                <span class="step-mock-text">Membro</span>
                             </div>
                         </div>
                         
-                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                            <div style="flex:1; border: 1px solid var(--border); border-radius: 8px; padding: 0.4rem; font-size: 0.7rem; font-weight: 700; text-align: center; color: var(--text-muted);">
-                                Ver Ficha
-                            </div>
-                            <div style="flex:1; background: var(--accent-gradient); border-radius: 8px; padding: 0.4rem; font-size: 0.7rem; font-weight: 700; text-align: center; color: white;">
-                                Atualizar
-                            </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button style="flex: 1; background: #f8fafc; border: 1px solid #cbd5e1; padding: 0.4rem; border-radius: 6px; font-size: 0.65rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.3rem;"><i data-lucide="file-text" size="12"></i> Ficha</button>
+                            <a href="#" class="whatsappBtn" style="flex: 2; padding: 0.4rem; font-size: 0.65rem;" onclick="return false;">
+                                <i data-lucide="message-circle" size="12"></i> WhatsApp
+                            </a>
+                        </div>
+                    </div></div></div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 6 de 9</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Linha do Tempo do Novo Convertido -->
+        <section class="slide" data-slide="7">
+            <div class="slide-grid">
+                <div class="slide-content" style="grid-column: 1 / -1;">
+                    <span class="slide-category">
+                        Caminho de Integração
+                        <span class="rhetoric-tag tag-logos">Clareza: Passo a Passo Claro</span>
+                    </span>
+                    <h2 class="slide-header slide-title" style="margin-bottom: 0.75rem;">A Jornada de Cuidado do <span>Novo Convertido</span></h2>
+                    <p class="slide-desc" style="margin-bottom: 1.5rem;">
+                        Entenda como as opções do menu funcionam juntas para acompanhar a vida desde o altar até a membresia na igreja local:
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-top: 1rem;">
+                        <!-- Passo 1 -->
+                        <div style="background: white; border: 1px solid var(--border); border-top: 4px solid #f59e0b; border-radius: 12px; padding: 1.25rem 1rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #fef3c7; color: #d97706; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 0 auto 0.75rem auto;">1</div>
+                            <h4 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 0.35rem;">Ficha no Altar</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Preenchimento rápido da ficha na recepção/altar.</p>
+                            <span style="font-size: 0.65rem; font-weight: 700; color: #d97706; display: block; margin-top: 0.5rem;">Menu: Fichas de Decisão</span>
+                        </div>
+
+                        <!-- Passo 2 -->
+                        <div style="background: white; border: 1px solid var(--border); border-top: 4px solid #2563eb; border-radius: 12px; padding: 1.25rem 1rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #dbeafe; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 0 auto 0.75rem auto;">2</div>
+                            <h4 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 0.35rem;">Alocação</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Líder vincula o voluntário mais próximo da pessoa.</p>
+                            <span style="font-size: 0.65rem; font-weight: 700; color: #1d4ed8; display: block; margin-top: 0.5rem;">Menu: Fichas de Decisão</span>
+                        </div>
+
+                        <!-- Passo 3 -->
+                        <div style="background: white; border: 1px solid var(--border); border-top: 4px solid #8b5cf6; border-radius: 12px; padding: 1.25rem 1rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #f3e8ff; color: #6b21a8; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 0 auto 0.75rem auto;">3</div>
+                            <h4 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 0.35rem;">Contato 24h</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Mensagem carinhosa de boas-vindas pelo WhatsApp.</p>
+                            <span style="font-size: 0.65rem; font-weight: 700; color: #6b21a8; display: block; margin-top: 0.5rem;">Menu: Acompanhamento</span>
+                        </div>
+
+                        <!-- Passo 4 -->
+                        <div style="background: white; border: 1px solid var(--border); border-top: 4px solid #06b6d4; border-radius: 12px; padding: 1.25rem 1rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #cffaff; color: #0e7490; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 0 auto 0.75rem auto;">4</div>
+                            <h4 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 0.35rem;">Visita / Estudo</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Visita presencial e início do curso de discipulado.</p>
+                            <span style="font-size: 0.65rem; font-weight: 700; color: #0e7490; display: block; margin-top: 0.5rem;">Menu: Acompanhamento</span>
+                        </div>
+
+                        <!-- Passo 5 -->
+                        <div style="background: white; border: 1px solid var(--border); border-top: 4px solid #10b981; border-radius: 12px; padding: 1.25rem 1rem; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);">
+                            <div style="width: 36px; height: 36px; border-radius: 50%; background: #dcfce7; color: #15803d; display: flex; align-items: center; justify-content: center; font-weight: 800; margin: 0 auto 0.75rem auto;">5</div>
+                            <h4 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 0.35rem;">Membro Integrado</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.4;">Batismo nas águas e acolhimento total na igreja.</p>
+                            <span style="font-size: 0.65rem; font-weight: 700; color: #15803d; display: block; margin-top: 0.5rem;">Menu: Painel Geral</span>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 5 de 8</div>
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 7 de 9</div>
             </div>
         </section>
 
-        <!-- SLIDE 6: Telas do Sistema -->
-        <section class="slide" data-slide="6">
+        <!-- SLIDE 8: Mockups Interativos -->
+        <section class="slide" data-slide="8">
             <div class="slide-grid">
                 <div class="slide-content" style="display: flex; flex-direction: column; justify-content: center; height: 100%;">
-                    <span class="slide-category">Interfaces</span>
-                    <h2 class="slide-header slide-title" style="font-size: 2.2rem; margin-bottom: 1rem;">Telas do <span>Sistema</span></h2>
-                    <p class="slide-desc" style="font-size: 0.95rem; margin-bottom: 1.5rem;">
-                        Uma interface responsiva e fácil de usar. Selecione uma tela abaixo para visualizar o mockup interativo:
+                    <span class="slide-category">
+                        Demonstração Prática
+                        <span class="rhetoric-tag tag-logos">Clareza: Visualização Real</span>
+                    </span>
+                    <h2 class="slide-header slide-title" style="font-size: 2.1rem; margin-bottom: 0.75rem;">Explore os <span>Menus do Sistema</span></h2>
+                    <p class="slide-desc" style="font-size: 0.9rem; margin-bottom: 1.25rem;">
+                        Clique nas opções abaixo para alternar a tela exibida no simulador ao lado:
                     </p>
                     
-                    <div class="screens-tabs" style="display: flex; flex-direction: column; gap: 0.6rem;">
-                        <button class="screen-tab-btn active" onclick="switchMockup('dashboard')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
-                            <i data-lucide="layout-dashboard" size="18" style="color: #2563eb;"></i>
+                    <div class="screens-tabs" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <button class="screen-tab-btn active" onclick="switchMockup('decisoes')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
+                            <i data-lucide="file-text" size="18" style="color: #f59e0b;"></i>
                             <div>
-                                <h4 style="font-size: 0.9rem; margin-bottom: 0.1rem;">1. Painel Geral do Discipulado</h4>
-                                <p style="font-size: 0.7rem; font-weight: 500; color: var(--text-muted);">Visão geral de estatísticas e gráficos de consolidação</p>
+                                <h4 style="font-size: 0.85rem; margin-bottom: 0.1rem;">1. Fichas de Decisão</h4>
+                                <p style="font-size: 0.68rem; font-weight: 500; color: var(--text-muted);">Cadastro no altar e atribuição de voluntários</p>
                             </div>
                         </button>
-                        <button class="screen-tab-btn" onclick="switchMockup('acompanhamento')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
-                            <i data-lucide="check-square" size="18" style="color: #10b981;"></i>
+                        <button class="screen-tab-btn" onclick="switchMockup('dashboard')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
+                            <i data-lucide="bar-chart-3" size="18" style="color: #2563eb;"></i>
                             <div>
-                                <h4 style="font-size: 0.9rem; margin-bottom: 0.1rem;">2. Acompanhamento Discipulado</h4>
-                                <p style="font-size: 0.7rem; font-weight: 500; color: var(--text-muted);">Evolução passo a passo, alertas de atraso e WhatsApp</p>
+                                <h4 style="font-size: 0.85rem; margin-bottom: 0.1rem;">2. Painel Geral do Discipulado</h4>
+                                <p style="font-size: 0.68rem; font-weight: 500; color: var(--text-muted);">Métricas e gráficos de consolidação da igreja</p>
                             </div>
                         </button>
-                        <button class="screen-tab-btn" onclick="switchMockup('decisoes')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
-                            <i data-lucide="users" size="18" style="color: #f59e0b;"></i>
+                        <button class="screen-tab-btn" onclick="switchMockup('acompanhamento')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
+                            <i data-lucide="heart" size="18" style="color: #10b981;"></i>
                             <div>
-                                <h4 style="font-size: 0.9rem; margin-bottom: 0.1rem;">3. Fichas de Decisão</h4>
-                                <p style="font-size: 0.7rem; font-weight: 500; color: var(--text-muted);">Alocação imediata de voluntários e filtros detalhados</p>
-                            </div>
-                        </button>
-                        <button class="screen-tab-btn" onclick="switchMockup('cadastro')" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: white; cursor: pointer; text-align: left; transition: var(--transition); font-weight: 700; color: var(--text-main); width:100%;">
-                            <i data-lucide="file-plus" size="18" style="color: #ef4444;"></i>
-                            <div>
-                                <h4 style="font-size: 0.9rem; margin-bottom: 0.1rem;">4. Ficha de Cadastro Digital</h4>
-                                <p style="font-size: 0.7rem; font-weight: 500; color: var(--text-muted);">Formulário simples e rápido acessível de qualquer celular</p>
+                                <h4 style="font-size: 0.85rem; margin-bottom: 0.1rem;">3. Acompanhamento de Vidas</h4>
+                                <p style="font-size: 0.68rem; font-weight: 500; color: var(--text-muted);">Cartões de vida, alertas de atraso e WhatsApp em 1 toque</p>
                             </div>
                         </button>
                     </div>
@@ -834,14 +1119,14 @@
 
                 <div class="slide-visual" style="height: 100%; display: flex; align-items: center; justify-content: center;">
                     <!-- Device Mockup Frame (Chrome/Window aesthetic) -->
-                    <div class="device-mockup" style="width: 100%; height: 90%; background: #ffffff; border: 2px solid #0f172a; border-radius: 16px; box-shadow: var(--shadow-premium); overflow: hidden; display: flex; flex-direction: column;">
+                    <div class="device-mockup" style="width: 100%; height: 92%; background: #ffffff; border: 2px solid #0f172a; border-radius: 16px; box-shadow: var(--shadow-premium); overflow: hidden; display: flex; flex-direction: column;">
                         <!-- Browser Header -->
                         <div class="device-header" style="height: 32px; background: #0f172a; display: flex; align-items: center; padding: 0 1rem; gap: 0.4rem; flex-shrink: 0;">
                             <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444;"></span>
                             <span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b;"></span>
                             <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
-                            <div class="device-url" id="mockupUrl" style="background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.6rem; color: #94a3b8; padding: 0.1rem 1rem; margin-left: 1rem; width: 60%; text-overflow: ellipsis; white-space: nowrap; font-family: monospace;">
-                                semadej.hub/dashboard/discipulado
+                            <div class="device-url" id="mockupUrl" style="background: rgba(255,255,255,0.1); border-radius: 4px; font-size: 0.6rem; color: #94a3b8; padding: 0.1rem 1rem; margin-left: 1rem; width: 65%; text-overflow: ellipsis; white-space: nowrap; font-family: monospace;">
+                                semadej.hub/dashboard/decisoes
                             </div>
                         </div>
                         <!-- Browser Content -->
@@ -853,122 +1138,58 @@
             </div>
             
             <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 6 de 8</div>
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 8 de 9</div>
             </div>
         </section>
 
-        <!-- SLIDE 7: Fluxo na Prática -->
-        <section class="slide" data-slide="7">
+        <!-- SLIDE 9: Conclusão & Chamado à Ação -->
+        <section class="slide" data-slide="9">
             <div class="slide-grid">
                 <div class="slide-content">
-                    <span class="slide-category">Operação</span>
-                    <h2 class="slide-header slide-title">Como Funciona na <span>Prática</span></h2>
+                    <span class="slide-category">
+                        O Nosso Chamado
+                        <span class="rhetoric-tag tag-pathos">Conexão & Postura: Amor & Ação</span>
+                    </span>
+                    <h2 class="slide-header slide-title">Nenhuma Ovelha <span>Ficará Para Trás</span></h2>
                     <p class="slide-desc">
-                        Um fluxo perfeitamente desenhado para garantir que nenhuma vida caia no esquecimento.
+                        A tecnologia é a ferramenta, mas o coração do discipulado é o amor e a dedicação de cada voluntário.
                     </p>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper">1</div>
+                        <div class="feature-icon-wrapper" style="color: #10b981; background: rgba(16, 185, 129, 0.1);"><i data-lucide="check"></i></div>
                         <div class="feature-text">
-                            <h4>Decisão Cadastrada</h4>
-                            <p>No culto, a pessoa aceita a Jesus e a ficha é preenchida pelo celular em menos de 1 minuto.</p>
+                            <h4>Facilidade Garantida</h4>
+                            <p>Telas simples para que você foque nas pessoas, não na burocracia.</p>
                         </div>
                     </div>
                     
                     <div class="feature-item">
-                        <div class="feature-icon-wrapper">2</div>
+                        <div class="feature-icon-wrapper" style="color: #2563eb; background: rgba(37, 99, 235, 0.1);"><i data-lucide="heart-handshake"></i></div>
                         <div class="feature-text">
-                            <h4>Alocação & Contato</h4>
-                            <p>O coordenador associa um voluntário pelo painel. O voluntário recebe a notificação e aciona via WhatsApp em 1 toque.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon-wrapper">3</div>
-                        <div class="feature-text">
-                            <h4>Consolidação Registrada</h4>
-                            <p>O voluntário registra a 1ª visita, o início do discipulado e a situação da pessoa até que se torne membro integrado.</p>
+                            <h4>Cuidado Pastoral Efetivo</h4>
+                            <p>Cada ligação e cada visita registrada fortalece a fé do novo irmão em Cristo.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="slide-visual">
-                    <div class="visual-card" style="background: var(--primary-gradient); color: white; padding: 2rem; max-width: 320px;">
-                        <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1rem;"><i data-lucide="shield-check" style="display:inline; vertical-align:middle; margin-right: 0.5rem;"></i> Cuidado Ativo</h4>
-                        <p style="font-size: 0.8rem; line-height: 1.6; opacity: 0.85; margin-bottom: 1.5rem;">
-                            "De modo que o que planta não é nada, nem o que rega, mas Deus, que dá o crescimento."
+                    <div class="visual-card" style="background: var(--primary-gradient); color: white; padding: 2rem; max-width: 360px; text-align: center;">
+                        <i data-lucide="heart" size="48" style="color: #ec4899; margin-bottom: 1rem;"></i>
+                        <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">"Vão e façam discípulos"</h4>
+                        <p style="font-size: 0.85rem; line-height: 1.6; opacity: 0.85; margin-bottom: 1.25rem;">
+                            Mateus 28:19
                         </p>
-                        <span style="font-size: 0.7rem; font-weight: 700; color: #60a5fa; text-transform: uppercase;">1 Coríntios 3:7</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 7 de 8</div>
-            </div>
-        </section>
-
-        <!-- SLIDE 8: Benefícios -->
-        <section class="slide" data-slide="8">
-            <div class="slide-grid">
-                <div class="slide-content">
-                    <span class="slide-category">Benefícios</span>
-                    <h2 class="slide-header slide-title">Os Frutos do <span>Sistema</span></h2>
-                    <p class="slide-desc">
-                        Muito mais do que um sistema, uma ferramenta estratégica para o crescimento da igreja de forma estruturada.
-                    </p>
-                    
-                    <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="check-square"></i></div>
-                        <div class="feature-text">
-                            <h4>Zero Perda de Fichas</h4>
-                            <p>Total segurança de dados armazenados na nuvem. Sem perdas físicas ou esquecimentos.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="trending-up"></i></div>
-                        <div class="feature-text">
-                            <h4>Decisões Estratégicas</h4>
-                            <p>Dados reais de integração facilitam a gestão de turmas de discipulado e batismo.</p>
-                        </div>
-                    </div>
-
-                    <div class="feature-item">
-                        <div class="feature-icon-wrapper"><i data-lucide="users"></i></div>
-                        <div class="feature-text">
-                            <h4>Discipulado Afetuoso</h4>
-                            <p>O voluntário tem um canal direto, ágil e focado na necessidade do convertido.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="slide-visual" style="flex-direction: column; gap: 1rem;">
-                    <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-main); font-family: 'Outfit';">
-                        Marcos do Acompanhamento:
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 320px; font-size: 0.8rem; font-weight: 600;">
-                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
-                            <span>1º Contato</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
-                            <span>1ª Visita</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
-                            <span>Discipulado</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; padding: 0.5rem; border: 1px solid var(--border); border-radius: 8px; background: white;">
-                            <span>Consolidado</span><span style="color:#10b981;"><i data-lucide="check" size="14"></i></span>
+                        <div style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 0.6rem 1rem; border-radius: 8px; font-weight: 700;">
+                            SEMADEJ Hub • Unindo Fé e Tecnologia
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="slide-footer">
-                <div class="slide-logo"><i data-lucide="heart"></i> SEMADEJ SJC</div>
-                <div>Slide 8 de 8</div>
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 9 de 9</div>
             </div>
         </section>
 
@@ -986,7 +1207,73 @@
         Navegue com <span class="k-btn">←</span> e <span class="k-btn">→</span> no teclado
     </div>
 
+    <!-- Modal de Dicas Retóricas do Orador (Aristóteles) -->
+    <div class="rhetoric-modal-overlay" id="rhetoricModal" onclick="handleModalBgClick(event)">
+        <div class="rhetoric-modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i data-lucide="mic" style="color: #2563eb;"></i> Guia do Orador - Dicas Essenciais
+                </div>
+                <button class="close-modal-btn" onclick="toggleRhetoricModal()">
+                    <i data-lucide="x" size="20"></i>
+                </button>
+            </div>
+            <div id="rhetoricContent">
+                <!-- Dynamic speaker guide injected by JS based on active slide -->
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Speaker notes based on Aristotelian Rhetoric (Ethos, Pathos, Logos) for each slide
+        const rhetoricNotes = {
+            1: {
+                ethos: "Apresente-se com postura humilde e autoridade de liderança. Destaque que o sistema foi desenvolvido para honrar a Deus e apoiar o trabalho sério da igreja.",
+                pathos: "Conecte-se com o coração do público lembrando da alegria de ver vidas se entregando a Jesus no altar.",
+                logos: "Anuncie de forma clara que a apresentação mostrará o caminho da ficha e as 3 opções do menu do discipulado."
+            },
+            2: {
+                ethos: "Mostre que o sistema valoriza a organização e elimina a perda de informações cruciais (fichas de papel que somem).",
+                pathos: "Transmita a alegria de ver que, desde o primeiro minuto no altar, a pessoa já está sendo cuidada com excelência.",
+                logos: "Apresente os 3 passos básicos: Culto -> Link/QR Code -> Sistema via Perfil do Voluntário."
+            },
+            3: {
+                ethos: "Reforce a responsabilidade da liderança em oferecer ferramentas modernas que respeitam o tempo dos voluntários.",
+                pathos: "Tranquilize voluntários de todos os níveis de escolaridade: 'Não importa sua facilidade com celular, o sistema foi feito para ser simples e direto'.",
+                logos: "Apresente a estrutura lógica em 3 partes: Fichas de Decisão (Entrada), Painel Geral (Visão Geral) e Acompanhamento (Dia a dia)."
+            },
+            4: {
+                ethos: "Mostre que as fichas de decisão não podem se perder no papel. A agilidade no cadastro honra a decisão espiritual da pessoa.",
+                pathos: "Sensibilize o voluntário: 'Atrás de cada ficha existe um nome e uma história salva por Jesus'.",
+                logos: "Explique como funciona o cadastro rápido e o link/QR Code público da congregação."
+            },
+            5: {
+                ethos: "Demonstre a transparência e a seriedade com que a liderança monitora a integração nas congregações.",
+                pathos: "Celebre os números não como meras estatísticas, mas como almas consolidadas na casa do Pai.",
+                logos: "Mostre os indicadores visuais simples (porcentagem e cartões coloridos) que facilitam a leitura rápida."
+            },
+            6: {
+                ethos: "Ressalte o valor do discipulado ativo. O voluntário é a ponte entre o novo convertido e a comunidade da igreja.",
+                pathos: "Enfatize a compaixão e o carinho no contato via WhatsApp: 'Uma mensagem carinhosa nas primeiras 24h muda tudo'.",
+                logos: "Demonstre a clareza do cartão da pessoa, os passos (contato, visita, estudo, membro) e a facilidade do botão verde do WhatsApp."
+            },
+            7: {
+                ethos: "Mostre a ordem e o zelo no processo de consolidação de ponta a ponta.",
+                pathos: "Ilustre o acolhimento humano do novo convertido em cada passo do caminho.",
+                logos: "Conecte cada etapa da linha do tempo com a respectiva opção do menu do sistema."
+            },
+            8: {
+                ethos: "Realize a demonstração simulada com confiança, mostrando a agilidade do sistema.",
+                pathos: "Convide os voluntários a perderem o medo da tecnologia: 'É tão simples quanto usar um aplicativo de mensagens'.",
+                logos: "Alterne entre os mockups das telas clicando nos botões e mostrando como a informação flui."
+            },
+            9: {
+                ethos: "Reafirme o compromisso espiritual da equipe com a Grande Comissão de Mateus 28:19.",
+                pathos: "Termine com uma palavra de gratidão, encorajamento e amor aos voluntários, convidando todos a servirem com alegria.",
+                logos: "Sintetize os ganhos: zero perda de fichas, acompanhamento ágil e vidas consolidadas na igreja."
+            }
+        };
+
         // Slides Navigation Logic
         const slides = document.querySelectorAll('.slide');
         const dotsContainer = document.getElementById('dotsContainer');
@@ -994,7 +1281,7 @@
         const nextBtn = document.getElementById('nextBtn');
         let currentSlideIndex = 0;
 
-        // Initialize icons
+        // Initialize Lucide icons
         lucide.createIcons();
 
         // Create dots dynamically
@@ -1023,6 +1310,8 @@
             dots.forEach((dot, idx) => {
                 dot.classList.toggle('active', idx === currentSlideIndex);
             });
+
+            updateRhetoricGuideContent();
         }
 
         function navigateToSlide(index) {
@@ -1053,34 +1342,99 @@
             }
         });
 
+        // Speaker Guide Modal Logic
+        function toggleRhetoricModal() {
+            const modal = document.getElementById('rhetoricModal');
+            modal.classList.toggle('active');
+        }
+
+        function handleModalBgClick(e) {
+            if (e.target.id === 'rhetoricModal') {
+                toggleRhetoricModal();
+            }
+        }
+
+        function updateRhetoricGuideContent() {
+            const slideNum = currentSlideIndex + 1;
+            const note = rhetoricNotes[slideNum] || rhetoricNotes[1];
+            
+            const html = `
+                <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 0.75rem;">
+                    Orientações de Fala para o Slide ${slideNum} de 8
+                </div>
+                
+                <div class="rhetoric-box box-ethos">
+                    <h5><i data-lucide="shield-check" size="16"></i> Postura (Credibilidade & Confiança)</h5>
+                    <p>${note.ethos}</p>
+                </div>
+                
+                <div class="rhetoric-box box-pathos">
+                    <h5><i data-lucide="heart" size="16"></i> Conexão (Empatia & Relacionamento)</h5>
+                    <p>${note.pathos}</p>
+                </div>
+
+                <div class="rhetoric-box box-logos">
+                    <h5><i data-lucide="brain" size="16"></i> Clareza (Estrutura Lógica)</h5>
+                    <p>${note.logos}</p>
+                </div>
+            `;
+            
+            document.getElementById('rhetoricContent').innerHTML = html;
+            lucide.createIcons();
+        }
+
         // Switch mockup views
         const mockupTemplates = {
+            decisoes: {
+                url: 'semadej.hub/dashboard/decisoes',
+                html: `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.4rem; margin-bottom:0.5rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">📄 Menu 1: Fichas de Decisão</span>
+                        <span style="font-size:0.55rem; color:#64748b; font-weight:600;">Links e QRs de Fichas de Decisão</span>
+                    </div>
+                    <div style="background:white; border:1px solid #e2e8f0; padding:1rem; border-radius:8px; margin-bottom:0.5rem; display:flex; flex-direction:column; gap:0.5rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-weight:800; color:#0f172a; font-size:0.85rem;">A. DE SANTANA</span>
+                            <span style="font-size:0.6rem; background:#e2e8f0; color:#475569; padding:0.2rem 0.4rem; border-radius:4px; font-weight:700;">Setor 4</span>
+                        </div>
+                        <p style="font-size:0.65rem; color:var(--text-muted); margin:0;">Divulgue o link ou QR Code no momento do apelo para cadastro.</p>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <button style="flex:1; padding:0.4rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:0.3rem;"><i data-lucide="link" size="12"></i> Copiar Link</button>
+                            <button style="flex:1; padding:0.4rem; background:#0f172a; color:white; border:none; border-radius:6px; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:0.3rem;"><i data-lucide="qr-code" size="12"></i> Ver QR Code</button>
+                        </div>
+                    </div>
+                `
+            },
             dashboard: {
                 url: 'semadej.hub/dashboard/discipulado',
                 html: `
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.5rem;">
-                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">Painel Geral Discipulado</span>
-                        <span style="font-size:0.6rem; font-weight:700; background:#e0f2fe; color:#0369a1; padding:0.15rem 0.4rem; border-radius:4px;">Setor 1</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.4rem; margin-bottom:0.5rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">📊 Menu 2: Painel Geral Discipulado</span>
+                        <span style="font-size:0.6rem; font-weight:700; background:#e0f2fe; color:#0369a1; padding:0.15rem 0.4rem; border-radius:4px;">Geral</span>
                     </div>
-                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:0.5rem; margin-bottom:0.5rem;">
+                    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:0.5rem; margin-bottom:0.5rem;">
                         <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
                             <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Novas Decisões</span>
-                            <div style="font-size:1.1rem; font-weight:800; color:#2563eb; margin-top:0.15rem;">45</div>
+                            <div style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-top:0.15rem;">12</div>
                         </div>
                         <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
-                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Em Progresso</span>
-                            <div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:0.15rem;">28</div>
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Sem Voluntário</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#ef4444; margin-top:0.15rem;">3</div>
                         </div>
                         <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
-                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Integrados</span>
-                            <div style="font-size:1.1rem; font-weight:800; color:#10b981; margin-top:0.15rem;">17</div>
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Em Acompanhamento</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:0.15rem;">24</div>
+                        </div>
+                        <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Consolidados</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#10b981; margin-top:0.15rem;">28</div>
                         </div>
                     </div>
                     <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; display:flex; gap:0.75rem; align-items:center;">
-                        <div style="width:36px; height:36px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; color:#16a34a; font-weight:800; font-size:0.7rem; flex-shrink:0;">75%</div>
+                        <div style="width:36px; height:36px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; color:#16a34a; font-weight:800; font-size:0.75rem; flex-shrink:0;">48%</div>
                         <div>
-                            <h5 style="font-size:0.7rem; font-weight:700; color:#0f172a; margin:0;">Taxa de Integração</h5>
-                            <p style="font-size:0.55rem; color:#64748b; margin:0;">Meta setorial: 80% dos convertidos</p>
+                            <h5 style="font-size:0.7rem; font-weight:700; color:#0f172a; margin:0;">Taxa de Integração Espiritual</h5>
+                            <p style="font-size:0.55rem; color:#64748b; margin:0;">28 de 58 novos convertidos consolidados</p>
                         </div>
                     </div>
                 `
@@ -1088,86 +1442,53 @@
             acompanhamento: {
                 url: 'semadej.hub/dashboard/acompanhamento',
                 html: `
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.5rem;">
-                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">Acompanhamento Discipulado</span>
-                        <span style="font-size:0.6rem; font-weight:700; background:#fee2e2; color:#ef4444; padding:0.15rem 0.4rem; border-radius:4px;">1 Alerta</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.4rem; margin-bottom:0.5rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">❤️ Menu 3: Acompanhamento</span>
                     </div>
-                    <div style="background:white; border:1px solid #e2e8f0; padding:0.6rem; border-radius:8px; border-left: 3px solid #ef4444;">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div style="background:white; border:1px solid #e2e8f0; padding:0.75rem; border-radius:8px; border-left: 4px solid #10b981;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
                             <div>
-                                <h5 style="font-size:0.75rem; font-weight:800; color:#0f172a; margin:0;">Maria Rodrigues</h5>
-                                <span style="font-size:0.55rem; color:#64748b;">Central • Voluntária: Camila</span>
+                                <h4 style="font-size:0.85rem; font-weight:800; margin:0; color:#0f172a;">João Pedro Alves</h4>
+                                <div style="font-size:0.6rem; color:var(--text-muted);">Sede • 12/08/2026</div>
                             </div>
-                            <span style="font-size:0.5rem; background:#fee2e2; color:#ef4444; padding:0.1rem 0.3rem; border-radius:4px; font-weight:700;">⚠️ 3+ dias sem contato</span>
+                            <span style="background:#dcfce7; color:#15803d; font-size:0.55rem; padding:0.2rem 0.4rem; border-radius:4px; font-weight:700;">Em Discipulado</span>
                         </div>
-                        <div style="display:flex; gap:0.2rem; align-items:center; margin-top:0.5rem; background:#f8fafc; padding:0.3rem; border-radius:6px; justify-content:space-between;">
-                            <div style="display:flex; align-items:center; gap:0.15rem;">
-                                <span style="width:12px; height:12px; border-radius:50%; background:#10b981; display:flex; align-items:center; justify-content:center; font-size:0.45rem; font-weight:800; color:white;">1</span>
-                                <span style="font-size:0.55rem; font-weight:700; color:#10b981;">Contato</span>
-                            </div>
-                            <div style="flex:1; height:2px; background:#cbd5e1; margin: 0 4px;"></div>
-                            <div style="display:flex; align-items:center; gap:0.15rem;">
-                                <span style="width:12px; height:12px; border-radius:50%; background:#cbd5e1; display:flex; align-items:center; justify-content:center; font-size:0.45rem; font-weight:800; color:white;">2</span>
-                                <span style="font-size:0.55rem; font-weight:700; color:#64748b;">Visita</span>
-                            </div>
-                        </div>
-                        <div style="display:flex; gap:0.25rem; margin-top:0.5rem;">
-                            <button style="flex:1; background:none; border:1px solid #e2e8f0; padding:0.25rem; font-size:0.6rem; border-radius:4px; font-weight:700; color:#64748b; cursor:pointer;">Ver Ficha</button>
-                            <button style="flex:1; background:#0f172a; border:none; padding:0.25rem; font-size:0.6rem; border-radius:4px; font-weight:700; color:white; cursor:pointer;">Atualizar</button>
-                        </div>
-                    </div>
-                `
-            },
-            decisoes: {
-                url: 'semadej.hub/dashboard/decisoes',
-                html: `
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.5rem; margin-bottom:0.5rem;">
-                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">Fichas de Decisão</span>
-                        <span style="font-size:0.55rem; color:#64748b; font-weight:600;">Total: 12 Convertidos</span>
-                    </div>
-                    <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.65rem;">
-                        <div>
-                            <span style="font-weight:700; color:#0f172a;">Thiago Silva Santos</span>
-                            <div style="font-size:0.55rem; color:#64748b;">Congregação: Bairro Novo</div>
-                        </div>
-                        <div>
-                            <select style="font-size:0.55rem; padding:0.15rem; border-radius:4px; border:1px solid #cbd5e1; background:white; font-weight:600; color:#334155; outline:none; max-width:90px;">
-                                <option>Alocar Voluntário...</option>
-                                <option>Gabriel Fernandes</option>
-                                <option>Sarah Carvalho</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:0.65rem; margin-top:0.4rem;">
-                        <div>
-                            <span style="font-weight:700; color:#0f172a;">Arthur N. Prado</span>
-                            <div style="font-size:0.55rem; color:#64748b;">Congregação: Central</div>
-                        </div>
-                        <div style="color:#16a34a; font-weight:700; font-size:0.6rem;">✓ Alocado (Gabriel)</div>
-                    </div>
-                `
-            },
-            cadastro: {
-                url: 'semadej.hub/decisao/formulario-central',
-                html: `
-                    <div style="max-width:220px; margin:0 auto; background:white; border:1px solid #e2e8f0; border-radius:12px; padding:0.6rem; box-shadow:0 4px 6px -1px rgba(0,0,0,0.05);">
-                        <h6 style="font-size:0.65rem; font-weight:800; color:#0f172a; text-align:center; margin-bottom:0.4rem; border-bottom:1px solid #f1f5f9; padding-bottom:0.25rem;">Nova Decisão - SEMADEJ</h6>
                         
-                        <div style="margin-bottom:0.35rem;">
-                            <label style="font-size:0.5rem; font-weight:700; color:#475569; display:block; margin-bottom:0.1rem;">Nome Completo</label>
-                            <input type="text" placeholder="Nome do convertido" value="Marcos Silva Prado" readonly style="width:100%; padding:0.25rem; font-size:0.55rem; border:1px solid #cbd5e1; border-radius:4px; outline:none; background:#f8fafc;" />
-                        </div>
-                        <div style="margin-bottom:0.35rem;">
-                            <label style="font-size:0.5rem; font-weight:700; color:#475569; display:block; margin-bottom:0.1rem;">WhatsApp</label>
-                            <input type="text" value="(12) 99111-2222" readonly style="width:100%; padding:0.25rem; font-size:0.55rem; border:1px solid #cbd5e1; border-radius:4px; outline:none; background:#f8fafc;" />
-                        </div>
                         <div style="margin-bottom:0.5rem;">
-                            <label style="font-size:0.5rem; font-weight:700; color:#475569; display:block; margin-bottom:0.1rem;">Deseja Visita?</label>
-                            <select style="width:100%; padding:0.25rem; font-size:0.55rem; border:1px solid #cbd5e1; border-radius:4px; outline:none; background:#f8fafc; font-weight:600; color:#334155;">
-                                <option>Sim, desejo receber visitas</option>
+                            <select style="width:100%; font-size:0.65rem; padding:0.3rem; border-radius:4px; border:1px solid #cbd5e1; background:#f8fafc; font-weight:600; color:#334155;">
+                                <option>Voluntário: Teste</option>
+                                <option selected>Voluntário: Gabriel F.</option>
                             </select>
                         </div>
-                        <button style="width:100%; background:#2563eb; color:white; border:none; padding:0.3rem; border-radius:6px; font-size:0.6rem; font-weight:800; cursor:pointer;">Salvar Decisão</button>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:0.4rem; border-radius:6px; margin-bottom:0.5rem;">
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#10b981; color:white; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+                                <div style="font-size:0.5rem; color:#10b981; font-weight:700; margin-top:0.1rem;">1. Contato</div>
+                            </div>
+                            <div style="flex:1; height:2px; background:#10b981; margin:0 2px;"></div>
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#10b981; color:white; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+                                <div style="font-size:0.5rem; color:#10b981; font-weight:700; margin-top:0.1rem;">2. Visita</div>
+                            </div>
+                            <div style="flex:1; height:2px; background:#cbd5e1; margin:0 2px;"></div>
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#e2e8f0; color:#64748b; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">3</div>
+                                <div style="font-size:0.5rem; color:#64748b; font-weight:700; margin-top:0.1rem;">3. Estudo</div>
+                            </div>
+                            <div style="flex:1; height:2px; background:#cbd5e1; margin:0 2px;"></div>
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#e2e8f0; color:#64748b; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">4</div>
+                                <div style="font-size:0.5rem; color:#64748b; font-weight:700; margin-top:0.1rem;">4. Membro</div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:0.4rem;">
+                            <button style="flex:1; background:#f8fafc; border:1px solid #cbd5e1; padding:0.3rem; border-radius:4px; font-size:0.55rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:0.2rem;"><i data-lucide="file-text" size="10"></i> Ficha</button>
+                            <a href="#" class="whatsappBtn" style="flex:2; padding:0.3rem; font-size:0.55rem;" onclick="return false;">
+                                <i data-lucide="message-circle" size="10"></i> Falar no WhatsApp
+                            </a>
+                        </div>
                     </div>
                 `
             }
@@ -1196,7 +1517,8 @@
         }
 
         // Initialize default mockup view on page load
-        switchMockup('dashboard');
+        switchMockup('decisoes');
+        updateRhetoricGuideContent();
     </script>
 </body>
 </html>

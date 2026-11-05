@@ -1,20 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Input } from '../ui/Input';
 import { supabase } from '@/utils/supabase/client';
 import styles from './RegistrationForm.module.css';
-import { CheckCircle, AlertCircle } from 'lucide-react';
+import { Check, AlertCircle, Send, ArrowRight } from 'lucide-react';
 import { maskPhone } from '@/utils/masks';
 
 interface RegistrationFormProps {
     courseType: 'PAM' | 'LIBRAS';
+    badge?: string;
     title: string;
     subtitle: string;
+    courseDisplayName?: string;
 }
 
-export function RegistrationForm({ courseType, title, subtitle }: RegistrationFormProps) {
+export function RegistrationForm({
+    courseType,
+    badge,
+    title,
+    subtitle,
+    courseDisplayName
+}: RegistrationFormProps) {
     const [formData, setFormData] = useState({
         full_name: '',
         phone: '',
@@ -23,6 +29,8 @@ export function RegistrationForm({ courseType, title, subtitle }: RegistrationFo
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState('');
+
+    const displayName = courseDisplayName || (courseType === 'PAM' ? 'EMAD (Curso Básico de Missões)' : 'Curso de LIBRAS');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -38,8 +46,8 @@ export function RegistrationForm({ courseType, title, subtitle }: RegistrationFo
                         full_name: formData.full_name,
                         phone: formData.phone,
                         email: formData.email,
-                        course_type: courseType,
-                        status: 'pending' // Default status
+                        course_type: courseType, // Retains DB CHECK constraint ('PAM' | 'LIBRAS')
+                        status: 'pending'
                     }
                 ]);
 
@@ -47,15 +55,14 @@ export function RegistrationForm({ courseType, title, subtitle }: RegistrationFo
 
             setStatus('success');
             setFormData({ full_name: '', phone: '', email: '' });
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('Error submitting registration:', error);
             setStatus('error');
-            setErrorMessage('Erro ao realizar inscrição. Tente novamente.');
+            setErrorMessage('Erro ao realizar inscrição. Tente novamente ou entre em contato pelo WhatsApp.');
         } finally {
             setLoading(false);
         }
     };
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value;
@@ -73,15 +80,17 @@ export function RegistrationForm({ courseType, title, subtitle }: RegistrationFo
     if (status === 'success') {
         return (
             <div className={styles.successWrapper}>
-                <CheckCircle size={64} className={styles.successIcon} />
-                <h2 className={styles.successTitle}>Inscrição Recebida!</h2>
+                <div className={styles.successIcon}>
+                    <Check size={36} />
+                </div>
+                <h2 className={styles.successTitle}>Inscrição Recebida com Sucesso!</h2>
                 <p className={styles.successText}>
-                    Sua pré-matrícula para o curso de {courseType} foi enviada com sucesso.
-                    Entraremos em contato em breve pelo WhatsApp.
+                    Sua pré-matrícula para <strong>{displayName}</strong> foi registrada no sistema.
+                    Nossa equipe entrará em contato em breve pelo WhatsApp para confirmação e orientações de início.
                 </p>
-                <Button onClick={() => setStatus('idle')} variant="outline">
+                <button onClick={() => setStatus('idle')} className={styles.resetBtn}>
                     Fazer outra inscrição
-                </Button>
+                </button>
             </div>
         );
     }
@@ -89,38 +98,55 @@ export function RegistrationForm({ courseType, title, subtitle }: RegistrationFo
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.header}>
+                {badge && <span className={styles.badge}>{badge}</span>}
                 <h1 className={styles.title}>{title}</h1>
                 <p className={styles.subtitle}>{subtitle}</p>
             </div>
 
             <div className={styles.fields}>
-                <Input
-                    id="full_name"
-                    label="Nome Completo"
-                    placeholder="Ex: João da Silva"
-                    required
-                    value={formData.full_name}
-                    onChange={handleChange}
-                />
+                <div className={styles.inputGroup}>
+                    <label htmlFor="full_name" className={styles.inputLabel}>
+                        Nome Completo
+                    </label>
+                    <input
+                        id="full_name"
+                        type="text"
+                        required
+                        placeholder="Ex: João da Silva"
+                        value={formData.full_name}
+                        onChange={handleChange}
+                        className={styles.textInput}
+                    />
+                </div>
 
-                <Input
-                    id="phone"
-                    label="WhatsApp"
-                    placeholder="(12) 99999-9999"
-                    type="tel"
-                    required
-                    value={formData.phone}
-                    onChange={handleChange}
-                />
+                <div className={styles.inputGroup}>
+                    <label htmlFor="phone" className={styles.inputLabel}>
+                        WhatsApp (com DDD)
+                    </label>
+                    <input
+                        id="phone"
+                        type="tel"
+                        required
+                        placeholder="(12) 99999-9999"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={styles.textInput}
+                    />
+                </div>
 
-                <Input
-                    id="email"
-                    label="E-mail (Opcional)"
-                    placeholder="joao@email.com"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
+                <div className={styles.inputGroup}>
+                    <label htmlFor="email" className={styles.inputLabel}>
+                        E-mail (Opcional)
+                    </label>
+                    <input
+                        id="email"
+                        type="email"
+                        placeholder="joao@email.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={styles.textInput}
+                    />
+                </div>
             </div>
 
             {status === 'error' && (
@@ -130,9 +156,16 @@ export function RegistrationForm({ courseType, title, subtitle }: RegistrationFo
                 </div>
             )}
 
-            <Button type="submit" size="lg" className={styles.submitButton} isLoading={loading}>
-                Confirmar Pré-Matrícula
-            </Button>
+            <button type="submit" disabled={loading} className={styles.submitButton}>
+                {loading ? (
+                    'Enviando pré-matrícula...'
+                ) : (
+                    <>
+                        <span>Confirmar Pré-Matrícula</span>
+                        <ArrowRight size={18} />
+                    </>
+                )}
+            </button>
         </form>
     );
 }

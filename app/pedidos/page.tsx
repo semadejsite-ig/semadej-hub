@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { Button } from '@/components/ui/Button';
 import { supabase } from '@/utils/supabase/client';
-import { ArrowLeft, Check, HeartHandshake } from 'lucide-react';
-import Link from 'next/link';
+import { Check, HeartHandshake, Send } from 'lucide-react';
 import styles from './page.module.css';
 
 export default function PedidosOracao() {
@@ -45,7 +43,7 @@ export default function PedidosOracao() {
 
             if (insertError) throw insertError;
 
-            // Send telegram alert (fire and forget or separate async)
+            // Send telegram alert (fire and forget)
             fetch('/api/notifications/telegram', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -87,18 +85,17 @@ export default function PedidosOracao() {
 
             <main className={styles.main}>
                 <div className={styles.header}>
-                    <div className="flex justify-center mb-8">
-                        <div className="p-6 rounded-full bg-pink-500/10 text-pink-500">
-                            <HeartHandshake size={64} />
-                        </div>
+                    <div className={styles.iconWrapper}>
+                        <HeartHandshake size={40} />
                     </div>
                     <h1 className={styles.title}>
                         Pedidos de Oração
                     </h1>
                     <p className={styles.subtitle}>
-                        &quot;E tudo o que pedirem em oração, se crerem, vocês receberão.&quot; - Mateus 21:22.
-                        <br />
-                        Deixe seu pedido e nossa equipe de intercessores estará orando por você.
+                        <span className={styles.verseQuote}>
+                            &ldquo;E tudo o que pedirem em oração, se crerem, vocês receberão.&rdquo; — Mateus 21:22
+                        </span>
+                        Deixe seu pedido de intercessão e nossa equipe missionária estará orando por você e por sua família.
                     </p>
                 </div>
 
@@ -106,69 +103,85 @@ export default function PedidosOracao() {
                     {success ? (
                         <div className={styles.successMessage}>
                             <div className={styles.successIcon}>
-                                <Check size={32} />
+                                <Check size={36} />
                             </div>
-                            <h2 className={styles.successTitle}>Pedido Enviado!</h2>
+                            <h2 className={styles.successTitle}>Pedido Enviado com Sucesso!</h2>
                             <p className={styles.successText}>
-                                Recebemos o seu pedido de oração com sucesso. Nossa equipe de intercessão estará orando por você. Que Deus te abençoe!
+                                Recebemos o seu clamor. Nossa equipe de intercessores já está com seu pedido de oração diante do Senhor. Que a paz de Deus reine em sua vida!
                             </p>
-                            <Button onClick={() => setSuccess(false)} variant="outline" className="mt-4">
+                            <button onClick={() => setSuccess(false)} className={styles.resetBtn}>
                                 Enviar outro pedido
-                            </Button>
+                            </button>
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit}>
+                            {error && (
+                                <div className={styles.errorAlert}>
+                                    {error}
+                                </div>
+                            )}
+
                             <div className={styles.formGroup}>
-                                <label htmlFor="name" className={styles.label}>Nome Completo</label>
+                                <label htmlFor="name" className={styles.label}>
+                                    Seu Nome Completo
+                                </label>
                                 <input
                                     type="text"
                                     id="name"
                                     name="name"
                                     required
-                                    className={styles.input}
-                                    placeholder="Seu nome completo"
+                                    placeholder="Ex: João Silva"
                                     value={formData.name}
                                     onChange={handleChange}
+                                    className={styles.input}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="whatsapp" className={styles.label}>WhatsApp / Telefone</label>
+                                <label htmlFor="whatsapp" className={styles.label}>
+                                    WhatsApp (com DDD)
+                                </label>
                                 <input
                                     type="tel"
                                     id="whatsapp"
                                     name="whatsapp"
                                     required
-                                    className={styles.input}
-                                    placeholder="(00) 00000-0000"
+                                    placeholder="(12) 99999-9999"
                                     value={formData.whatsapp}
                                     onChange={handleChange}
+                                    className={styles.input}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="address" className={styles.label}>Endereço (Opcional)</label>
+                                <label htmlFor="address" className={styles.label}>
+                                    Bairro / Cidade
+                                </label>
                                 <input
                                     type="text"
                                     id="address"
                                     name="address"
-                                    className={styles.input}
-                                    placeholder="Seu endereço ou congregação"
+                                    required
+                                    placeholder="Ex: Jardim Satélite, São José dos Campos"
                                     value={formData.address}
                                     onChange={handleChange}
+                                    className={styles.input}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label htmlFor="request" className={styles.label}>Seu Pedido de Oração</label>
+                                <label htmlFor="request" className={styles.label}>
+                                    Seu Motivo de Oração
+                                </label>
                                 <textarea
                                     id="request"
                                     name="request"
                                     required
-                                    className={styles.textarea}
-                                    placeholder="Como podemos orar por você hoje?"
+                                    rows={4}
+                                    placeholder="Escreva aqui pelo que deseja que oremos (saúde, família, libertação, causas espirituais...)"
                                     value={formData.request}
                                     onChange={handleChange}
+                                    className={styles.textarea}
                                 />
                             </div>
 
@@ -177,24 +190,26 @@ export default function PedidosOracao() {
                                     type="checkbox"
                                     id="consent_lgpd"
                                     name="consent_lgpd"
-                                    className={styles.checkbox}
+                                    required
                                     checked={formData.consent_lgpd}
                                     onChange={handleChange}
+                                    className={styles.checkbox}
                                 />
                                 <label htmlFor="consent_lgpd" className={styles.checkboxLabel}>
-                                    Eu concordo em compartilhar meus dados de contato (Nome, WhatsApp e Endereço) com a Secretaria de Missões para fins de acompanhamento e suporte espiritual, conforme a Lei Geral de Proteção de Dados (LGPD).
+                                    Concordo com a utilização dos meus dados exclusivamente para fins de intercessão e apoio espiritual pela SEMADEJ, em conformidade com a LGPD.
                                 </label>
                             </div>
 
-                            {error && (
-                                <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center">
-                                    {error}
-                                </div>
-                            )}
-
-                            <Button type="submit" size="lg" className={styles.submitBtn} disabled={loading}>
-                                {loading ? 'Enviando...' : 'Enviar Pedido de Oração'}
-                            </Button>
+                            <button type="submit" disabled={loading} className={styles.submitBtn}>
+                                {loading ? (
+                                    'Enviando pedido...'
+                                ) : (
+                                    <>
+                                        <span>Enviar Pedido de Oração</span>
+                                        <Send size={18} />
+                                    </>
+                                )}
+                            </button>
                         </form>
                     )}
                 </div>

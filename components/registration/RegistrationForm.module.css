@@ -1,85 +1,202 @@
+/* SEMADEJ Online - Registration Form */
+
 .form {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
-    max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  width: 100%;
 }
 
 .header {
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(59, 130, 246, 0.14);
+  color: #93C5FD;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  margin-bottom: 0.25rem;
 }
 
 .title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--foreground);
+  font-family: var(--font-display, 'General Sans', 'Inter', sans-serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #FFFFFF;
+  line-height: 1.15;
 }
 
 .subtitle {
-    color: var(--muted-foreground);
-    font-size: 1rem;
+  color: #94A3B8;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .fields {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.inputLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #CBD5E1;
+}
+
+.textInput {
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(11, 18, 34, 0.85);
+  color: #FFFFFF;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  width: 100%;
+}
+
+.textInput::placeholder {
+  color: #64748B;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: #F97316;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.18);
+  background: rgba(15, 23, 42, 0.95);
 }
 
 .submitButton {
-    margin-top: 1rem;
-    width: 100%;
+  margin-top: 0.75rem;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.5rem;
+  border-radius: 9999px;
+  background: linear-gradient(135deg, #FF8A1E 0%, #EA580C 100%);
+  color: #070B16;
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px -4px rgba(249, 115, 22, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(249, 115, 22, 0.6);
+  filter: brightness(1.05);
+}
+
+.submitButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .successWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 1.5rem;
-    max-width: 400px;
-    animation: scaleIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+  padding: 1rem 0;
+  animation: scaleIn 0.3s ease-out;
 }
 
 .successIcon {
-    color: var(--success);
+  width: 72px;
+  height: 72px;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  color: #34D399;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .successTitle {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--foreground);
+  font-family: var(--font-display, 'General Sans', 'Inter', sans-serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
 }
 
 .successText {
-    color: var(--muted-foreground);
-    line-height: 1.5;
+  color: #94A3B8;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  max-width: 420px;
+}
+
+.resetBtn {
+  margin-top: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.85rem;
+  border-radius: 9999px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #F8FAFC;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: rgba(51, 65, 85, 0.8);
+  border-color: rgba(148, 163, 184, 0.5);
+  transform: translateY(-1px);
 }
 
 .errorBanner {
-    background-color: rgba(239, 68, 68, 0.1);
-    /* Destructive color with opacity */
-    color: var(--destructive);
-    padding: 0.75rem;
-    border-radius: var(--radius);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
+  background-color: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #FCA5A5;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
 }
 
 @keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
 
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

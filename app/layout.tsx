@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "SEMADEJ - Secretaria de Missões AD Belém SJC",
-    template: "%s | SEMADEJ"
+    default: "SEMADEJ Online - Secretaria de Missões AD Belém SJC",
+    template: "%s | SEMADEJ Online"
   },
   description: "Plataforma oficial da Secretaria de Missões da Assembleia de Deus Belém em São José dos Campos. Cursos de Missões (PAM), LIBRAS e gestão missionária.",
   keywords: ["Missões", "SEMADEJ", "AD Belém SJC", "Curso de Missões", "PAM", "LIBRAS", "Assembleia de Deus", "São José dos Campos", "Evangelismo"],
@@ -18,9 +15,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "pt_BR",
     url: "https://semadej.com.br",
-    title: "SEMADEJ - Capacitando para a Grande Comissão",
+    title: "SEMADEJ Online - Capacitando para a Grande Comissão",
     description: "Inscreva-se nos cursos do PAM, LIBRAS e participe da obra missionária.",
-    siteName: "SEMADEJ Hub",
+    siteName: "SEMADEJ Online",
   },
   robots: {
     index: true,
@@ -35,7 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+      </body>
     </html>
   );
 }

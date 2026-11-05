@@ -9,9 +9,9 @@ export function Footer() {
                 <div className={styles.grid}>
                     {/* Brand */}
                     <div>
-                        <h3 className={styles.brandTitle}>SEMADEJ Hub</h3>
+                        <h3 className={styles.brandTitle}>SEMADEJ Online</h3>
                         <p className={styles.brandDesc}>
-                            Plataforma oficial da Secretaria de Missões da Assembléia de Deus Ministério do Belém em São José dos Campos.
+                            Plataforma oficial da Secretaria de Missões da Assembleia de Deus Ministério do Belém em São José dos Campos.
                         </p>
                     </div>
 
@@ -20,9 +20,9 @@ export function Footer() {
                         <h4 className={styles.sectionTitle}>Navegação</h4>
                         <ul className={styles.navList}>
                             <li><Link href="/about" className={styles.navLink}>Sobre a SEMADEJ</Link></li>
-                            <li><Link href="/pam" className={styles.navLink}>Curso PAM</Link></li>
+                            <li><Link href="/pam" className={styles.navLink}>Curso EMAD</Link></li>
                             <li><Link href="/libras" className={styles.navLink}>Curso de LIBRAS</Link></li>
-                            <li><Link href="/login" className={styles.navLink}>Área do Agente</Link></li>
+                            <li><Link href="/login" className={styles.navLink}>Espaço do Agente</Link></li>
                         </ul>
                     </div>
 

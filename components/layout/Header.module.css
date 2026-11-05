@@ -1,52 +1,106 @@
 .header {
-    height: 4rem;
-    border-bottom: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(8px);
-    position: sticky;
-    top: 0;
-    z-index: 50;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  padding: 1rem 0;
+  background: rgba(7, 11, 22, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
 }
 
 .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: var(--primary);
-    font-weight: 700;
-    font-size: 1.25rem;
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
-.logoIcon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    background: var(--primary);
-    color: white;
-    border-radius: 0.5rem;
-    font-size: 1rem;
+.logoLink:hover {
+  opacity: 0.92;
 }
 
-.logoText {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.logoImage {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0, 102, 255, 0.2));
 }
 
-.nav {
-    display: flex;
-    gap: 1rem;
+.pillNav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem;
+  background: rgba(23, 32, 51, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 9999px;
+  backdrop-filter: blur(10px);
+}
+
+.pillLink {
+  padding: 0.45rem 1.25rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #94A3B8;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.pillLink:hover {
+  color: #F8FAFC;
+}
+
+.pillLinkActive {
+  background: rgba(51, 65, 85, 0.85);
+  color: #FFFFFF;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.agentButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1.35rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #F8FAFC;
+  background: rgba(23, 32, 51, 0.65);
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.agentButton:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(148, 163, 184, 0.45);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 860px) {
+  .pillNav {
+    display: none;
+  }
+
+  .container {
+    padding: 0 1.25rem;
+  }
+
+  .logoImage {
+    height: 40px;
+  }
 }

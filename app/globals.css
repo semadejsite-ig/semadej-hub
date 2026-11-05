@@ -1,3 +1,6 @@
+@import url('https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+
 :root {
   /* Brand Colors */
   --primary: #0F172A; /* Deep Blue */
@@ -35,6 +38,106 @@
   
   /* Fonts */
   --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'General Sans', system-ui, sans-serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Genesis Design System Tokens (Scoped to Dashboard / Genesis Components) */
+.genesisTheme {
+  --primary: #6366F1;
+  --primary-hover: #4F46E5;
+  --primary-foreground: #FFFFFF;
+  --secondary: #20970B;
+  --secondary-foreground: #FFFFFF;
+  --neutral: #9C9C9C;
+  --background: #FAFAFA;
+  --surface: #FFFFFF;
+  --card: #FFFFFF;
+  --card-foreground: #0A0A0A;
+  --foreground: #0A0A0A;
+  --text-primary: #0A0A0A;
+  --text-secondary: #6B6B6B;
+  --muted: #F4F4F6;
+  --muted-foreground: #6B6B6B;
+  --border: #E8E8EC;
+  --input: #E8E8EC;
+  --ring: #6366F1;
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  --success: #10B981;
+  --warning: #F59E0B;
+  --destructive: #EF4444;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  --radius: 6px;
+
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+.genesisTheme h1,
+.genesisTheme h2,
+.genesisTheme h3,
+.genesisTheme h4,
+.genesisTheme h5,
+.genesisTheme h6,
+.genesis-heading {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+/* Genesis Primitives */
+.genesis-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 12px);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.genesis-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border-color: #D8D8DF;
+}
+
+.genesis-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 9999px;
+  background-color: #F3F4F6;
+  color: #4B5563;
+  transition: all 0.2s ease;
+}
+
+.genesis-chip-active {
+  background-color: var(--primary);
+  color: #FFFFFF;
+}
+
+.genesis-chip-success {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #065F46;
+}
+
+.genesis-chip-warning {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #92400E;
+}
+
+.genesis-chip-error {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #991B1B;
 }
 
 @media (prefers-color-scheme: dark) {

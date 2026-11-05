@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apresentação - Relatório Financeiro SEMADEJ</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            --accent-gradient: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            --ethos-color: #8b5cf6;
+            --pathos-color: #ec4899;
+            --logos-color: #0284c7;
+            --background: #f8fafc;
+            --card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --shadow-premium: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Presentation Container */
+        .presentation {
+            flex: 1;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Slide Styles */
+        .slide {
+            position: absolute;
+            width: 92%;
+            max-width: 1240px;
+            height: 82vh;
+            max-height: 760px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-premium);
+            padding: 3rem 3.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
+            pointer-events: none;
+            transition: var(--transition);
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Slide Active State */
+        .slide.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            pointer-events: auto;
+            z-index: 10;
+        }
+
+        /* Slide Outward Transitions */
+        .slide.exit-left {
+            opacity: 0;
+            transform: scale(0.95) translateX(-100px);
+            z-index: 1;
+        }
+
+        .slide.exit-right {
+            opacity: 0;
+            transform: scale(0.95) translateX(100px);
+            z-index: 1;
+        }
+
+        /* Background blur shapes for modern aesthetic */
+        .slide::before {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
+            top: -100px;
+            right: -100px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* Grid layouts for content */
+        .slide-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 2.5rem;
+            flex: 1;
+            align-items: center;
+        }
+
+        @media (max-width: 960px) {
+            .slide-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .slide-visual {
+                display: none;
+            }
+        }
+
+        /* Typography & Headings */
+        .slide-header {
+            margin-bottom: 1.25rem;
+        }
+
+        .slide-category {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #2563eb;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .rhetoric-tag {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .tag-ethos { background: rgba(139, 92, 246, 0.1); color: var(--ethos-color); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .tag-pathos { background: rgba(236, 72, 153, 0.1); color: var(--pathos-color); border: 1px solid rgba(236, 72, 153, 0.2); }
+        .tag-logos { background: rgba(2, 132, 199, 0.1); color: var(--logos-color); border: 1px solid rgba(2, 132, 199, 0.2); }
+
+        .slide-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.35rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #0f172a;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-title span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .slide-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Features List */
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            animation: slideInUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .feature-item:nth-child(1) { animation-delay: 0.1s; }
+        .feature-item:nth-child(2) { animation-delay: 0.2s; }
+        .feature-item:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-icon-wrapper {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            flex-shrink: 0;
+            font-weight: 800;
+        }
+
+        .feature-text h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+        }
+
+        .feature-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Footer Info */
+        .slide-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 1.25rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .slide-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-main);
+            font-weight: 800;
+        }
+
+        /* Interactive Visual Mockups */
+        .slide-visual {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .visual-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.06);
+            width: 92%;
+            position: relative;
+            transform: rotate(-1.5deg);
+            transition: var(--transition);
+        }
+
+        .visual-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        /* Title Slide Customization */
+        .slide-title-page {
+            background: var(--primary-gradient);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .slide-title-page::before {
+            display: none;
+        }
+
+        .title-badge {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.75rem;
+            display: inline-block;
+        }
+
+        .title-main {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.25rem;
+        }
+
+        .title-main span {
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .title-sub {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 720px;
+            margin: 0 auto 2rem auto;
+            line-height: 1.6;
+        }
+
+        /* Rhetoric Guide Overlay/Modal */
+        .rhetoric-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(6px);
+            z-index: 100;
+            display: opacity;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rhetoric-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .rhetoric-modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            width: 90%;
+            max-width: 680px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .rhetoric-modal-overlay.active .rhetoric-modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0.25rem;
+            border-radius: 6px;
+        }
+
+        .rhetoric-box {
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 0.85rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .rhetoric-box h5 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .box-ethos { background: rgba(139, 92, 246, 0.08); border-left: 4px solid var(--ethos-color); color: #4c1d95; }
+        .box-pathos { background: rgba(236, 72, 153, 0.08); border-left: 4px solid var(--pathos-color); color: #831843; }
+        .box-logos { background: rgba(2, 132, 199, 0.08); border-left: 4px solid var(--logos-color); color: #0c4a6e; }
+
+        /* Controls Toolbar */
+        .controls {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            z-index: 50;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: #3b82f6;
+            width: 24px;
+            border-radius: 9999px;
+        }
+
+        /* Floating Speaker Guide Button */
+        .speaker-guide-btn {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 50;
+            transition: var(--transition);
+        }
+
+        .speaker-guide-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stepper & Timeline Mocks */
+        .stepper-mock {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .step-mock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            z-index: 2;
+        }
+
+        .step-mock-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #64748b;
+        }
+
+        .step-mock.active .step-mock-num {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .step-mock-text {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .step-mock.active .step-mock-text {
+            color: #10b981;
+        }
+
+        .step-mock-line {
+            flex: 1;
+            height: 2px;
+            background: #cbd5e1;
+            margin-top: -16px;
+        }
+
+        .step-mock-line.active {
+            background: #10b981;
+        }
+
+        /* Keypad Instructions overlay */
+        .keyboard-tips {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2.5rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .k-btn {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.05);
+        }
+
+        .screen-tab-btn {
+            background: white !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border) !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+            transition: var(--transition);
+        }
+
+        .screen-tab-btn.active {
+            background: var(--primary-gradient) !important;
+            color: white !important;
+            border-color: #0f172a !important;
+            box-shadow: 0 10px 15px -3px rgba(15, 23, 42, 0.1) !important;
+        }
+        
+        .screen-tab-btn.active i {
+            color: #60a5fa !important;
+        }
+
+        .screen-tab-btn.active p {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        /* WhatsApp Button styling matching DESIGN_SYSTEM.md */
+        .whatsappBtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.8rem;
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white !important;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(37, 211, 102, 0.15);
+            transition: all 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Speaker Guide Button (Aristotelian Rhetoric) -->
+    <button class="speaker-guide-btn" onclick="toggleRhetoricModal()">
+        <i data-lucide="mic"></i> Dicas do Orador
+    </button>
+
+    <div class="presentation">
+        <!-- SLIDE 1: Capa -->
+        <section class="slide slide-title-page active" data-slide="1">
+            <div class="title-badge">SEMADEJ DIGITAL</div>
+            <h1 class="title-main">Relatório Financeiro <span>Mensal</span></h1>
+            <p class="title-sub">
+                Envio rápido, seguro e organizado dos relatórios de ofertas missionárias e carnês das congregações.
+            </p>
+            <div style="font-size: 0.85rem; opacity: 0.8; font-weight: 600; display: flex; gap: 1rem; justify-content: center;">
+                <span class="rhetoric-tag tag-ethos"><i data-lucide="shield-check" size="12"></i> Transparência</span>
+                <span class="rhetoric-tag tag-pathos"><i data-lucide="heart" size="12"></i> Fidelidade</span>
+                <span class="rhetoric-tag tag-logos"><i data-lucide="file-text" size="12"></i> Organização</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Lançamento Mensal -->
+        <section class="slide" data-slide="2">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">
+                        Envio de Dados
+                        <span class="rhetoric-tag tag-logos"><i data-lucide="check-circle" size="12"></i> Praticidade</span>
+                    </span>
+                    <h2 class="slide-header slide-title">Preenchimento <span>Simples e Direto</span></h2>
+                    <p class="slide-desc">
+                        O líder ou tesoureiro informa os valores arrecadados no mês sem precisar lidar com planilhas complicadas.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper" style="color: #10b981; background: rgba(16, 185, 129, 0.1);"><i data-lucide="dollar-sign"></i></div>
+                        <div class="feature-text">
+                            <h4>Carnê Missionário & Missões</h4>
+                            <p>Lançamento do total de carnês, cultos de missões e ofertas especiais em campos específicos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper" style="color: #3b82f6; background: rgba(59, 130, 246, 0.1);"><i data-lucide="calendar"></i></div>
+                        <div class="feature-text">
+                            <h4>Referência Mensal</h4>
+                            <p>Seleção fácil do mês e ano correspondente ao relatório que está sendo enviado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="background: white; border: 1px solid var(--border); padding: 1.5rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 0.75rem; font-weight: 800; color: #10b981; text-transform: uppercase; margin-bottom: 1rem;"><i data-lucide="dollar-sign" size="12" style="vertical-align: middle;"></i> Dados Financeiros</div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.75rem;">
+                            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px;">
+                                <span style="font-size: 0.6rem; color: #64748b; font-weight: 700; display: block;">Mês</span>
+                                <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">Julho</div>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px;">
+                                <span style="font-size: 0.6rem; color: #64748b; font-weight: 700; display: block;">Ano</span>
+                                <div style="font-size: 0.85rem; font-weight: 800; color: #0f172a;">2026</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 0.5rem;">
+                            <label style="font-size: 0.65rem; font-weight: 700; color: #64748b;">Total Carnê Missionário (R$)</label>
+                            <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.4rem; font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem;">350,00</div>
+                        </div>
+                        <div style="margin-bottom: 0.5rem;">
+                            <label style="font-size: 0.65rem; font-weight: 700; color: #64748b;">Oferta Culto de Missões (R$)</label>
+                            <div style="border: 1px solid #cbd5e1; border-radius: 6px; padding: 0.4rem; font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem;">120,00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 2 de 4</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Histórico e Revisão -->
+        <section class="slide" data-slide="3">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">
+                        Transparência
+                        <span class="rhetoric-tag tag-ethos"><i data-lucide="history" size="12"></i> Controle</span>
+                    </span>
+                    <h2 class="slide-header slide-title">Histórico de <span>Envios</span></h2>
+                    <p class="slide-desc">
+                        Cada congregação mantém o histórico completo dos seus relatórios para conferência e revisão futura.
+                    </p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper" style="color: #f59e0b; background: rgba(245, 158, 11, 0.1);"><i data-lucide="file-text"></i></div>
+                        <div class="feature-text">
+                            <h4>Revisão e Observações</h4>
+                            <p>Antes do envio, o sistema exibe o total arrecadado e permite adicionar observações sobre o mês.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-wrapper" style="color: #8b5cf6; background: rgba(139, 92, 246, 0.1);"><i data-lucide="edit"></i></div>
+                        <div class="feature-text">
+                            <h4>Edição e Exclusão</h4>
+                            <p>Caso tenha ocorrido um erro na digitação, é possível editar ou excluir um relatório já enviado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="background: white; border: 1px solid var(--border); padding: 1rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
+                        <div style="font-size: 0.8rem; font-weight: 800; color: #0f172a; margin-bottom: 0.75rem;">Histórico de Envios</div>
+                        
+                        <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;">
+                            <div style="display: flex; justify-content: space-between; background: #f8fafc; padding: 0.5rem; border-bottom: 1px solid #e2e8f0; font-size: 0.65rem; font-weight: 700; color: #64748b;">
+                                <span>Período</span>
+                                <span>Total (R$)</span>
+                                <span>Ações</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.5rem; border-bottom: 1px solid #e2e8f0; font-size: 0.7rem;">
+                                <span style="font-weight: 700;">Fevereiro / 2026</span>
+                                <span style="font-weight: 800; color: #10b981; background: #dcfce7; padding: 0.2rem 0.4rem; border-radius: 4px;">R$ 520,00</span>
+                                <div style="display: flex; gap: 0.3rem;">
+                                    <span style="color: #3b82f6; font-weight: 700; cursor: pointer;">Editar</span>
+                                </div>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.5rem; font-size: 0.7rem;">
+                                <span style="font-weight: 700;">Janeiro / 2026</span>
+                                <span style="font-weight: 800; color: #10b981; background: #dcfce7; padding: 0.2rem 0.4rem; border-radius: 4px;">R$ 400,00</span>
+                                <div style="display: flex; gap: 0.3rem;">
+                                    <span style="color: #3b82f6; font-weight: 700; cursor: pointer;">Editar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 3 de 4</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: Conclusão -->
+        <section class="slide" data-slide="4">
+            <div class="slide-grid">
+                <div class="slide-content">
+                    <span class="slide-category">
+                        O Nosso Chamado
+                        <span class="rhetoric-tag tag-pathos">Transparência</span>
+                    </span>
+                    <h2 class="slide-header slide-title">Prestação de Contas <span>Eficiente</span></h2>
+                    <p class="slide-desc">
+                        Honrando o esforço de cada ofertante e garantindo transparência para a congregação e a liderança do setor.
+                    </p>
+                </div>
+
+                <div class="slide-visual">
+                    <div class="visual-card" style="background: var(--primary-gradient); color: white; padding: 2rem; max-width: 360px; text-align: center;">
+                        <i data-lucide="check-circle-2" size="48" style="color: #10b981; margin-bottom: 1rem;"></i>
+                        <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.75rem;">Fidelidade na Obra</h4>
+                        <div style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 0.6rem 1rem; border-radius: 8px; font-weight: 700;">
+                            SEMADEJ Hub • Missões em Foco
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-footer">
+                <div class="slide-logo"><i data-lucide="cross"></i> SEMADEJ Hub</div>
+                <div>Slide 4 de 4</div>
+            </div>
+        </section>
+
+</div>
+
+    <!-- Controls Toolbar -->
+    <div class="controls">
+        <button class="nav-btn" id="prevBtn" aria-label="Slide anterior"><i data-lucide="arrow-left"></i></button>
+        <div class="progress-dots" id="dotsContainer"></div>
+        <button class="nav-btn" id="nextBtn" aria-label="Próximo slide"><i data-lucide="arrow-right"></i></button>
+    </div>
+
+    <!-- Keyboard shortcuts tips -->
+    <div class="keyboard-tips">
+        Navegue com <span class="k-btn">←</span> e <span class="k-btn">→</span> no teclado
+    </div>
+
+    <!-- Modal de Dicas Retóricas do Orador (Aristóteles) -->
+    <div class="rhetoric-modal-overlay" id="rhetoricModal" onclick="handleModalBgClick(event)">
+        <div class="rhetoric-modal">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i data-lucide="mic" style="color: #2563eb;"></i> Guia do Orador - Dicas Essenciais
+                </div>
+                <button class="close-modal-btn" onclick="toggleRhetoricModal()">
+                    <i data-lucide="x" size="20"></i>
+                </button>
+            </div>
+            <div id="rhetoricContent">
+                <!-- Dynamic speaker guide injected by JS based on active slide -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Speaker notes based on Aristotelian Rhetoric (Ethos, Pathos, Logos) for each slide
+        
+        const rhetoricNotes = {
+            1: { ethos: "Demonstre seriedade.", pathos: "Fale sobre a alegria de ser fiel.", logos: "Apresente o objetivo de facilitar o envio dos relatórios." },
+            2: { ethos: "Mostre que o sistema é seguro.", pathos: "Tranquilize tesoureiros e líderes sobre a facilidade do uso.", logos: "Explique o formulário passo a passo (Mês, Carnê, Ofertas)." },
+            3: { ethos: "Reforce a responsabilidade da prestação de contas.", pathos: "Mostre que o sistema cuida do histórico para eles não perderem papéis.", logos: "Demonstre a tabela de envios e opções de edição." },
+            4: { ethos: "Transmita autoridade e paz.", pathos: "Celebre o compromisso da igreja.", logos: "Conclua lembrando que a tecnologia facilita o controle financeiro." }
+        };
+
+
+        // Slides Navigation Logic
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlideIndex = 0;
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Create dots dynamically
+        slides.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (idx === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => navigateToSlide(idx));
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.dot');
+
+        function updateNavigationUI() {
+            slides.forEach((slide, idx) => {
+                slide.classList.remove('active', 'exit-left', 'exit-right');
+                if (idx === currentSlideIndex) {
+                    slide.classList.add('active');
+                } else if (idx < currentSlideIndex) {
+                    slide.classList.add('exit-left');
+                } else {
+                    slide.classList.add('exit-right');
+                }
+            });
+
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === currentSlideIndex);
+            });
+
+            updateRhetoricGuideContent();
+        }
+
+        function navigateToSlide(index) {
+            if (index >= 0 && index < slides.length) {
+                currentSlideIndex = index;
+                updateNavigationUI();
+            }
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlideIndex > 0) {
+                navigateToSlide(currentSlideIndex - 1);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlideIndex < slides.length - 1) {
+                navigateToSlide(currentSlideIndex + 1);
+            }
+        });
+
+        // Keyboard arrow navigation
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                if (currentSlideIndex > 0) navigateToSlide(currentSlideIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                if (currentSlideIndex < slides.length - 1) navigateToSlide(currentSlideIndex + 1);
+            }
+        });
+
+        // Speaker Guide Modal Logic
+        function toggleRhetoricModal() {
+            const modal = document.getElementById('rhetoricModal');
+            modal.classList.toggle('active');
+        }
+
+        function handleModalBgClick(e) {
+            if (e.target.id === 'rhetoricModal') {
+                toggleRhetoricModal();
+            }
+        }
+
+        function updateRhetoricGuideContent() {
+            const slideNum = currentSlideIndex + 1;
+            const note = rhetoricNotes[slideNum] || rhetoricNotes[1];
+            
+            const html = `
+                <div style="font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 0.75rem;">
+                    Orientações de Fala para o Slide ${slideNum} de 8
+                </div>
+                
+                <div class="rhetoric-box box-ethos">
+                    <h5><i data-lucide="shield-check" size="16"></i> Postura (Credibilidade & Confiança)</h5>
+                    <p>${note.ethos}</p>
+                </div>
+                
+                <div class="rhetoric-box box-pathos">
+                    <h5><i data-lucide="heart" size="16"></i> Conexão (Empatia & Relacionamento)</h5>
+                    <p>${note.pathos}</p>
+                </div>
+
+                <div class="rhetoric-box box-logos">
+                    <h5><i data-lucide="brain" size="16"></i> Clareza (Estrutura Lógica)</h5>
+                    <p>${note.logos}</p>
+                </div>
+            `;
+            
+            document.getElementById('rhetoricContent').innerHTML = html;
+            lucide.createIcons();
+        }
+
+        // Switch mockup views
+        const mockupTemplates = {
+            decisoes: {
+                url: 'semadej.hub/dashboard/decisoes',
+                html: `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.4rem; margin-bottom:0.5rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">📄 Menu 1: Fichas de Decisão</span>
+                        <span style="font-size:0.55rem; color:#64748b; font-weight:600;">Links e QRs de Fichas de Decisão</span>
+                    </div>
+                    <div style="background:white; border:1px solid #e2e8f0; padding:1rem; border-radius:8px; margin-bottom:0.5rem; display:flex; flex-direction:column; gap:0.5rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-weight:800; color:#0f172a; font-size:0.85rem;">A. DE SANTANA</span>
+                            <span style="font-size:0.6rem; background:#e2e8f0; color:#475569; padding:0.2rem 0.4rem; border-radius:4px; font-weight:700;">Setor 4</span>
+                        </div>
+                        <p style="font-size:0.65rem; color:var(--text-muted); margin:0;">Divulgue o link ou QR Code no momento do apelo para cadastro.</p>
+                        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                            <button style="flex:1; padding:0.4rem; background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:0.3rem;"><i data-lucide="link" size="12"></i> Copiar Link</button>
+                            <button style="flex:1; padding:0.4rem; background:#0f172a; color:white; border:none; border-radius:6px; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:0.3rem;"><i data-lucide="qr-code" size="12"></i> Ver QR Code</button>
+                        </div>
+                    </div>
+                `
+            },
+            dashboard: {
+                url: 'semadej.hub/dashboard/discipulado',
+                html: `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.4rem; margin-bottom:0.5rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">📊 Menu 2: Painel Geral Discipulado</span>
+                        <span style="font-size:0.6rem; font-weight:700; background:#e0f2fe; color:#0369a1; padding:0.15rem 0.4rem; border-radius:4px;">Geral</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:0.5rem; margin-bottom:0.5rem;">
+                        <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Novas Decisões</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#0f172a; margin-top:0.15rem;">12</div>
+                        </div>
+                        <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Sem Voluntário</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#ef4444; margin-top:0.15rem;">3</div>
+                        </div>
+                        <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Em Acompanhamento</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#f59e0b; margin-top:0.15rem;">24</div>
+                        </div>
+                        <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; text-align:center;">
+                            <span style="font-size:0.6rem; color:#64748b; font-weight:700; display:block;">Consolidados</span>
+                            <div style="font-size:1.1rem; font-weight:800; color:#10b981; margin-top:0.15rem;">28</div>
+                        </div>
+                    </div>
+                    <div style="background:white; border:1px solid #e2e8f0; padding:0.5rem; border-radius:8px; display:flex; gap:0.75rem; align-items:center;">
+                        <div style="width:36px; height:36px; border-radius:50%; background:#dcfce7; display:flex; align-items:center; justify-content:center; color:#16a34a; font-weight:800; font-size:0.75rem; flex-shrink:0;">48%</div>
+                        <div>
+                            <h5 style="font-size:0.7rem; font-weight:700; color:#0f172a; margin:0;">Taxa de Integração Espiritual</h5>
+                            <p style="font-size:0.55rem; color:#64748b; margin:0;">28 de 58 novos convertidos consolidados</p>
+                        </div>
+                    </div>
+                `
+            },
+            acompanhamento: {
+                url: 'semadej.hub/dashboard/acompanhamento',
+                html: `
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0; padding-bottom:0.4rem; margin-bottom:0.5rem;">
+                        <span style="font-size:0.75rem; font-weight:800; color:#0f172a;">❤️ Menu 3: Acompanhamento</span>
+                    </div>
+                    <div style="background:white; border:1px solid #e2e8f0; padding:0.75rem; border-radius:8px; border-left: 4px solid #10b981;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.5rem;">
+                            <div>
+                                <h4 style="font-size:0.85rem; font-weight:800; margin:0; color:#0f172a;">João Pedro Alves</h4>
+                                <div style="font-size:0.6rem; color:var(--text-muted);">Sede • 12/08/2026</div>
+                            </div>
+                            <span style="background:#dcfce7; color:#15803d; font-size:0.55rem; padding:0.2rem 0.4rem; border-radius:4px; font-weight:700;">Em Discipulado</span>
+                        </div>
+                        
+                        <div style="margin-bottom:0.5rem;">
+                            <select style="width:100%; font-size:0.65rem; padding:0.3rem; border-radius:4px; border:1px solid #cbd5e1; background:#f8fafc; font-weight:600; color:#334155;">
+                                <option>Voluntário: Teste</option>
+                                <option selected>Voluntário: Gabriel F.</option>
+                            </select>
+                        </div>
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:0.4rem; border-radius:6px; margin-bottom:0.5rem;">
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#10b981; color:white; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+                                <div style="font-size:0.5rem; color:#10b981; font-weight:700; margin-top:0.1rem;">1. Contato</div>
+                            </div>
+                            <div style="flex:1; height:2px; background:#10b981; margin:0 2px;"></div>
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#10b981; color:white; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+                                <div style="font-size:0.5rem; color:#10b981; font-weight:700; margin-top:0.1rem;">2. Visita</div>
+                            </div>
+                            <div style="flex:1; height:2px; background:#cbd5e1; margin:0 2px;"></div>
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#e2e8f0; color:#64748b; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">3</div>
+                                <div style="font-size:0.5rem; color:#64748b; font-weight:700; margin-top:0.1rem;">3. Estudo</div>
+                            </div>
+                            <div style="flex:1; height:2px; background:#cbd5e1; margin:0 2px;"></div>
+                            <div style="text-align:center;">
+                                <div style="width:14px; height:14px; background:#e2e8f0; color:#64748b; border-radius:50%; font-size:0.5rem; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto;">4</div>
+                                <div style="font-size:0.5rem; color:#64748b; font-weight:700; margin-top:0.1rem;">4. Membro</div>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:0.4rem;">
+                            <button style="flex:1; background:#f8fafc; border:1px solid #cbd5e1; padding:0.3rem; border-radius:4px; font-size:0.55rem; font-weight:700; display:flex; align-items:center; justify-content:center; gap:0.2rem;"><i data-lucide="file-text" size="10"></i> Ficha</button>
+                            <a href="#" class="whatsappBtn" style="flex:2; padding:0.3rem; font-size:0.55rem;" onclick="return false;">
+                                <i data-lucide="message-circle" size="10"></i> Falar no WhatsApp
+                            </a>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function switchMockup(screenName) {
+            const template = mockupTemplates[screenName];
+            if (template) {
+                document.getElementById('mockupUrl').textContent = template.url;
+                document.getElementById('mockupBody').innerHTML = template.html;
+                
+                // Update active tab button style
+                document.querySelectorAll('.screen-tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Find button with specific onclick handler and add active
+                const eventBtn = Array.from(document.querySelectorAll('.screen-tab-btn')).find(btn => 
+                    btn.getAttribute('onclick').includes(screenName)
+                );
+                if (eventBtn) eventBtn.classList.add('active');
+                
+                // Re-initialize dynamic icons inside mockup
+                lucide.createIcons();
+            }
+        }
+
+        // Initialize default mockup view on page load
+        switchMockup('decisoes');
+        updateRhetoricGuideContent();
+    </script>
+</body>
+</html>
