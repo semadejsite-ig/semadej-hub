@@ -3,7 +3,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import styles from './page.module.css';
-import { QRCodeSVG } from 'qrcode.react';
 import {
   DollarSign,
   Copy,
@@ -17,7 +16,9 @@ import {
   Building,
   Upload,
   X,
-  CreditCard
+  CreditCard,
+  RotateCcw,
+  Download
 } from 'lucide-react';
 
 interface Congregation {
@@ -32,6 +33,10 @@ interface Profile {
   phone: string | null;
   congregation_id: string | null;
   role: string;
+  congregations?: {
+    name: string;
+    sector: string;
+  } | null;
 }
 
 interface FundPayment {
@@ -52,8 +57,9 @@ interface FundPayment {
   };
 }
 
-const PIX_KEY = 'missoesadbelemsjc@gmail.com';
+// Chave PIX oficial (EMV Payload Copia e Cola)
 const PIX_PAYLOAD = '00020101021126490014br.gov.bcb.pix0127missoesadbelemsjc@gmail.com5204520453039865802BR5904SEDE6015SAO JOSE DOS CA62290525SEDE000000SEMADEJ0122MNF363042D5E';
+const PIX_EMAIL = 'missoesadbelemsjc@gmail.com';
 
 const MONTH_NAMES = [
   'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -91,42 +97,76 @@ export default function FundoOperacionalPage() {
       setLoading(true);
 
       const isMock = typeof window !== 'undefined' && localStorage.getItem('mock_session') === 'true';
+      let currentProf: Profile | null = null;
+
       if (isMock) {
-        setCurrentUser({ id: 'mock-admin', role: 'admin', congregation_id: null, full_name: 'Administrador', phone: null });
+        currentProf = { id: 'mock-admin', role: 'admin', congregation_id: null, full_name: 'Administrador', phone: null };
+        setCurrentUser(currentProf);
       } else {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const { data: profile } = await supabase
             .from('profiles')
-            .select('id, role, congregation_id, full_name, phone')
+            .select('id, role, congregation_id, full_name, phone, congregations(name, sector)')
             .eq('id', user.id)
             .single();
-          if (profile) setCurrentUser(profile);
+          if (profile) {
+            currentProf = profile as unknown as Profile;
+            setCurrentUser(currentProf);
+          }
         }
       }
 
-      // 1. Fetch congregations
-      const { data: congData } = await supabase
+      // Regra de acesso baseada no Perfil:
+      // - admin / treasurer: vê todas as 84 congregações
+      // - sector_agent / sector_pastor: vê apenas congregações do seu setor
+      // - agent / pastor: vê apenas a sua congregação
+      const userRole = currentProf?.role || 'agent';
+      const userSector = currentProf?.congregations?.sector;
+      const userCongregationId = currentProf?.congregation_id;
+
+      let congQuery = supabase
         .from('congregations')
         .select('id, name, sector')
         .order('sector', { ascending: true })
         .order('name', { ascending: true });
+
+      if (['sector_agent', 'sector_pastor'].includes(userRole)) {
+        if (userSector) {
+          congQuery = congQuery.eq('sector', userSector);
+          setSelectedSector(userSector);
+        }
+      } else if (userRole === 'agent' || userRole === 'pastor') {
+        if (userCongregationId) {
+          congQuery = congQuery.eq('id', userCongregationId);
+        }
+      }
+
+      const { data: congData } = await congQuery;
       if (congData) setCongregations(congData);
 
-      // 2. Fetch profiles for contacts
+      // Fetch profiles for contacts
       const { data: profData } = await supabase
         .from('profiles')
         .select('id, full_name, phone, congregation_id, role');
-      if (profData) setProfiles(profData);
+      if (profData) setProfiles(profData as unknown as Profile[]);
 
-      // 3. Fetch payments for selected year
-      const { data: payData, error } = await supabase
+      // Fetch payments for selected year
+      let payQuery = supabase
         .from('operational_fund_payments')
         .select('*, congregations(name, sector)')
         .eq('payment_year', selectedYear);
 
+      if (userRole === 'agent' || userRole === 'pastor') {
+        if (userCongregationId) {
+          payQuery = payQuery.eq('congregation_id', userCongregationId);
+        }
+      }
+
+      const { data: payData, error } = await payQuery;
+
       if (payData && !error) {
-        setPayments(payData);
+        setPayments(payData as unknown as FundPayment[]);
       } else {
         setPayments([]);
       }
@@ -138,7 +178,7 @@ export default function FundoOperacionalPage() {
   };
 
   const handleCopyPix = () => {
-    navigator.clipboard.writeText(PIX_KEY);
+    navigator.clipboard.writeText(PIX_PAYLOAD);
     setCopiedPix(true);
     setTimeout(() => setCopiedPix(false), 2000);
   };
@@ -188,10 +228,16 @@ export default function FundoOperacionalPage() {
           .single();
         if (insErr) throw insErr;
         if (inserted) {
-          setPayments(prev => [...prev.filter(p => !(p.congregation_id === reportingCongregation.id && p.payment_month === selectedMonth)), inserted]);
+          setPayments(prev => [
+            ...prev.filter(p => !(p.congregation_id === reportingCongregation.id && p.payment_month === selectedMonth)),
+            inserted as unknown as FundPayment
+          ]);
         }
       } else if (saved) {
-        setPayments(prev => [...prev.filter(p => !(p.congregation_id === reportingCongregation.id && p.payment_month === selectedMonth)), saved]);
+        setPayments(prev => [
+          ...prev.filter(p => !(p.congregation_id === reportingCongregation.id && p.payment_month === selectedMonth)),
+          saved as unknown as FundPayment
+        ]);
       }
 
       setIsModalOpen(false);
@@ -230,12 +276,54 @@ export default function FundoOperacionalPage() {
       if (confirmed) {
         setPayments(prev => [
           ...prev.filter(p => !(p.congregation_id === congId && p.payment_month === selectedMonth)),
-          confirmed
+          confirmed as unknown as FundPayment
         ]);
       }
     } catch (err) {
       console.error('Erro ao confirmar:', err);
       alert('Erro ao confirmar recebimento.');
+    }
+  };
+
+  // Desfazer confirmação (Rollback) - Tesouraria / Admin
+  const handleRollbackPayment = async (congId: string) => {
+    if (!confirm('Deseja desfazer a confirmação deste PIX? O status voltará para pendente/aguardando validação.')) {
+      return;
+    }
+
+    try {
+      const existing = currentMonthPaymentMap.get(congId);
+      // Se o agente já havia informado, volta para 'paid'; se foi marcado direto, volta para 'pending'
+      const newStatus = existing?.notes || existing?.receipt_url ? 'paid' : 'pending';
+
+      const payload = {
+        congregation_id: congId,
+        payment_month: selectedMonth,
+        payment_year: selectedYear,
+        status: newStatus,
+        confirmed_by: null,
+        confirmed_at: null,
+        updated_at: new Date().toISOString()
+      };
+
+      const { data: rolledBack, error } = await supabase
+        .from('operational_fund_payments')
+        .upsert(payload, { onConflict: 'congregation_id,payment_month,payment_year' })
+        .select('*, congregations(name, sector)')
+        .single();
+
+      if (error) throw error;
+
+      if (rolledBack) {
+        setPayments(prev => [
+          ...prev.filter(p => !(p.congregation_id === congId && p.payment_month === selectedMonth)),
+          rolledBack as unknown as FundPayment
+        ]);
+      }
+      alert('Confirmação revertida com sucesso!');
+    } catch (err) {
+      console.error('Erro ao desfazer confirmação:', err);
+      alert('Erro ao desfazer a confirmação.');
     }
   };
 
@@ -250,7 +338,7 @@ export default function FundoOperacionalPage() {
     return map;
   }, [payments, selectedMonth, selectedYear]);
 
-  // Overall Statistics for current month
+  // Overall Statistics for current month (scoped)
   const stats = useMemo(() => {
     const total = congregations.length;
     let paidCount = 0;
@@ -299,10 +387,12 @@ export default function FundoOperacionalPage() {
   }, [congregations]);
 
   const canConfirm = ['admin', 'treasurer'].includes(currentUser?.role || '');
+  const userRole = currentUser?.role || 'agent';
+  const userSector = currentUser?.congregations?.sector;
 
   const getWhatsAppRemindLink = (cong: Congregation, agentPhone?: string | null) => {
     const message = encodeURIComponent(
-      `Paz do Senhor, amado(a) pastor/agente da congregação *${cong.name}*!\n\nLembramos sobre o repasse mensal da contribuição operacional da SEMADEJ (*R$ 30,00*) referente a *${MONTH_NAMES[selectedMonth - 1]} de ${selectedYear}*.\n\nEsse valor apoia diretamente a impressão de fichas, materiais de treinamento nos polos e suporte missionário.\n\n🔑 *Chave PIX:* ${PIX_KEY}`
+      `Paz do Senhor, amado(a) pastor/agente da congregação *${cong.name}*!\n\nLembramos sobre o repasse mensal da contribuição operacional da SEMADEJ (*R$ 30,00*) referente a *${MONTH_NAMES[selectedMonth - 1]} de ${selectedYear}*.\n\nEsse valor apoia diretamente a impressão de fichas de cadastro, materiais de treinamento nos polos e suporte missionário.\n\n🔑 *Código PIX Copia e Cola:* \n${PIX_PAYLOAD}`
     );
 
     if (agentPhone) {
@@ -316,17 +406,26 @@ export default function FundoOperacionalPage() {
 
   return (
     <div className={styles.container}>
-      {/* HEADER */}
+      {/* HEADER (Revisado com a cor e padrão consistente com os outros cabeçalhos) */}
       <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>Fundo Operacional das 84 Congregações</h1>
+          <h1 className={styles.title}>Fundo Operacional das Congregações</h1>
           <p className={styles.subtitle}>
-            Apoio operacional de R$ 30/mês para infraestrutura, materiais e logística da Secretaria de Missões.
+            Apoio operacional de R$ 30/mês por congregação para impressão de materiais, fichas e logística de missões.
           </p>
+        </div>
+        <div>
+          <span className={styles.scopeBadge}>
+            {userRole === 'admin' || userRole === 'treasurer'
+              ? '🌍 Visão Global (84 Congregações)'
+              : ['sector_agent', 'sector_pastor'].includes(userRole)
+              ? `Setor ${userSector || '?'}`
+              : `Congregação ${currentUser?.congregations?.name || 'Local'}`}
+          </span>
         </div>
       </header>
 
-      {/* PIX BANNER INFORMATIVO */}
+      {/* PIX BANNER INFORMATIVO (Com Chave Oficial e Thumbnail do QR Code Oficial) */}
       <div className={styles.pixBanner}>
         <div className={styles.pixInfo}>
           <div className={styles.pixTitle}>
@@ -337,16 +436,32 @@ export default function FundoOperacionalPage() {
             O valor simbólico apoia a impressão de materiais, fichas de cadastro, suporte logístico e reuniões nos polos regionais.
           </p>
           <div className={styles.pixKeyBox}>
-            <span className="text-xs text-gray-500 font-bold uppercase">Chave PIX:</span>
-            <span className={styles.pixKey}>{PIX_KEY}</span>
+            <span className="text-xs text-gray-500 font-bold uppercase">PIX Copia e Cola:</span>
+            <span className={styles.pixKey} title={PIX_PAYLOAD}>
+              {PIX_PAYLOAD.slice(0, 36)}...{PIX_PAYLOAD.slice(-12)}
+            </span>
             <button onClick={handleCopyPix} className={styles.copyBtn}>
               {copiedPix ? <Check size={14} /> : <Copy size={14} />}
-              {copiedPix ? 'Copiado!' : 'Copiar'}
+              {copiedPix ? 'Código Copiado!' : 'Copiar Código'}
             </button>
             <button onClick={() => setShowQrModal(true)} className={`${styles.copyBtn} bg-slate-800`}>
-              <QrCode size={14} /> QR Code
+              <QrCode size={14} /> Ver QR Code Oficial
             </button>
           </div>
+        </div>
+
+        <div className={styles.qrCodeThumbnail} onClick={() => setShowQrModal(true)} title="Clique para ampliar o QR Code">
+          {/* Imagem do QR Code oficial anexado */}
+          <img
+            src="/pix-qrcode-semadej.png"
+            alt="QR Code PIX Oficial"
+            width={85}
+            height={85}
+            className="rounded-lg border shadow-sm hover:opacity-90 transition-opacity"
+          />
+          <span className="text-xs text-gray-500 font-semibold mt-1 flex items-center gap-1 justify-center">
+            <QrCode size={12} /> Ampliar
+          </span>
         </div>
       </div>
 
@@ -404,18 +519,21 @@ export default function FundoOperacionalPage() {
               <option value={2027}>2027</option>
             </select>
 
-            <select
-              value={selectedSector}
-              onChange={e => setSelectedSector(e.target.value)}
-              className={styles.selectInput}
-            >
-              <option value="ALL">Todos os Setores</option>
-              {sectors.map(s => (
-                <option key={s} value={s}>
-                  Setor {s}
-                </option>
-              ))}
-            </select>
+            {/* Filtro de setor só aparece se tiver mais de um setor disponível */}
+            {sectors.length > 1 && (
+              <select
+                value={selectedSector}
+                onChange={e => setSelectedSector(e.target.value)}
+                className={styles.selectInput}
+              >
+                <option value="ALL">Todos os Setores</option>
+                {sectors.map(s => (
+                  <option key={s} value={s}>
+                    Setor {s}
+                  </option>
+                ))}
+              </select>
+            )}
 
             <select
               value={statusFilter}
@@ -427,15 +545,17 @@ export default function FundoOperacionalPage() {
               <option value="pending">Pendentes (🔴)</option>
             </select>
 
-            <div className={styles.searchBox}>
-              <Search size={16} />
-              <input
-                type="text"
-                placeholder="Buscar congregação..."
-                value={searchTerm}
-                onChange={e => setSearchTerm(e.target.value)}
-              />
-            </div>
+            {congregations.length > 1 && (
+              <div className={styles.searchBox}>
+                <Search size={16} />
+                <input
+                  type="text"
+                  placeholder="Buscar congregação..."
+                  value={searchTerm}
+                  onChange={e => setSearchTerm(e.target.value)}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -448,7 +568,7 @@ export default function FundoOperacionalPage() {
                 <th className={styles.th}>Valor</th>
                 <th className={styles.th}>Status ({MONTH_NAMES[selectedMonth - 1]})</th>
                 <th className={styles.th}>Ação do Agente</th>
-                {canConfirm && <th className={styles.th}>Tesouraria</th>}
+                {canConfirm && <th className={styles.th}>Tesouraria / Validação</th>}
                 <th className={styles.th} style={{ textAlign: 'right' }}>Cobrança WhatsApp</th>
               </tr>
             </thead>
@@ -490,9 +610,11 @@ export default function FundoOperacionalPage() {
                           Informar Repasse
                         </button>
                       ) : (
-                        <span className="text-xs text-gray-500">Repasse registrado</span>
+                        <span className="text-xs text-gray-500 font-medium">Repasse registrado</span>
                       )}
                     </td>
+
+                    {/* Coluna da Tesouraria com Ação de Confirmação e ROLLBACK */}
                     {canConfirm && (
                       <td className={styles.td}>
                         {pay?.status !== 'confirmed' ? (
@@ -500,10 +622,22 @@ export default function FundoOperacionalPage() {
                             <CheckCircle2 size={13} /> Confirmar PIX
                           </button>
                         ) : (
-                          <span className="text-xs text-emerald-600 font-bold">OK</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                              <CheckCircle2 size={13} /> OK
+                            </span>
+                            <button
+                              onClick={() => handleRollbackPayment(cong.id)}
+                              className={styles.rollbackBtn}
+                              title="Desfazer confirmação (Voltar para pendente/aguardando)"
+                            >
+                              <RotateCcw size={12} /> Desfazer
+                            </button>
+                          </div>
                         )}
                       </td>
                     )}
+
                     <td className={styles.td} style={{ textAlign: 'right' }}>
                       {!isPaid && (
                         <a
@@ -573,25 +707,66 @@ export default function FundoOperacionalPage() {
         </div>
       )}
 
-      {/* MODAL QR CODE PIX */}
+      {/* MODAL QR CODE PIX OFICIAL */}
       {showQrModal && (
         <div className={styles.modalOverlay} onClick={() => setShowQrModal(false)}>
-          <div className={styles.modalContent} style={{ textAlign: 'center' }} onClick={e => e.stopPropagation()}>
+          <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
             <div className={styles.modalHeader}>
-              <h2 className={styles.modalTitle}>QR Code PIX - Secretaria SEMADEJ</h2>
+              <h2 className={styles.modalTitle}>QR Code Oficial - Secretaria SEMADEJ</h2>
               <button onClick={() => setShowQrModal(false)} className={styles.closeBtn}>
                 <X size={20} />
               </button>
             </div>
-            <div className="p-4 flex flex-col items-center justify-center">
-              <QRCodeSVG value={PIX_PAYLOAD} size={220} level="M" />
-              <div className="mt-4 font-mono text-sm text-gray-700 bg-gray-100 p-2 rounded w-full break-all">
-                {PIX_KEY}
-              </div>
+
+            <div className="flex flex-col items-center justify-center">
+              {/* Imagem oficial anexada */}
+              <img
+                src="/pix-qrcode-semadej.png"
+                alt="QR Code Oficial SEMADEJ"
+                className={styles.qrModalImage}
+              />
             </div>
-            <div className="mt-4">
-              <button onClick={handleCopyPix} className={styles.submitBtn}>
-                <Copy size={16} /> Copiar Chave PIX
+
+            {/* Caixa estruturada e elegante para copiar o código sem quebrar layout */}
+            <div className={styles.pixCopyContainer}>
+              <span className={styles.pixCopyLabel}>Código PIX Copia e Cola:</span>
+              <div className={styles.pixCopyInputWrapper}>
+                <input
+                  type="text"
+                  readOnly
+                  value={PIX_PAYLOAD}
+                  className={styles.pixCopyInput}
+                  onClick={e => (e.target as HTMLInputElement).select()}
+                />
+                <button
+                  type="button"
+                  onClick={handleCopyPix}
+                  className={styles.pixCopyActionBtn}
+                >
+                  {copiedPix ? <Check size={14} /> : <Copy size={14} />}
+                  {copiedPix ? 'Copiado!' : 'Copiar'}
+                </button>
+              </div>
+              <span className={styles.pixHelpText}>
+                Chave e-mail alternativa: <strong>{PIX_EMAIL}</strong>
+              </span>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <a
+                href="/pix-qrcode-semadej.png"
+                download="qrcode-pix-semadej.png"
+                className={styles.submitBtn}
+                style={{ background: '#2563eb', textDecoration: 'none' }}
+              >
+                <Download size={16} /> Baixar Imagem
+              </a>
+              <button
+                type="button"
+                onClick={() => setShowQrModal(false)}
+                className={styles.cancelBtn}
+              >
+                Fechar
               </button>
             </div>
           </div>
@@ -600,4 +775,3 @@ export default function FundoOperacionalPage() {
     </div>
   );
 }
-
